@@ -26,6 +26,8 @@ func food(state model.GameState, possible model.PossibleMoves) {
 		}
 	}
 
+	fmt.Printf("Moving toward closest food %s, %d away\n", closestFood, minDist)
+
 	// Prefer to move toward the nearest food
 	if minDist > 0 {
 		step := myHead.StepToward(&closestFood)
