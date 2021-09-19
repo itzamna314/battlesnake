@@ -3,12 +3,14 @@ package move
 import (
 	"log"
 	"math/rand"
+
+	"github.com/itzamna314/battlesnake/model"
 )
 
 // This function is called on every turn of a game. Use the provided GameState to decide
 // where to move -- valid moves are "up", "down", "left", or "right".
 // We've provided some code and comments to get you started.
-func Next(state model.GameState) BattlesnakeMoveResponse {
+func Next(state model.GameState) model.BattlesnakeMoveResponse {
 	possibleMoves := map[string]bool{
 		"up":    true,
 		"down":  true,
@@ -62,7 +64,7 @@ func Next(state model.GameState) BattlesnakeMoveResponse {
 		nextMove = safeMoves[rand.Intn(len(safeMoves))]
 		log.Printf("%s MOVE %d: %s\n", state.Game.ID, state.Turn, nextMove)
 	}
-	return BattlesnakeMoveResponse{
+	return model.BattlesnakeMoveResponse{
 		Move: nextMove,
 	}
 }
