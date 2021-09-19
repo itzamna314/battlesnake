@@ -49,14 +49,13 @@ Enemies:
 					continue
 				}
 
-				if isHead && enemy.Length < state.You.Length {
-					possible[dir].Safe = true
-					possible[dir].Weight = 1
-					possible[dir].Shout = "KILL"
-					break Enemies
-				}
-
 				if poss.Hit(&eBody) {
+					if isHead && enemy.Length < state.You.Length {
+						possible[dir].Safe = true
+						possible[dir].Weight = 1
+						possible[dir].Shout = "KILL"
+						break Enemies
+					}
 					possible[dir].Safe = false
 				}
 			}
