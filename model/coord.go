@@ -5,6 +5,10 @@ type Coord struct {
 	Y int `json:"y"`
 }
 
+func (c *Coord) Hit(other *Coord) bool {
+	return c.X == other.X && c.Y == other.Y
+}
+
 type MoveCoord struct {
 	Coord
 	Safe bool

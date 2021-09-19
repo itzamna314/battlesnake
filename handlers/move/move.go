@@ -44,10 +44,42 @@ func Next(state model.GameState) model.BattlesnakeMoveResponse {
 
 	// TODO: Step 2 - Don't hit yourself.
 	// Use information in GameState to prevent your Battlesnake from colliding with itself.
-	//mybody := state.You.Body
+	mybody := state.You.Body
+	for dir, poss := range possibleMoves {
+		if !poss.Safe {
+			continue
+		}
+
+		for _, body := range mybody {
+			if poss.Coord.Hit(&body) {
+				possibleMoves[dir].Safe = false
+			}
+		}
+	}
 
 	// TODO: Step 3 - Don't collide with others.
 	// Use information in GameState to prevent your Battlesnake from colliding with others.
+Enemies:
+	for _, enemy := range state.Board.Snakes {
+		for eIdx, eBody := range enemy.Body {
+			isHead := eIdx == 0
+			for dir, poss := range possibleMoves {
+				if !poss.Safe {
+					continue
+				}
+
+				// KILL
+				if isHead && enemy.Length < state.You.Length {
+					possibleMoves[dir].Safe = true
+					break Enemies
+				}
+
+				if poss.Hit(&eBody) {
+					possibleMoves[dir].Safe = false
+				}
+			}
+		}
+	}
 
 	// TODO: Step 4 - Find food.
 	// Use information in GameState to seek out and find food.
