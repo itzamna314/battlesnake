@@ -11,22 +11,13 @@ import (
 // where to move -- valid moves are "up", "down", "left", or "right".
 // We've provided some code and comments to get you started.
 func Next(state model.GameState) model.BattlesnakeMoveResponse {
-	myHead := state.You.Body[0] // Coordinates of your head
-	possibleMoves := model.Options(&myHead)
+	var (
+		myBody        = state.You.Body
+		myHead        = myBody[0]
+		possibleMoves = model.Options(&myHead)
+	)
 
-	// Step 0: Don't let your Battlesnake move back in on it's own neck
-	myNeck := state.You.Body[1] // Coordinates of body piece directly behind your head (your "neck")
-	if myNeck.X < myHead.X {
-		possibleMoves[model.Left].Safe = false
-	} else if myNeck.X > myHead.X {
-		possibleMoves[model.Right].Safe = false
-	} else if myNeck.Y < myHead.Y {
-		possibleMoves[model.Down].Safe = false
-	} else if myNeck.Y > myHead.Y {
-		possibleMoves[model.Up].Safe = false
-	}
-
-	// TODO: Step 1 - Don't hit walls.
+	// Step 1 - Don't hit walls.
 	// Use information in GameState to prevent your Battlesnake from moving beyond the boundaries of the board.
 	// boardWidth := state.Board.Width
 	// boardHeight := state.Board.Height
@@ -42,22 +33,21 @@ func Next(state model.GameState) model.BattlesnakeMoveResponse {
 		possibleMoves[model.Up].Safe = false
 	}
 
-	// TODO: Step 2 - Don't hit yourself.
+	// Step 2 - Don't hit yourself.
 	// Use information in GameState to prevent your Battlesnake from colliding with itself.
-	mybody := state.You.Body
 	for dir, poss := range possibleMoves {
 		if !poss.Safe {
 			continue
 		}
 
-		for _, body := range mybody {
+		for _, body := range myBody {
 			if poss.Coord.Hit(&body) {
 				possibleMoves[dir].Safe = false
 			}
 		}
 	}
 
-	// TODO: Step 3 - Don't collide with others.
+	// Step 3 - Don't collide with others.
 	// Use information in GameState to prevent your Battlesnake from colliding with others.
 Enemies:
 	for _, enemy := range state.Board.Snakes {
@@ -71,6 +61,7 @@ Enemies:
 				// KILL
 				if isHead && enemy.Length < state.You.Length {
 					possibleMoves[dir].Safe = true
+					possibleMoves[dir].Weight = 1
 					break Enemies
 				}
 
@@ -81,16 +72,42 @@ Enemies:
 		}
 	}
 
-	// TODO: Step 4 - Find food.
+	// Step 4 - Find food.
 	// Use information in GameState to seek out and find food.
+	var (
+		closestFood model.Coord
+		minDist     int
+	)
+	for _, food := range state.Board.Food {
+		dist := myHead.Dist(&food)
+
+		if minDist == 0 || dist < minDist {
+			minDist = dist
+			closestFood = food
+		}
+	}
+
+	// Prefer to move toward the nearest food
+	if minDist > 0 {
+		step := myHead.StepToward(&closestFood)
+		possibleMoves[step].Weight = 0.75
+	}
 
 	// Finally, choose a move from the available safe moves.
 	// TODO: Step 5 - Select a move to make based on strategy, rather than random.
-	var nextMove string
-
-	safeMoves := []string{}
+	var (
+		nextMove  string
+		safeMoves []string
+		maxWeight float64
+	)
 	for dir, coord := range possibleMoves {
-		if coord.Safe {
+		if !coord.Safe {
+			continue
+		}
+
+		if coord.Weight > maxWeight {
+			safeMoves = []string{model.Direction(dir).String()}
+		} else if coord.Weight == maxWeight {
 			safeMoves = append(safeMoves, model.Direction(dir).String())
 		}
 	}

@@ -9,9 +9,40 @@ func (c *Coord) Hit(other *Coord) bool {
 	return c.X == other.X && c.Y == other.Y
 }
 
+func (c *Coord) Dist(other *Coord) int {
+	xDiff := c.X - other.X
+	yDiff := c.Y - other.Y
+
+	return (xDiff * xDiff) + (yDiff * yDiff)
+}
+
+func (c *Coord) StepToward(other *Coord) Direction {
+	var (
+		xDiff = other.X - c.X
+		yDiff = other.Y - c.Y
+	)
+
+	// Move in the farthest dimension first
+	if (xDiff * xDiff) > (yDiff * yDiff) {
+		if xDiff < 0 {
+			return Left
+		} else {
+			return Right
+		}
+	} else {
+		if yDiff < 0 {
+			return Down
+		} else {
+			return Right
+		}
+	}
+}
+
 type MoveCoord struct {
 	Coord
-	Safe bool
+	Safe   bool
+	Weight float64
+	Scream string
 }
 
 func Options(myHead *Coord) [4]MoveCoord {
