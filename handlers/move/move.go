@@ -132,7 +132,7 @@ Enemies:
 		log.Printf("%s MOVE %d: %s\n", state.Game.ID, state.Turn, nextMove)
 	}
 	return model.BattlesnakeMoveResponse{
-		Move:   nextMove,
-		Scream: nextScream,
+		Move:  nextMove,
+		Shout: nextScream,
 	}
 }
