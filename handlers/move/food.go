@@ -1,12 +1,13 @@
 package move
 
-import (
-	"fmt"
-
-	"github.com/itzamna314/battlesnake/model"
-)
+import "github.com/itzamna314/battlesnake/model"
 
 func food(state model.GameState, possible model.PossibleMoves) {
+	// Stop eating if we are really big
+	if state.You.Length > 10 {
+		return
+	}
+
 	// Step 4 - Find food.
 	// Use information in GameState to seek out and find food.
 	var (
@@ -14,7 +15,6 @@ func food(state model.GameState, possible model.PossibleMoves) {
 		closestFood model.Coord
 		minDist     int
 	)
-	fmt.Printf("Closest food to my head %s\n", myHead)
 	for _, food := range state.Board.Food {
 		dist := myHead.Dist(&food)
 
@@ -23,8 +23,6 @@ func food(state model.GameState, possible model.PossibleMoves) {
 			closestFood = food
 		}
 	}
-
-	fmt.Printf("Moving toward closest food %s, %d away\n", closestFood, minDist)
 
 	// Prefer to move toward the nearest food
 	if minDist > 0 {
