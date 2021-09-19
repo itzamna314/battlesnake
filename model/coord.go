@@ -1,5 +1,7 @@
 package model
 
+import "fmt"
+
 type Coord struct {
 	X int `json:"x"`
 	Y int `json:"y"`
@@ -36,6 +38,10 @@ func (c *Coord) StepToward(other *Coord) Direction {
 			return Right
 		}
 	}
+}
+
+func (c *Coord) String() string {
+	fmt.Sprintf("(%d,%d)", c.X, c.Y)
 }
 
 type MoveCoord struct {
