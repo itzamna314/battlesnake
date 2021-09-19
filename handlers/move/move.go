@@ -11,24 +11,19 @@ import (
 // where to move -- valid moves are "up", "down", "left", or "right".
 // We've provided some code and comments to get you started.
 func Next(state model.GameState) model.BattlesnakeMoveResponse {
-	possibleMoves := map[string]bool{
-		"up":    true,
-		"down":  true,
-		"left":  true,
-		"right": true,
-	}
+	myHead := state.You.Body[0] // Coordinates of your head
+	possibleMoves := model.Options(&myHead)
 
 	// Step 0: Don't let your Battlesnake move back in on it's own neck
-	myHead := state.You.Body[0] // Coordinates of your head
 	myNeck := state.You.Body[1] // Coordinates of body piece directly behind your head (your "neck")
 	if myNeck.X < myHead.X {
-		possibleMoves["left"] = false
+		possibleMoves[model.Left].Safe = false
 	} else if myNeck.X > myHead.X {
-		possibleMoves["right"] = false
+		possibleMoves[model.Right].Safe = false
 	} else if myNeck.Y < myHead.Y {
-		possibleMoves["down"] = false
+		possibleMoves[model.Down].Safe = false
 	} else if myNeck.Y > myHead.Y {
-		possibleMoves["up"] = false
+		possibleMoves[model.Up].Safe = false
 	}
 
 	// TODO: Step 1 - Don't hit walls.
@@ -36,20 +31,20 @@ func Next(state model.GameState) model.BattlesnakeMoveResponse {
 	// boardWidth := state.Board.Width
 	// boardHeight := state.Board.Height
 	if myHead.X-1 < 0 {
-		possibleMoves["left"] = false
+		possibleMoves[model.Left].Safe = false
 	} else if myHead.X+1 == state.Board.Width {
-		possibleMoves["right"] = false
+		possibleMoves[model.Right].Safe = false
 	}
 
 	if myHead.Y-1 < 0 {
-		possibleMoves["down"] = false
+		possibleMoves[model.Down].Safe = false
 	} else if myHead.Y+1 == state.Board.Height {
-		possibleMoves["up"] = false
+		possibleMoves[model.Down].Safe = false
 	}
 
 	// TODO: Step 2 - Don't hit yourself.
 	// Use information in GameState to prevent your Battlesnake from colliding with itself.
-	// mybody := state.You.Body
+	//mybody := state.You.Body
 
 	// TODO: Step 3 - Don't collide with others.
 	// Use information in GameState to prevent your Battlesnake from colliding with others.
@@ -62,9 +57,9 @@ func Next(state model.GameState) model.BattlesnakeMoveResponse {
 	var nextMove string
 
 	safeMoves := []string{}
-	for move, isSafe := range possibleMoves {
-		if isSafe {
-			safeMoves = append(safeMoves, move)
+	for dir, coord := range possibleMoves {
+		if coord.Safe {
+			safeMoves = append(safeMoves, model.Direction(dir).String())
 		}
 	}
 

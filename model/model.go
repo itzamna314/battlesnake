@@ -42,11 +42,6 @@ type Battlesnake struct {
 	Squad string `json:"squad"`
 }
 
-type Coord struct {
-	X int `json:"x"`
-	Y int `json:"y"`
-}
-
 // Response Structs
 
 type BattlesnakeInfoResponse struct {
