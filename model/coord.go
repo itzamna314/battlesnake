@@ -20,12 +20,16 @@ func (c *Coord) Dist(other *Coord) int {
 
 func (c *Coord) StepToward(other *Coord) Direction {
 	var (
-		xDiff = other.X - c.X
-		yDiff = other.Y - c.Y
+		xDiff, yDiff       = other.X - c.X, other.Y - c.Y
+		xDistRaw, yDistRaw = xDiff * xDiff, yDiff * yDiff
 	)
 
+	fmt.Printf("Step from %s toward %s\n", *c, *other)
+	fmt.Printf("XDiff: %d, XDist: %d, YDiff: %d, YDist: %d",
+		xDiff, xDistRaw, yDiff, yDiffRaw)
+
 	// Move in the farthest dimension first
-	if (xDiff * xDiff) > (yDiff * yDiff) {
+	if xDistRaw > yDistRaw {
 		if xDiff < 0 {
 			return Left
 		} else {

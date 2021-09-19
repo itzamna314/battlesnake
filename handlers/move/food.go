@@ -18,8 +18,6 @@ func food(state model.GameState, possible model.PossibleMoves) {
 	for _, food := range state.Board.Food {
 		dist := myHead.Dist(&food)
 
-		fmt.Printf("Considering food %s, %d away\n", food, dist)
-
 		if minDist == 0 || dist < minDist {
 			minDist = dist
 			closestFood = food
