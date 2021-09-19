@@ -58,10 +58,10 @@ Enemies:
 					continue
 				}
 
-				// KILL
 				if isHead && enemy.Length < state.You.Length {
 					possibleMoves[dir].Safe = true
 					possibleMoves[dir].Weight = 1
+					possibleMoves[dir].Scream = "KILL"
 					break Enemies
 				}
 
@@ -91,6 +91,12 @@ Enemies:
 	if minDist > 0 {
 		step := myHead.StepToward(&closestFood)
 		possibleMoves[step].Weight = 0.75
+
+		if minDist == 1 {
+			possibleMoves[step].Scream = "OMNOMNOM"
+		} else {
+			possibleMoves[step].Scream = "hungry"
+		}
 	}
 
 	log.Printf("Choosing from possible moves\n%+v\n", possibleMoves)
@@ -98,9 +104,10 @@ Enemies:
 	// Finally, choose a move from the available safe moves.
 	// TODO: Step 5 - Select a move to make based on strategy, rather than random.
 	var (
-		nextMove  string
-		safeMoves []string
-		maxWeight float64
+		nextMove   string
+		nextScream string
+		safeMoves  []string
+		maxWeight  float64
 	)
 	for dir, coord := range possibleMoves {
 		if !coord.Safe {
@@ -109,20 +116,23 @@ Enemies:
 
 		if coord.Weight > maxWeight {
 			safeMoves = []string{model.Direction(dir).String()}
+			nextScream = coord.Scream
 		} else if coord.Weight == maxWeight {
 			safeMoves = append(safeMoves, model.Direction(dir).String())
+			nextScream = ""
 		}
 	}
 
 	if len(safeMoves) == 0 {
 		nextMove = "down"
+		nextScream = "bye"
 		log.Printf("%s MOVE %d: No safe moves detected! Moving %s\n", state.Game.ID, state.Turn, nextMove)
 	} else {
-		log.Printf("Choosing from safe moves\n%+v\n", safeMoves)
 		nextMove = safeMoves[rand.Intn(len(safeMoves))]
 		log.Printf("%s MOVE %d: %s\n", state.Game.ID, state.Turn, nextMove)
 	}
 	return model.BattlesnakeMoveResponse{
-		Move: nextMove,
+		Move:   nextMove,
+		Scream: nextScream,
 	}
 }
