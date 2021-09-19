@@ -41,7 +41,7 @@ func (c *Coord) StepToward(other *Coord) Direction {
 }
 
 func (c *Coord) String() string {
-	fmt.Sprintf("(%d,%d)", c.X, c.Y)
+	return fmt.Sprintf("(%d,%d)", c.X, c.Y)
 }
 
 type MoveCoord struct {
