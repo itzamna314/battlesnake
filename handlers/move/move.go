@@ -93,6 +93,8 @@ Enemies:
 		possibleMoves[step].Weight = 0.75
 	}
 
+	log.Printf("Choosing from possible moves\n%+v\n", possibleMoves)
+
 	// Finally, choose a move from the available safe moves.
 	// TODO: Step 5 - Select a move to make based on strategy, rather than random.
 	var (
