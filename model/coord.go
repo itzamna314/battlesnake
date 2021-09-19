@@ -45,26 +45,27 @@ type MoveCoord struct {
 	Shout  string
 }
 
-type PossibleMoves [4]MoveCoord
+type PossibleMoves [4]*MoveCoord
 
-func Options(myHead *Coord) [4]MoveCoord {
-	var opts [4]MoveCoord
+func Options(myHead *Coord) PossibleMoves {
+	var opts [4]*MoveCoord
 
-	opts[Up].Coord.X = myHead.X
-	opts[Up].Coord.Y = myHead.Y + 1
-	opts[Up].Safe = true
-
-	opts[Down].Coord.X = myHead.X
-	opts[Down].Coord.Y = myHead.Y - 1
-	opts[Down].Safe = true
-
-	opts[Left].Coord.X = myHead.X - 1
-	opts[Left].Coord.Y = myHead.Y
-	opts[Left].Safe = true
-
-	opts[Right].Coord.X = myHead.X + 1
-	opts[Right].Coord.Y = myHead.Y
-	opts[Right].Safe = true
+	opts[Up] = &MoveCoord{
+		Coord: Coord{myHead.X, myHead.Y + 1},
+		Safe:  true,
+	}
+	opts[Down] = &MoveCoord{
+		Coord: Coord{myHead.X, myHead.Y - 1},
+		Safe:  true,
+	}
+	opts[Left] = &MoveCoord{
+		Coord: Coord{myHead.X - 1, myHead.Y},
+		Safe:  true,
+	}
+	opts[Right] = &MoveCoord{
+		Coord: Coord{myHead.X + 1, myHead.Y},
+		Safe:  true,
+	}
 
 	return opts
 }
