@@ -1,10 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/itzamna314/battlesnake/handlers"
 )
 
 // Main Entrypoint

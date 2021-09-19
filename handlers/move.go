@@ -4,10 +4,13 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/itzamna314/battlesnake/handlers/move"
+	"github.com/itzamna314/battlesnake/model"
 )
 
 func Move(w http.ResponseWriter, r *http.Request) {
-	state := GameState{}
+	state := model.GameState{}
 	err := json.NewDecoder(r.Body).Decode(&state)
 	if err != nil {
 		log.Printf("ERROR: Failed to decode move json, %s", err)

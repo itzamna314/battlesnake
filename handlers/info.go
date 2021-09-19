@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/itzamna314/battlesnake/model"
 )
 
 // Index is called when you register your Battlesnake on play.battlesnake.com
@@ -21,9 +23,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func info() BattlesnakeInfoResponse {
+func info() model.BattlesnakeInfoResponse {
 	log.Println("INFO")
-	return BattlesnakeInfoResponse{
+	return model.BattlesnakeInfoResponse{
 		APIVersion: "1",
 		Author:     "itzamna",
 		Color:      "#FF4F00",
