@@ -26,7 +26,7 @@ func (c *Coord) StepToward(other *Coord) Direction {
 
 	fmt.Printf("Step from %s toward %s\n", *c, *other)
 	fmt.Printf("XDiff: %d, XDist: %d, YDiff: %d, YDist: %d",
-		xDiff, xDistRaw, yDiff, yDiffRaw)
+		xDiff, xDistRaw, yDiff, yDistRaw)
 
 	// Move in the farthest dimension first
 	if xDistRaw > yDistRaw {
