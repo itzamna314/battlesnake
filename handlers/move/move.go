@@ -102,8 +102,9 @@ Enemies:
 
 	log.Println("Choosing from possible moves:")
 	for dir, move := range possibleMoves {
-		fmt.Printf("%s: Safe? %t, Weight: %f, Shout: %s",
+		fmt.Printf("%s: Safe? %t, Weight: %f, Shout: %s\n",
 			model.Direction(dir),
+			move.Safe,
 			move.Weight,
 			move.Shout,
 		)
