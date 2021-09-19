@@ -40,7 +40,7 @@ func (c *Coord) StepToward(other *Coord) Direction {
 	}
 }
 
-func (c *Coord) String() string {
+func (c Coord) String() string {
 	return fmt.Sprintf("(%d,%d)", c.X, c.Y)
 }
 
