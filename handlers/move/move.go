@@ -35,6 +35,17 @@ func Next(state model.GameState) model.BattlesnakeMoveResponse {
 	// Use information in GameState to prevent your Battlesnake from moving beyond the boundaries of the board.
 	// boardWidth := state.Board.Width
 	// boardHeight := state.Board.Height
+	if myHead.X-1 < 0 {
+		possibleMoves["left"] = false
+	} else if myHead.X+1 == state.Board.Width {
+		possibleMoves["right"] = false
+	}
+
+	if myHead.Y-1 < 0 {
+		possibleMoves["down"] = false
+	} else if myHead.Y+1 == state.Board.Height {
+		possibleMoves["up"] = false
+	}
 
 	// TODO: Step 2 - Don't hit yourself.
 	// Use information in GameState to prevent your Battlesnake from colliding with itself.
