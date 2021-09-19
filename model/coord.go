@@ -45,6 +45,8 @@ type MoveCoord struct {
 	Shout  string
 }
 
+type PossibleMoves [4]MoveCoord
+
 func Options(myHead *Coord) [4]MoveCoord {
 	var opts [4]MoveCoord
 
