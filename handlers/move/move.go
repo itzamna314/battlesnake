@@ -39,7 +39,7 @@ func Next(state model.GameState) model.BattlesnakeMoveResponse {
 	if myHead.Y-1 < 0 {
 		possibleMoves[model.Down].Safe = false
 	} else if myHead.Y+1 == state.Board.Height {
-		possibleMoves[model.Down].Safe = false
+		possibleMoves[model.Up].Safe = false
 	}
 
 	// TODO: Step 2 - Don't hit yourself.
