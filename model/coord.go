@@ -42,7 +42,7 @@ type MoveCoord struct {
 	Coord
 	Safe   bool
 	Weight float64
-	Scream string
+	Shout  string
 }
 
 func Options(myHead *Coord) [4]MoveCoord {

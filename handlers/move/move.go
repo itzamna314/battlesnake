@@ -1,6 +1,7 @@
 package move
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 
@@ -61,7 +62,7 @@ Enemies:
 				if isHead && enemy.Length < state.You.Length {
 					possibleMoves[dir].Safe = true
 					possibleMoves[dir].Weight = 1
-					possibleMoves[dir].Scream = "KILL"
+					possibleMoves[dir].Shout = "KILL"
 					break Enemies
 				}
 
@@ -93,21 +94,28 @@ Enemies:
 		possibleMoves[step].Weight = 0.75
 
 		if minDist == 1 {
-			possibleMoves[step].Scream = "OMNOMNOM"
+			possibleMoves[step].Shout = "OMNOMNOM"
 		} else {
-			possibleMoves[step].Scream = "hungry"
+			possibleMoves[step].Shout = "hungry"
 		}
 	}
 
-	log.Printf("Choosing from possible moves\n%+v\n", possibleMoves)
+	log.Println("Choosing from possible moves:")
+	for dir, move := range possibleMoves {
+		fmt.Printf("%s: Safe? %t, Weight: %f, Shout: %s",
+			model.Direction(dir),
+			move.Weight,
+			move.Shout,
+		)
+	}
 
 	// Finally, choose a move from the available safe moves.
 	// TODO: Step 5 - Select a move to make based on strategy, rather than random.
 	var (
-		nextMove   string
-		nextScream string
-		safeMoves  []string
-		maxWeight  float64
+		nextMove  string
+		nextShout string
+		safeMoves []string
+		maxWeight float64
 	)
 	for dir, coord := range possibleMoves {
 		if !coord.Safe {
@@ -116,16 +124,16 @@ Enemies:
 
 		if coord.Weight > maxWeight {
 			safeMoves = []string{model.Direction(dir).String()}
-			nextScream = coord.Scream
+			nextShout = coord.Shout
 		} else if coord.Weight == maxWeight {
 			safeMoves = append(safeMoves, model.Direction(dir).String())
-			nextScream = ""
+			nextShout = ""
 		}
 	}
 
 	if len(safeMoves) == 0 {
 		nextMove = "down"
-		nextScream = "bye"
+		nextShout = "bye"
 		log.Printf("%s MOVE %d: No safe moves detected! Moving %s\n", state.Game.ID, state.Turn, nextMove)
 	} else {
 		nextMove = safeMoves[rand.Intn(len(safeMoves))]
@@ -133,6 +141,6 @@ Enemies:
 	}
 	return model.BattlesnakeMoveResponse{
 		Move:  nextMove,
-		Shout: nextScream,
+		Shout: nextShout,
 	}
 }
