@@ -116,6 +116,7 @@ Enemies:
 		nextMove = "down"
 		log.Printf("%s MOVE %d: No safe moves detected! Moving %s\n", state.Game.ID, state.Turn, nextMove)
 	} else {
+		log.Printf("Choosing from safe moves\n%+v\n", safeMoves)
 		nextMove = safeMoves[rand.Intn(len(safeMoves))]
 		log.Printf("%s MOVE %d: %s\n", state.Game.ID, state.Turn, nextMove)
 	}
