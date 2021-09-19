@@ -45,6 +45,7 @@ func Next(state model.GameState) model.BattlesnakeMoveResponse {
 		}
 
 		if coord.Weight > maxWeight {
+			maxWeight = coord.Weight
 			safeMoves = []string{model.Direction(dir).String()}
 			nextShout = coord.Shout
 		} else if coord.Weight == maxWeight {
