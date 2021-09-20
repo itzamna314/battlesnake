@@ -12,17 +12,14 @@ import (
 // where to move -- valid moves are "up", "down", "left", or "right".
 // We've provided some code and comments to get you started.
 func Next(state model.GameState) model.BattlesnakeMoveResponse {
-	var (
-		myBody        = state.You.Body
-		myHead        = myBody[0]
-		possibleMoves = model.Options(&myHead)
-	)
-
-	safe(state, possibleMoves)
-	food(state, possibleMoves)
+	tree := BuildTree(&state, 1)
 
 	log.Println("Choosing from possible moves:")
-	for dir, move := range possibleMoves {
+	for dir, move := range tree.Root.Moves {
+		if move == nil {
+			continue
+		}
+
 		fmt.Printf("%s: Safe? %t, Weight: %f, Shout: %s\n",
 			model.Direction(dir),
 			move.Safe,
@@ -31,15 +28,13 @@ func Next(state model.GameState) model.BattlesnakeMoveResponse {
 		)
 	}
 
-	// Finally, choose a move from the available safe moves.
-	// TODO: Step 5 - Select a move to make based on strategy, rather than random.
 	var (
 		nextMove  string
 		nextShout string
 		safeMoves []string
 		maxWeight float64
 	)
-	for dir, coord := range possibleMoves {
+	for dir, coord := range tree.Root.Moves {
 		if !coord.Safe {
 			continue
 		}
@@ -62,6 +57,7 @@ func Next(state model.GameState) model.BattlesnakeMoveResponse {
 		nextMove = safeMoves[rand.Intn(len(safeMoves))]
 		log.Printf("%s MOVE %d: %s\n", state.Game.ID, state.Turn, nextMove)
 	}
+
 	return model.BattlesnakeMoveResponse{
 		Move:  nextMove,
 		Shout: nextShout,

@@ -4,7 +4,7 @@ import (
 	"github.com/itzamna314/battlesnake/model"
 )
 
-func safe(state model.GameState, possible model.PossibleMoves) {
+func safe(state *model.GameState, possible model.PossibleMoves) {
 	var (
 		myBody = state.You.Body
 		myHead = myBody[0]
