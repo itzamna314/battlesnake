@@ -42,6 +42,9 @@ func safe(state model.GameState, possible model.PossibleMoves) {
 	// Use information in GameState to prevent your Battlesnake from colliding with others.
 Enemies:
 	for _, enemy := range state.Board.Snakes {
+		if enemy.ID == state.You.ID {
+			continue
+		}
 		for eIdx, eBody := range enemy.Body {
 			isHead := eIdx == 0
 			for dir, poss := range possible {

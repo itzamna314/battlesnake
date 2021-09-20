@@ -3,8 +3,19 @@ package move
 import "github.com/itzamna314/battlesnake/model"
 
 func food(state model.GameState, possible model.PossibleMoves) {
-	// Stop eating if we are really big
-	if state.You.Length > 10 {
+	// Stop eating if we the longest snake
+	eat := false
+	for _, enemy := range state.Board.Snakes {
+		if enemy.ID == state.You.ID {
+			continue
+		}
+
+		if enemy.Length >= state.You.Length {
+			eat = true
+		}
+	}
+
+	if !eat {
 		return
 	}
 
