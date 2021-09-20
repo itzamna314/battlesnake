@@ -2,7 +2,7 @@ package move
 
 import "github.com/itzamna314/battlesnake/model"
 
-func food(state model.GameState, possible model.PossibleMoves) {
+func food(state *model.GameState, possible model.PossibleMoves) {
 	// Stop eating if we the longest snake
 	eat := false
 	for _, enemy := range state.Board.Snakes {
