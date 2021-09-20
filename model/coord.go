@@ -18,6 +18,23 @@ func (c *Coord) Dist(other *Coord) int {
 	return (xDiff * xDiff) + (yDiff * yDiff)
 }
 
+func (c *Coord) Step(dir Direction) Coord {
+	out := *c
+
+	switch dir {
+	case Up:
+		out.Y += 1
+	case Down:
+		out.Y -= 1
+	case Left:
+		out.X -= 1
+	case Right:
+		out.X += 1
+	}
+
+	return out
+}
+
 func (c *Coord) StepToward(other *Coord) Direction {
 	var (
 		xDiff, yDiff       = other.X - c.X, other.Y - c.Y
@@ -46,7 +63,6 @@ func (c Coord) String() string {
 
 type MoveCoord struct {
 	Coord
-	Safe   bool
 	Weight float64
 	Shout  string
 }
@@ -58,19 +74,15 @@ func Options(myHead *Coord) PossibleMoves {
 
 	opts[Up] = &MoveCoord{
 		Coord: Coord{myHead.X, myHead.Y + 1},
-		Safe:  true,
 	}
 	opts[Down] = &MoveCoord{
 		Coord: Coord{myHead.X, myHead.Y - 1},
-		Safe:  true,
 	}
 	opts[Left] = &MoveCoord{
 		Coord: Coord{myHead.X - 1, myHead.Y},
-		Safe:  true,
 	}
 	opts[Right] = &MoveCoord{
 		Coord: Coord{myHead.X + 1, myHead.Y},
-		Safe:  true,
 	}
 
 	return opts

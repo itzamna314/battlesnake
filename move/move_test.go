@@ -13,7 +13,57 @@ import (
 	"testing"
 
 	"github.com/itzamna314/battlesnake/api"
+	"github.com/itzamna314/battlesnake/model"
+	"github.com/itzamna314/battlesnake/move"
 )
+
+func TestEatOne(t *testing.T) {
+	// Arrange
+	me := model.Battlesnake{
+		// Length 3, facing right
+		Head: model.Coord{X: 2, Y: 0},
+		Body: []model.Coord{{X: 2, Y: 0}, {X: 1, Y: 0}, {X: 0, Y: 0}},
+	}
+	state := model.GameState{
+		Board: model.Board{
+			Snakes: []model.Battlesnake{me},
+			Food: []model.Coord{
+				{2, 1},
+			},
+		},
+		You: me,
+	}
+
+	nextMove := move.Next(state)
+	if nextMove.Move != "up" {
+		t.Errorf("snake did not eat food, went %s", nextMove.Move)
+	}
+}
+
+func TestEatTwo(t *testing.T) {
+	// Arrange
+	me := model.Battlesnake{
+		// Length 3, facing right
+		Head: model.Coord{X: 2, Y: 0},
+		Body: []model.Coord{{X: 2, Y: 0}, {X: 1, Y: 0}, {X: 0, Y: 0}},
+	}
+	state := model.GameState{
+		Board: model.Board{
+			Snakes: []model.Battlesnake{me},
+			Food: []model.Coord{
+				{2, 1},
+				{3, 0},
+				{4, 0},
+			},
+		},
+		You: me,
+	}
+
+	nextMove := move.Next(state)
+	if nextMove.Move != "right" {
+		t.Errorf("snake did not eat 2 food, went %s", nextMove.Move)
+	}
+}
 
 func TestNoCrash(t *testing.T) {
 	testServer := server()
