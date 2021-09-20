@@ -6,6 +6,6 @@ type GameTree struct {
 
 type TreeNode struct {
 	State    *GameState
-	Moves    PossibleMoves
 	Children [4]*TreeNode
+	Weight   float64
 }
