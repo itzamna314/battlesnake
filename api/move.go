@@ -1,12 +1,12 @@
-package handlers
+package api
 
 import (
 	"encoding/json"
 	"log"
 	"net/http"
 
-	"github.com/itzamna314/battlesnake/handlers/move"
 	"github.com/itzamna314/battlesnake/model"
+	"github.com/itzamna314/battlesnake/move"
 )
 
 func Move(w http.ResponseWriter, r *http.Request) {
