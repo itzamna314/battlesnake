@@ -1,10 +1,6 @@
 package move
 
-import (
-	"fmt"
-
-	"github.com/itzamna314/battlesnake/model"
-)
+import "github.com/itzamna314/battlesnake/model"
 
 const FoodWeight = 0.15
 
@@ -40,8 +36,6 @@ func weightFood(state *model.GameState, coord *model.Coord) float64 {
 		if myDist < minDist {
 			amtCloser := float64(minDist-myDist) / float64(minDist)
 			weight = weight + FoodWeight*amtCloser
-
-			fmt.Printf("Move from %s to %s toward food %s, %v pct closer, weight %v\n", state.You.Head, coord, food, amtCloser, weight)
 		}
 	}
 
