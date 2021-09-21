@@ -7,6 +7,15 @@ type GameState struct {
 	You   Battlesnake `json:"you"`
 }
 
+func (g *GameState) Clone() GameState {
+	return GameState{
+		Game:  g.Game,
+		Turn:  g.Turn,
+		Board: g.Board.Clone(),
+		You:   g.You.Clone(),
+	}
+}
+
 type Game struct {
 	ID      string  `json:"id"`
 	Ruleset Ruleset `json:"ruleset"`
@@ -28,6 +37,25 @@ type Board struct {
 	Hazards []Coord `json:"hazards"`
 }
 
+func (b *Board) Clone() Board {
+	clone := Board{
+		Height: b.Height,
+		Width:  b.Width,
+		Food:   make([]Coord, len(b.Food)),
+		Snakes: make([]Battlesnake, len(b.Snakes)),
+	}
+
+	for i, f := range b.Food {
+		clone.Food[i] = f
+	}
+
+	for i, s := range b.Snakes {
+		clone.Snakes[i] = s.Clone()
+	}
+
+	return clone
+}
+
 type Battlesnake struct {
 	ID      string  `json:"id"`
 	Name    string  `json:"name"`
@@ -42,7 +70,29 @@ type Battlesnake struct {
 	Squad string `json:"squad"`
 }
 
+func (b *Battlesnake) Clone() Battlesnake {
+	clone := Battlesnake{
+		ID:      b.ID,
+		Name:    b.Name,
+		Health:  b.Health,
+		Head:    b.Head,
+		Length:  b.Length,
+		Latency: b.Latency,
+		Body:    make([]Coord, len(b.Body)),
+	}
+
+	for i, bd := range b.Body {
+		clone.Body[i] = bd
+	}
+
+	return clone
+}
+
 func (gs *GameState) MoveSnake(snake Battlesnake, dir Direction) {
+	if !snake.Head.Hit(&snake.Body[0]) {
+		panic("illegal snake")
+	}
+
 	// Copy each body segment to next
 	// Head will remain copied into neck
 	for i := len(snake.Body) - 1; i > 0; i-- {
