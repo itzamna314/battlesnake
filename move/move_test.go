@@ -3,9 +3,7 @@ package move_test
 import (
 	"bytes"
 	"fmt"
-	"io"
 	"net/http/httptest"
-	"os"
 	"os/exec"
 	"regexp"
 	"strconv"
@@ -26,6 +24,8 @@ func TestEatOne(t *testing.T) {
 	}
 	state := model.GameState{
 		Board: model.Board{
+			Height: 10,
+			Width:  10,
 			Snakes: []model.Battlesnake{me},
 			Food: []model.Coord{
 				{2, 1},
@@ -40,7 +40,7 @@ func TestEatOne(t *testing.T) {
 	}
 }
 
-func TestEatTwo(t *testing.T) {
+func TestEatFuture(t *testing.T) {
 	// Arrange
 	me := model.Battlesnake{
 		// Length 3, facing right
@@ -49,11 +49,14 @@ func TestEatTwo(t *testing.T) {
 	}
 	state := model.GameState{
 		Board: model.Board{
+			Height: 10,
+			Width:  10,
 			Snakes: []model.Battlesnake{me},
 			Food: []model.Coord{
 				{2, 1},
 				{3, 0},
 				{4, 0},
+				{7, 0},
 			},
 		},
 		You: me,
@@ -92,21 +95,20 @@ type playResult struct {
 
 // play runs a solo game on a 5x5 grid, with no food
 func play(t *testing.T, url string) (*playResult, error) {
-	cmd := exec.Command("battlesnake", "play", "-W", "5", "-H", "5", "--name", "test", "--url", url, "-g", "solo", "--foodSpawnChance", "0")
+	cmd := exec.Command("battlesnake", "play", "-W", "5", "-H", "5", "--name", "test", "--url", url, "-g", "solo", "--foodSpawnChance", "0", "-v")
 
-	var stdBuffer bytes.Buffer
-	mw := io.MultiWriter(os.Stdout, &stdBuffer)
+	var buf bytes.Buffer
 
-	cmd.Stdout = mw
-	cmd.Stderr = mw
+	cmd.Stdout = &buf
+	cmd.Stderr = &buf
 
 	// Execute the command
 	if err := cmd.Run(); err != nil {
 		return nil, err
 	}
 
-	output := stdBuffer.String()
-	t.Log(output)
+	output := buf.String()
+	t.Logf(output)
 
 	bufLines := strings.Split(output, "\n")
 	outLine := bufLines[len(bufLines)-2]

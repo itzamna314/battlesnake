@@ -1,17 +1,21 @@
 package move
 
-import "github.com/itzamna314/battlesnake/model"
+import (
+	"fmt"
 
-func food(state *model.GameState, possible model.PossibleMoves) {
-	// Step 4 - Find food.
-	// Use information in GameState to seek out and find food.
+	"github.com/itzamna314/battlesnake/model"
+)
+
+const FoodWeight = 0.15
+
+func weightFood(state *model.GameState, coord *model.Coord) float64 {
+	// Find closest food to our head
 	var (
-		myHead       = state.You.Body[0]
 		closestFoods []model.Coord
 		minDist      int
 	)
 	for _, food := range state.Board.Food {
-		dist := myHead.Dist(&food)
+		dist := state.You.Head.Dist(&food)
 
 		if minDist == 0 || dist < minDist {
 			minDist = dist
@@ -21,19 +25,25 @@ func food(state *model.GameState, possible model.PossibleMoves) {
 		}
 	}
 
+	// No food
 	if minDist == 0 {
-		return
+		return 0
 	}
 
-	// Prefer to move toward the nearest food
+	// Prefer to move toward the closest foods
+	// Divide by number of closest foods
+	// If there are many tied at the same distance from head,
+	// lower priority and only count the ones in the right direction
+	var weight float64
 	for _, food := range closestFoods {
-		step := myHead.StepToward(&food)
-		possible[step].Weight += 0.15
+		myDist := coord.Dist(&food)
+		if myDist < minDist {
+			amtCloser := float64(minDist-myDist) / float64(minDist)
+			weight = weight + FoodWeight*amtCloser
 
-		if minDist == 1 {
-			possible[step].Shout = "OMNOMNOM"
-		} else {
-			possible[step].Shout = "hungry"
+			fmt.Printf("Move from %s to %s toward food %s, %v pct closer, weight %v\n", state.You.Head, coord, food, amtCloser, weight)
 		}
 	}
+
+	return weight / float64(len(closestFoods))
 }

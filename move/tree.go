@@ -1,75 +1,63 @@
 package move
 
-import (
-	"fmt"
+import "github.com/itzamna314/battlesnake/model"
 
-	"github.com/itzamna314/battlesnake/model"
-)
-
-func BuildTree(root *model.GameState, depth int) *model.GameTree {
-	tree := &model.GameTree{
-		Root: treeNode(root, 0, depth),
+func BuildTree(start *model.GameState, depth int) *model.TreeNode {
+	root := model.TreeNode{
+		State: start,
 	}
+	expand(&root, depth)
 
-	return tree
+	return &root
 }
 
-// treeNode returns a node of the tree with all of its children,
-// expanding children via DFS up to depth
-func treeNode(state *model.GameState, weight float64, depth int) *model.TreeNode {
-	nd := &model.TreeNode{
-		State:    state,
-		Children: [4]*model.TreeNode{},
-		Weight:   weight,
-	}
-
-	moves := model.Options(&state.You.Head)
-
-	safe(nd.State, moves)
-	food(nd.State, moves)
-
-	// If we're at the bottom, return
+// expand expands children of node via DFS up to depth
+func expand(node *model.TreeNode, depth int) {
+	// If we're at the bottom, stop
 	if depth <= 0 {
-		return nd
+		return
 	}
 
+	// If this move is death, no need to calculate children
+	if node.Weight < 0 {
+		return
+	}
+
+	moves := model.Options(&node.State.You.Head)
 	for dir, move := range moves {
-		// Prune branches that die
-		if move.Weight < 0 {
-			continue
+		weight := weightSafe(node.State, &move.Coord)
+
+		if weight >= 0 {
+			weight += weightFood(node.State, &move.Coord)
 		}
 
-		// Build next game state for move
-		gs := *state
-		gs.MoveSnake(gs.You, model.Direction(dir))
+		// Advance game state in direction
+		next := node.State.Clone()
+		next.MoveSnake(next.You, model.Direction(dir))
 
-		nd.Children[dir] = treeNode(&gs, move.Weight, depth-1)
+		// Build child and recurse
+		child := model.TreeNode{
+			Parent: node,
+			Weight: weight,
+			State:  &next,
+		}
+
+		expand(&child, depth-1)
+		node.Children[dir] = &child
 	}
 
-	var (
-		numChildren  float64
-		childWeights float64
-	)
-
-	// Copy child node weights up to this node
-	for _, child := range nd.Children {
-		// Pruned child, weight -1
+	// Add best child to our weight
+	bestChild := -1.0
+	for _, child := range node.Children {
 		if child == nil {
 			continue
 		}
 
-		numChildren += 1
-		childWeights += child.Weight
+		if child.Weight > bestChild {
+			bestChild = child.Weight
+		}
 	}
 
-	nd.Weight = nd.Weight + (childWeights / numChildren)
-	return nd
-}
-
-func depthPrintf(depth int, str string, args ...interface{}) {
-	d := 3 - depth
-	for i := 0; i < d; i++ {
-		fmt.Printf(".")
-	}
-	fmt.Printf(str, args...)
+	node.Weight = node.Weight + (bestChild * 0.5)
+	return
 }

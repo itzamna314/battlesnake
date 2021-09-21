@@ -15,27 +15,21 @@ func Next(state model.GameState) model.BattlesnakeMoveResponse {
 	tree := BuildTree(&state, 10)
 
 	log.Println("Choosing from possible moves:")
-	for dir, move := range tree.Root.Children {
-		if move == nil {
-			continue
-		}
-
-		fmt.Printf("%s: Weight: %f\n",
-			model.Direction(dir),
-			move.Weight,
-		)
-	}
-
 	var (
 		nextMove  string
 		nextShout string
 		bestMoves []string
 		maxWeight float64
 	)
-	for dir, coord := range tree.Root.Children {
+	for dir, coord := range tree.Children {
 		if coord == nil {
 			continue
 		}
+
+		fmt.Printf("%s: Weight: %f\n",
+			model.Direction(dir),
+			coord.Weight,
+		)
 
 		if coord.Weight > maxWeight {
 			maxWeight = coord.Weight
