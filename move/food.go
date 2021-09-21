@@ -2,13 +2,11 @@ package move
 
 import "github.com/itzamna314/battlesnake/model"
 
-const FoodWeight = 0.15
-
 func weightFood(state *model.GameState, coord *model.Coord) float64 {
-	foodWeight := FoodWeight
+	baseWeight := WeightFood
 
 	if !wantFood(state) {
-		weight *= -1
+		baseWeight *= -1
 	}
 
 	// Find closest food to our head
@@ -29,23 +27,29 @@ func weightFood(state *model.GameState, coord *model.Coord) float64 {
 
 	// No food
 	if minDist == 0 {
-		return 0
+		return WeightNothing
 	}
 
-	// Prefer to move toward the closest foods
+	// Prefer to move toward or away from the closest foods
 	// Divide by number of closest foods
 	// If there are many tied at the same distance from head,
 	// lower priority and only count the ones in the right direction
-	var weight float64
+	var finalWeight, numWeights float64
+
 	for _, food := range closestFoods {
 		myDist := coord.Dist(&food)
 		if myDist < minDist {
 			amtCloser := float64(minDist-myDist) / float64(minDist)
-			weight = weight + foodWeight*amtCloser
+			finalWeight += baseWeight * amtCloser
+			numWeights++
 		}
 	}
 
-	return weight / float64(len(closestFoods))
+	if numWeights == 0 {
+		return WeightNothing
+	}
+
+	return finalWeight / numWeights
 }
 
 func wantFood(state *model.GameState) bool {
@@ -53,9 +57,7 @@ func wantFood(state *model.GameState) bool {
 		return true
 	}
 
-	var myLen = state.You.Length
-
-	for _, snake := range state.Snakes {
+	for _, snake := range state.Board.Snakes {
 		if snake.ID == state.You.ID {
 			continue
 		}

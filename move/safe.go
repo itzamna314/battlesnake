@@ -6,25 +6,25 @@ import "github.com/itzamna314/battlesnake/model"
 func weightSafe(state *model.GameState, coord *model.Coord) float64 {
 	// Don't hit walls.
 	if coord.X < 0 {
-		return -1
+		return WeightDeath
 	} else if coord.X >= state.Board.Width {
-		return -1
+		return WeightDeath
 	}
 
 	if coord.Y < 0 {
-		return -1
+		return WeightDeath
 	} else if coord.Y >= state.Board.Height {
-		return -1
+		return WeightDeath
 	}
 
 	// Don't hit snakes
 	for _, snake := range state.Board.Snakes {
 		for _, sBody := range snake.Body {
 			if coord.Hit(&sBody) {
-				return -1
+				return WeightDeath
 			}
 		}
 	}
 
-	return 0
+	return WeightNothing
 }

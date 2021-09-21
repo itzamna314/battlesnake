@@ -25,7 +25,8 @@ func expand(node *model.TreeNode, depth int) {
 
 	moves := model.Options(&node.State.You.Head)
 	for dir, move := range moves {
-		weight := weightSafe(node.State, &move.Coord)
+		weight := WeightBase
+		weight += weightSafe(node.State, &move.Coord)
 
 		if weight >= 0 {
 			weight += weightFood(node.State, &move.Coord)
