@@ -19,9 +19,21 @@ func isSafe(state *model.GameState, coord *model.Coord) bool {
 
 	// Don't hit snakes
 	for _, snake := range state.Board.Snakes {
+		isEnemy := snake.ID != state.You.ID
+
 		for _, sBody := range snake.Body {
 			if coord.Hit(&sBody) {
 				return false
+			}
+		}
+
+		// If this is an enemy that can eat us, avoid its next moves
+		if isEnemy && snake.Length > state.You.Length {
+			opts := model.Options(&snake.Head)
+			for _, opt := range opts {
+				if coord.Hit(&opt.Coord) {
+					return false
+				}
 			}
 		}
 	}

@@ -55,20 +55,3 @@ func expand(node *model.TreeNode, depth int) {
 	node.Weight = node.Weight + (bestChild * 0.5)
 	return
 }
-
-func moveWeight(state *model.GameState, coord *model.Coord) float64 {
-	if !isSafe(state, coord) {
-		return Death
-	}
-
-	// Compute food weight
-	weight := Base
-	weight += weightFood(state, coord)
-
-	// Don't consider food to be death
-	if weight < Avoid {
-		return Avoid
-	}
-
-	return weight
-}
