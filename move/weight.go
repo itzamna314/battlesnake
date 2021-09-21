@@ -1,8 +1,8 @@
 package move
 
 const (
-	WeightDeath   = -1.0
-	WeightBase    = 0.5
-	WeightNothing = 0.0
-	WeightFood    = 0.15
+	Death = -1.0
+	Base  = 0.5
+	Avoid = 0.0
+	Food  = 0.15
 )

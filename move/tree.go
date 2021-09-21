@@ -25,13 +25,6 @@ func expand(node *model.TreeNode, depth int) {
 
 	moves := model.Options(&node.State.You.Head)
 	for dir, move := range moves {
-		weight := WeightBase
-		weight += weightSafe(node.State, &move.Coord)
-
-		if weight >= 0 {
-			weight += weightFood(node.State, &move.Coord)
-		}
-
 		// Advance game state in direction
 		next := node.State.Clone()
 		next.MoveSnake(next.You, model.Direction(dir))
@@ -39,7 +32,7 @@ func expand(node *model.TreeNode, depth int) {
 		// Build child and recurse
 		child := model.TreeNode{
 			Parent: node,
-			Weight: weight,
+			Weight: moveWeight(node.State, &move.Coord),
 			State:  &next,
 		}
 
@@ -61,4 +54,21 @@ func expand(node *model.TreeNode, depth int) {
 
 	node.Weight = node.Weight + (bestChild * 0.5)
 	return
+}
+
+func moveWeight(state *model.GameState, coord *model.Coord) float64 {
+	if !isSafe(state, coord) {
+		return Death
+	}
+
+	// Compute food weight
+	weight := Base
+	weight += weightFood(state, coord)
+
+	// Don't consider food to be death
+	if weight < Avoid {
+		return Avoid
+	}
+
+	return weight
 }

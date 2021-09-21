@@ -3,7 +3,7 @@ package move
 import "github.com/itzamna314/battlesnake/model"
 
 func weightFood(state *model.GameState, coord *model.Coord) float64 {
-	baseWeight := WeightFood
+	baseWeight := Food
 
 	if !wantFood(state) {
 		baseWeight *= -1
@@ -27,7 +27,7 @@ func weightFood(state *model.GameState, coord *model.Coord) float64 {
 
 	// No food
 	if minDist == 0 {
-		return WeightNothing
+		return 0
 	}
 
 	// Prefer to move toward or away from the closest foods
@@ -46,7 +46,7 @@ func weightFood(state *model.GameState, coord *model.Coord) float64 {
 	}
 
 	if numWeights == 0 {
-		return WeightNothing
+		return 0
 	}
 
 	return finalWeight / numWeights
