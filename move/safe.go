@@ -3,18 +3,18 @@ package move
 import "github.com/itzamna314/battlesnake/model"
 
 // Calculate weight for moving You to coord in state
-func isSafe(state *model.GameState, coord *model.Coord) bool {
+func weightSafety(state *model.GameState, coord *model.Coord) float64 {
 	// Don't hit walls.
 	if coord.X < 0 {
-		return false
+		return Death
 	} else if coord.X >= state.Board.Width {
-		return false
+		return Death
 	}
 
 	if coord.Y < 0 {
-		return false
+		return Death
 	} else if coord.Y >= state.Board.Height {
-		return false
+		return Death
 	}
 
 	// Don't hit snakes
@@ -23,7 +23,7 @@ func isSafe(state *model.GameState, coord *model.Coord) bool {
 
 		for _, sBody := range snake.Body {
 			if coord.Hit(&sBody) {
-				return false
+				return Death
 			}
 		}
 
@@ -32,11 +32,13 @@ func isSafe(state *model.GameState, coord *model.Coord) bool {
 			opts := model.Options(&snake.Head)
 			for _, opt := range opts {
 				if coord.Hit(&opt.Coord) {
-					return false
+					// assume enemy snake has 3 valid moves
+					// this could be improved
+					return Death * 0.33
 				}
 			}
 		}
 	}
 
-	return true
+	return Nothing
 }
