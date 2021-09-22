@@ -66,6 +66,9 @@ func (g *GameState) initFutureToPresent() BoardVision {
 
 	for x := 0; x < g.Board.Width; x++ {
 		future[x] = make([]VisionCell, g.Board.Height)
+		for y := 0; y < g.Board.Height; y++ {
+			future[x][y].Enemies = make([]float64, len(g.Board.Snakes))
+		}
 	}
 
 	for i, snake := range g.Board.Snakes {

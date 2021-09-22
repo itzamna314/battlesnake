@@ -84,6 +84,40 @@ func TestNoCrash(t *testing.T) {
 	}
 }
 
+func TestWithEnemies(t *testing.T) {
+	// Arrange
+	me := model.Battlesnake{
+		// Length 3, facing right
+		ID:     "me",
+		Head:   model.Coord{X: 2, Y: 0},
+		Body:   []model.Coord{{X: 2, Y: 0}, {X: 1, Y: 0}, {X: 0, Y: 0}},
+		Health: 80,
+	}
+	enemy := model.Battlesnake{
+		// Length 3, facing down
+		ID:     "enemy",
+		Head:   model.Coord{X: 3, Y: 1},
+		Body:   []model.Coord{{X: 3, Y: 1}, {X: 3, Y: 2}, {X: 2, Y: 2}},
+		Health: 80,
+	}
+	state := model.GameState{
+		Board: model.Board{
+			Height: 10,
+			Width:  10,
+			Snakes: []model.Battlesnake{me, enemy},
+			Food: []model.Coord{
+				{2, 1},
+			},
+		},
+		You: me,
+	}
+
+	nextMove := move.Next(state)
+	if nextMove.Move != "up" {
+		t.Errorf("snake did not eat food at (2,1), went %s", nextMove.Move)
+	}
+}
+
 func server() *httptest.Server {
 	hnd := api.Build()
 	svr := httptest.NewServer(hnd)
