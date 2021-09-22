@@ -14,6 +14,9 @@ const (
 	Nothing = 0.0
 	// Value of food
 	Food = 0.15
+
+	// Probabilities
+	Certain = 1.0
 )
 
 func moveWeight(state *model.GameState, coord *model.Coord) float64 {

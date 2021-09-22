@@ -17,6 +17,10 @@ func weightEnemies(state *model.GameState, coord *model.Coord) float64 {
 			continue
 		}
 
+		if vis.Enemies[i] == Certain {
+			return Death
+		}
+
 		// Ignore low-probability enemies
 		if vis.Enemies[i] < 0.75 {
 			continue
