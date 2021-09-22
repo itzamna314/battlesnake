@@ -1,0 +1,1976 @@
+<!doctype html>
+<html lang="en">
+
+
+
+<head>
+
+  
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146470536-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-146470536-1');
+  </script>
+  
+  
+
+  <meta charset="utf-8"><script type="text/javascript">(window.NREUM||(NREUM={})).loader_config={licenseKey:"NRJS-b48d993261528c0bd02",applicationID:"660890254"};window.NREUM||(NREUM={}),__nr_require=function(t,e,n){function r(n){if(!e[n]){var i=e[n]={exports:{}};t[n][0].call(i.exports,function(e){var i=t[n][1][e];return r(i||e)},i,i.exports)}return e[n].exports}if("function"==typeof __nr_require)return __nr_require;for(var i=0;i<n.length;i++)r(n[i]);return r}({1:[function(t,e,n){function r(){}function i(t,e,n){return function(){return o(t,[u.now()].concat(f(arguments)),e?null:this,n),e?void 0:this}}var o=t("handle"),a=t(8),f=t(9),c=t("ee").get("tracer"),u=t("loader"),s=NREUM;"undefined"==typeof window.newrelic&&(newrelic=s);var d=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],p="api-",l=p+"ixn-";a(d,function(t,e){s[e]=i(p+e,!0,"api")}),s.addPageAction=i(p+"addPageAction",!0),s.setCurrentRouteName=i(p+"routeName",!0),e.exports=newrelic,s.interaction=function(){return(new r).get()};var m=r.prototype={createTracer:function(t,e){var n={},r=this,i="function"==typeof e;return o(l+"tracer",[u.now(),t,n],r),function(){if(c.emit((i?"":"no-")+"fn-start",[u.now(),r,i],n),i)try{return e.apply(this,arguments)}catch(t){throw c.emit("fn-err",[arguments,this,t],n),t}finally{c.emit("fn-end",[u.now()],n)}}}};a("actionText,setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(t,e){m[e]=i(l+e)}),newrelic.noticeError=function(t,e){"string"==typeof t&&(t=new Error(t)),o("err",[t,u.now(),!1,e])}},{}],2:[function(t,e,n){function r(t){if(NREUM.init){for(var e=NREUM.init,n=t.split("."),r=0;r<n.length-1;r++)if(e=e[n[r]],"object"!=typeof e)return;return e=e[n[n.length-1]]}}e.exports={getConfiguration:r}},{}],3:[function(t,e,n){function r(){return f.exists&&performance.now?Math.round(performance.now()):(o=Math.max((new Date).getTime(),o))-a}function i(){return o}var o=(new Date).getTime(),a=o,f=t(10);e.exports=r,e.exports.offset=a,e.exports.getLastTimestamp=i},{}],4:[function(t,e,n){function r(t){return!(!t||!t.protocol||"file:"===t.protocol)}e.exports=r},{}],5:[function(t,e,n){function r(t,e){var n=t.getEntries();n.forEach(function(t){"first-paint"===t.name?d("timing",["fp",Math.floor(t.startTime)]):"first-contentful-paint"===t.name&&d("timing",["fcp",Math.floor(t.startTime)])})}function i(t,e){var n=t.getEntries();n.length>0&&d("lcp",[n[n.length-1]])}function o(t){t.getEntries().forEach(function(t){t.hadRecentInput||d("cls",[t])})}function a(t){if(t instanceof m&&!g){var e=Math.round(t.timeStamp),n={type:t.type};e<=p.now()?n.fid=p.now()-e:e>p.offset&&e<=Date.now()?(e-=p.offset,n.fid=p.now()-e):e=p.now(),g=!0,d("timing",["fi",e,n])}}function f(t){"hidden"===t&&d("pageHide",[p.now()])}if(!("init"in NREUM&&"page_view_timing"in NREUM.init&&"enabled"in NREUM.init.page_view_timing&&NREUM.init.page_view_timing.enabled===!1)){var c,u,s,d=t("handle"),p=t("loader"),l=t(7),m=NREUM.o.EV;if("PerformanceObserver"in window&&"function"==typeof window.PerformanceObserver){c=new PerformanceObserver(r);try{c.observe({entryTypes:["paint"]})}catch(v){}u=new PerformanceObserver(i);try{u.observe({entryTypes:["largest-contentful-paint"]})}catch(v){}s=new PerformanceObserver(o);try{s.observe({type:"layout-shift",buffered:!0})}catch(v){}}if("addEventListener"in document){var g=!1,h=["click","keydown","mousedown","pointerdown","touchstart"];h.forEach(function(t){document.addEventListener(t,a,!1)})}l(f)}},{}],6:[function(t,e,n){function r(t,e){if(!i)return!1;if(t!==i)return!1;if(!e)return!0;if(!o)return!1;for(var n=o.split("."),r=e.split("."),a=0;a<r.length;a++)if(r[a]!==n[a])return!1;return!0}var i=null,o=null,a=/Version\/(\S+)\s+Safari/;if(navigator.userAgent){var f=navigator.userAgent,c=f.match(a);c&&f.indexOf("Chrome")===-1&&f.indexOf("Chromium")===-1&&(i="Safari",o=c[1])}e.exports={agent:i,version:o,match:r}},{}],7:[function(t,e,n){function r(t){function e(){t(a&&document[a]?document[a]:document[i]?"hidden":"visible")}"addEventListener"in document&&o&&document.addEventListener(o,e,!1)}e.exports=r;var i,o,a;"undefined"!=typeof document.hidden?(i="hidden",o="visibilitychange",a="visibilityState"):"undefined"!=typeof document.msHidden?(i="msHidden",o="msvisibilitychange"):"undefined"!=typeof document.webkitHidden&&(i="webkitHidden",o="webkitvisibilitychange",a="webkitVisibilityState")},{}],8:[function(t,e,n){function r(t,e){var n=[],r="",o=0;for(r in t)i.call(t,r)&&(n[o]=e(r,t[r]),o+=1);return n}var i=Object.prototype.hasOwnProperty;e.exports=r},{}],9:[function(t,e,n){function r(t,e,n){e||(e=0),"undefined"==typeof n&&(n=t?t.length:0);for(var r=-1,i=n-e||0,o=Array(i<0?0:i);++r<i;)o[r]=t[e+r];return o}e.exports=r},{}],10:[function(t,e,n){e.exports={exists:"undefined"!=typeof window.performance&&window.performance.timing&&"undefined"!=typeof window.performance.timing.navigationStart}},{}],ee:[function(t,e,n){function r(){}function i(t){function e(t){return t&&t instanceof r?t:t?u(t,c,a):a()}function n(n,r,i,o,a){if(a!==!1&&(a=!0),!l.aborted||o){t&&a&&t(n,r,i);for(var f=e(i),c=v(n),u=c.length,s=0;s<u;s++)c[s].apply(f,r);var p=d[w[n]];return p&&p.push([b,n,r,f]),f}}function o(t,e){y[t]=v(t).concat(e)}function m(t,e){var n=y[t];if(n)for(var r=0;r<n.length;r++)n[r]===e&&n.splice(r,1)}function v(t){return y[t]||[]}function g(t){return p[t]=p[t]||i(n)}function h(t,e){l.aborted||s(t,function(t,n){e=e||"feature",w[n]=e,e in d||(d[e]=[])})}var y={},w={},b={on:o,addEventListener:o,removeEventListener:m,emit:n,get:g,listeners:v,context:e,buffer:h,abort:f,aborted:!1};return b}function o(t){return u(t,c,a)}function a(){return new r}function f(){(d.api||d.feature)&&(l.aborted=!0,d=l.backlog={})}var c="nr@context",u=t("gos"),s=t(8),d={},p={},l=e.exports=i();e.exports.getOrSetContext=o,l.backlog=d},{}],gos:[function(t,e,n){function r(t,e,n){if(i.call(t,e))return t[e];var r=n();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(t,e,{value:r,writable:!0,enumerable:!1}),r}catch(o){}return t[e]=r,r}var i=Object.prototype.hasOwnProperty;e.exports=r},{}],handle:[function(t,e,n){function r(t,e,n,r){i.buffer([t],r),i.emit(t,e,n)}var i=t("ee").get("handle");e.exports=r,r.ee=i},{}],id:[function(t,e,n){function r(t){var e=typeof t;return!t||"object"!==e&&"function"!==e?-1:t===window?0:a(t,o,function(){return i++})}var i=1,o="nr@id",a=t("gos");e.exports=r},{}],loader:[function(t,e,n){function r(){if(!R++){var t=M.info=NREUM.info,e=v.getElementsByTagName("script")[0];if(setTimeout(u.abort,3e4),!(t&&t.licenseKey&&t.applicationID&&e))return u.abort();c(E,function(e,n){t[e]||(t[e]=n)});var n=a();f("mark",["onload",n+M.offset],null,"api"),f("timing",["load",n]);var r=v.createElement("script");0===t.agent.indexOf("http://")||0===t.agent.indexOf("https://")?r.src=t.agent:r.src=l+"://"+t.agent,e.parentNode.insertBefore(r,e)}}function i(){"complete"===v.readyState&&o()}function o(){f("mark",["domContent",a()+M.offset],null,"api")}var a=t(3),f=t("handle"),c=t(8),u=t("ee"),s=t(6),d=t(4),p=t(2),l=p.getConfiguration("ssl")===!1?"http":"https",m=window,v=m.document,g="addEventListener",h="attachEvent",y=m.XMLHttpRequest,w=y&&y.prototype,b=!d(m.location);NREUM.o={ST:setTimeout,SI:m.setImmediate,CT:clearTimeout,XHR:y,REQ:m.Request,EV:m.Event,PR:m.Promise,MO:m.MutationObserver};var x=""+location,E={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-1210.min.js"},O=y&&w&&w[g]&&!/CriOS/.test(navigator.userAgent),M=e.exports={offset:a.getLastTimestamp(),now:a,origin:x,features:{},xhrWrappable:O,userAgent:s,disabled:b};if(!b){t(1),t(5),v[g]?(v[g]("DOMContentLoaded",o,!1),m[g]("load",r,!1)):(v[h]("onreadystatechange",i),m[h]("onload",r)),f("mark",["firstbyte",a.getLastTimestamp()],null,"api");var R=0}},{}],"wrap-function":[function(t,e,n){function r(t,e){function n(e,n,r,c,u){function nrWrapper(){var o,a,s,p;try{a=this,o=d(arguments),s="function"==typeof r?r(o,a):r||{}}catch(l){i([l,"",[o,a,c],s],t)}f(n+"start",[o,a,c],s,u);try{return p=e.apply(a,o)}catch(m){throw f(n+"err",[o,a,m],s,u),m}finally{f(n+"end",[o,a,p],s,u)}}return a(e)?e:(n||(n=""),nrWrapper[p]=e,o(e,nrWrapper,t),nrWrapper)}function r(t,e,r,i,o){r||(r="");var f,c,u,s="-"===r.charAt(0);for(u=0;u<e.length;u++)c=e[u],f=t[c],a(f)||(t[c]=n(f,s?c+r:r,i,c,o))}function f(n,r,o,a){if(!m||e){var f=m;m=!0;try{t.emit(n,r,o,e,a)}catch(c){i([c,n,r,o],t)}m=f}}return t||(t=s),n.inPlace=r,n.flag=p,n}function i(t,e){e||(e=s);try{e.emit("internal-error",t)}catch(n){}}function o(t,e,n){if(Object.defineProperty&&Object.keys)try{var r=Object.keys(t);return r.forEach(function(n){Object.defineProperty(e,n,{get:function(){return t[n]},set:function(e){return t[n]=e,e}})}),e}catch(o){i([o],n)}for(var a in t)l.call(t,a)&&(e[a]=t[a]);return e}function a(t){return!(t&&t instanceof Function&&t.apply&&!t[p])}function f(t,e){var n=e(t);return n[p]=t,o(t,n,s),n}function c(t,e,n){var r=t[e];t[e]=f(r,n)}function u(){for(var t=arguments.length,e=new Array(t),n=0;n<t;++n)e[n]=arguments[n];return e}var s=t("ee"),d=t(9),p="nr@original",l=Object.prototype.hasOwnProperty,m=!1;e.exports=r,e.exports.wrapFunction=f,e.exports.wrapInPlace=c,e.exports.argsToArray=u},{}]},{},["loader"]);</script><script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","errorBeacon":"bam.nr-data.net","licenseKey":"NRJS-b48d993261528c0bd02","applicationID":"660890254","transactionName":"b1VUZBYHXUoDW00PXlYfcEUKBUdQDVYWB0FIQxhFDUhFUAdPSkhBTVJaWQdcdFgPXW8PVE8eUVUQ","queueTime":0,"applicationTime":54,"agent":""}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <title>Battlesnake</title>
+  <meta name="description"
+    content="Battlesnake is a multi-player programming game played by developers all over the world.">
+
+    <!-- https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs -->
+    <link rel="icon" href="/static/ui/favicon.ico" sizes="any"><!-- 32×32 -->
+    <link rel="icon" href="/static/ui/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/static/ui/apple-touch-icon.png"><!-- 180×180 -->
+
+  <!-- Open Graph Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Battlesnake">
+  <meta property="og:description"
+    content="Battlesnake is a multi-player programming game played by developers all over the world.">
+  <meta property="og:url" content="https://play.battlesnake.com/g/fbe39900-f4aa-44b2-b978-aecf0d332c06/?turn=50">
+
+  
+  <meta property="og:image" content="https://exporter.battlesnake.com/games/fbe39900-f4aa-44b2-b978-aecf0d332c06/gif">
+  
+
+  <!-- Twitter Specific Meta -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@playbattlesnake">
+  <meta name="twitter:creator" content="@playbattlesnake">
+
+  
+
+  <meta name='theme-color' content='#F64A91'>
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed Battlesnake News" href="/news/rss/" />
+
+  
+
+
+
+<!-- ================== GOOGLE FONTS ==================-->
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500" rel="stylesheet">
+<!-- ======================= GLOBAL VENDOR STYLES ========================-->
+<link rel="stylesheet" href="/static/ui/theme/css/vendor/bootstrap.css">
+<link rel="stylesheet" href="/static/ui/theme/vendor/metismenu/dist/metisMenu.css">
+<link rel="stylesheet" href="/static/ui/theme/vendor/switchery-npm/index.css">
+<link rel="stylesheet" href="/static/ui/theme/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css">
+<!-- ======================= LINE AWESOME ICONS ===========================-->
+<link rel="stylesheet" href="/static/ui/theme/css/icons/line-awesome.min.css">
+<link rel="stylesheet" href="/static/ui/theme/css/icons/simple-line-icons.css">
+<!-- ======================= DRIP ICONS ===================================-->
+<link rel="stylesheet" href="/static/ui/theme/css/icons/dripicons.min.css">
+<!-- ======================= MATERIAL DESIGN ICONIC FONTS =================-->
+<link rel="stylesheet" href="/static/ui/theme/css/icons/material-design-iconic-font.min.css">
+<!-- ======================= PAGE VENDOR STYLES ===========================-->
+<link rel="stylesheet" href="/static/ui/theme/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">
+<link rel="stylesheet" href="/static/ui/theme/vendor/select2/select2.min.css">
+<!-- ======================= GLOBAL COMMON STYLES ============================-->
+<link rel="stylesheet" href="/static/ui/theme/css/common/main.bundle.css">
+<!-- ======================= LAYOUT STYLES ===========================-->
+<link rel="stylesheet" href="/static/ui/theme/css/layouts/horizontal/core/main.css">
+<!-- ======================= MENU TYPE ===========================-->
+<link rel="stylesheet" href="/static/ui/theme/css/layouts/horizontal/menu-type/auto-hide.css">
+<!-- ======================= THEME COLOR STYLES ===========================-->
+<link rel="stylesheet" href="/static/ui/theme/css/layouts/horizontal/themes/theme-p.css">
+
+<style>
+  /* Resets the `padding: 0` that is introduced in the theme,
+   * but isn't in the theme demo here?
+   * http://www.authenticgoods.co/themes/quantum-pro/demos/demo6/
+   */
+  @media (max-width: 992px) {
+    body.layout-horizontal .content-wrapper {
+      padding: 15px 5px;
+    }
+  }
+</style>
+
+  <style>
+  /***
+   * bvanvugt: these are pretty heavy theme changes, grouped together on purpose.
+   * The comment values represent the original theme.
+   */
+  body {
+    /* background: #f0f6ff!important; */
+    background: #F4F3F9 !important;
+  }
+
+  /* Bootstrap 4.5 changed this, revert back to what the theme wants */
+  body .table {
+    color: #617182;
+  }
+
+  /* Make icons work in secondary buttons */
+  body a.btn-secondary:visited,
+  body a.btn-secondary:link,
+  body a.btn-secondary i {
+    color: #788db4;
+  }
+
+  body a.btn-secondary:hover,
+  body a.btn-secondary:hover i {
+    color: #ffffff;
+  }
+
+  body a.btn-secondary i {
+    transition-duration: 0.2s;
+  }
+
+  body .btn, body a.btn, body a:link.btn, body button.btn {
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .card {
+    /* box-shadow: 0 10px 40px 0 rgba(18,106,211,.07), 0 2px 9px 0 rgba(18,106,211,.06); */
+    box-shadow: 0 10px 40px 0 rgba(165, 178, 193, 0.4), 0 2px 9px 0 rgba(195, 195, 210, 0.5);
+
+  }
+
+  .card.card-elevate:hover {
+    /* box-shadow: 0 16px 32px 0 rgba(100,143,195,.28), 0 0 0 transparent; */
+    box-shadow: 0 16px 32px 0 rgba(165, 178, 193, .5), 0 0 0 transparent;
+  }
+
+  .table-striped tbody tr:nth-of-type(odd) {
+    /* background-color: #f0f6ff; */
+    background-color: #F4F3F9;
+  }
+
+  /* Navbar */
+  body.layout-horizontal .header-wrapper {
+    height: 100px;
+  }
+  @media (max-width: 992px) {
+    body.layout-horizontal .header-wrapper {
+      height: 50px;
+    }
+  }
+
+  body.layout-horizontal .content-wrapper {
+    padding: 20px 35px;
+  }
+  @media (max-width: 992px) {
+    body.layout-horizontal .content-wrapper {
+      margin-top: 50px;
+      padding: 20px 15px;
+    }
+  }
+  body.layout-horizontal .content-wrapper .content {
+    margin-top: 0;
+  }
+  /* Navbar - Top */
+  body .header-wrapper .header-top {
+    /* background: linear-gradient(135deg,#534ca7 21%,#3190f0 100%,#3190f0 100%); */
+    background: linear-gradient(135deg, #E80987 15%, #3E338F 100%);
+    height: 50px;
+    padding: 10px;
+  }
+  body .header-wrapper .header-top .top-toolbar {
+    top: 0;
+  }
+  body .navbar-site-logo img {
+    height: 30px;
+  }
+  body .navbar-site-logo {
+    display: flex;
+    justify-content: center;
+  }
+  @media (min-width: 992px) {
+    body .navbar-site-logo {
+      justify-content: start;
+    }
+  }
+  @media (max-width: 992px) {
+    body .header-wrapper .mobile-only li {
+      line-height: 1.5;
+      height: 30px;
+    }
+    body .header-wrapper .mobile-only li a {
+      height: 30px;
+    }
+    body .header-wrapper .mobile-only li a i {
+      font-size: 1.5rem;
+      height: 30px;
+      width: 30px;
+    }
+  }
+  body .header-wrapper .header-top .top-toolbar ul li.nav-item>a {
+    color: #F0F0F0;
+    padding: 5px 10px;
+  }
+  body .header-wrapper .header-top .top-toolbar ul li.nav-item>a>i,
+  body .header-wrapper .header-top .top-toolbar ul li.nav-item>a>i:hover {
+    color: #F0F0F0;
+  }
+  body .top-toolbar-wrapper .top-toolbar .navbar-nav .nav-item>a:hover i.icon:after {
+    position: absolute;
+    top: -8px;
+    left: -7px;
+  }
+  @media (max-width: 992px) {
+    body .header-wrapper .header-top .top-toolbar ul li.nav-item>a,
+    body .header-wrapper .header-top .top-toolbar ul li.nav-item>a>i,
+    body .header-wrapper .header-top .top-toolbar ul li.nav-item>a>i:hover {
+      color: #788db4;
+      font-size: 1.125rem;
+    }
+  }
+  /* Navbar - Bottom */
+  body.menu-auto-hide .header-wrapper .header-bottom {
+    top: 50px;
+    height: 50px;
+  }
+  body .header-wrapper .header-bottom .main-menu {
+    padding: 0;
+  }
+  @media (max-width: 992px) {
+    body.menu-auto-hide .header-wrapper .header-bottom {
+      height: 100vh;
+      top: 0;
+    }
+  }
+
+  /* footer */
+  @media (max-width: 992px) {
+    body .container.footer {
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+  }
+
+  /* reduce h1 size on mobile */
+  @media (max-width: 992px) {
+    body h1.display-4 {
+      font-size: 2.5rem;
+    }
+  }
+
+  /**
+   * Different color logo for the sign in form.
+  */
+  .sign-in-form .battlesnake-logo {
+    fill: #6f42c1;
+  }
+
+  /**
+   * Hack for modals inside list-group-items
+   * https://github.com/twbs/bootstrap/issues/25206
+   */
+  .list-group-item,
+  .list-group-item:hover {
+    z-index: auto !important;
+  }
+
+  /* Fix for theme btn CSS*/
+  a:link.btn.btn-sm {
+    line-height: 1.6;
+  }
+
+  /* Fix for popover widths being too restrictive in the theme */
+  .popover {
+    min-width: 280px;
+    max-width: 400px;
+  }
+
+  /* Select2 Tweaks */
+  .select2-container--default .select2-selection--multiple .select2-selection__choice,
+  .select2-container--default.select2-container--disabled .select2-selection--single {
+    margin-top: 7px;
+  }
+
+  /**
+   * SVG logo
+   */
+
+  .logo a {
+    display: block;
+  }
+
+  .battlesnake-logo {
+    fill: #fff;
+    width: 100px;
+  }
+
+  @media (min-width: 992px) {
+    .battlesnake-logo {
+      width: 140px;
+    }
+  }
+
+  .sign-in-form .battlesnake-logo {
+    width: 240px;
+  }
+
+  /**
+   * Homepage tournament media banner
+   */
+  .tournament-media-play-link {
+    height: 140px;
+  }
+
+  @media (min-width: 576px) {
+    .tournament-media-play-link {
+      height: 200px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .tournament-media-play-link {
+      height: 300px;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .tournament-media-play-link {
+      height: 140px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .tournament-media-play-link {
+      height: 200px;
+    }
+  }
+
+  /**
+  * Table Highlights. These did not come with the theme.
+  */
+  table .table-primary,
+  table .table-primary>td,
+  table .table-primary>th {
+    color: #ffffff;
+    background-color: #635ebe;
+  }
+
+  table .table-secondary,
+  table .table-secondary>td,
+  table .table-secondary>th {
+    color: #ffffff;
+    background-color: #788db4;
+  }
+
+  table .table-accent,
+  table .table-accent>td,
+  table .table-accent>th {
+    color: #ffffff;
+    background-color: #f64a91;
+  }
+
+  table .table-info,
+  table .table-info>td,
+  table .table-info>th {
+    color: #ffffff;
+    background-color: #399AF2;
+  }
+
+  .event-type-flag {
+    top: 0%;
+    left: 0%;
+    position: absolute;
+    width: 60%;
+    height: auto;
+    max-width: 241px;
+  }
+
+  .event-past-flag {
+    top: 0%;
+    right: 0%;
+    position: absolute;
+    width: 60%;
+    height: auto;
+    max-width: 241px
+  }
+
+  .word-wrap-button {
+    word-wrap: break-word;
+    white-space: normal !important;
+    word-break: normal;
+    line-height: normal;
+  }
+
+  .arena-dropdown-list {
+    width: 350px;
+  }
+
+  /** bvanvugt - we intentionally don't set these, they're too aggressive and dark.
+  table .table-success, table .table-success>td, table .table-success>th {
+    color: #ffffff;
+    background-color: #2fbfa0;
+  }
+  table .table-danger, table .table-danger>td, table .table-danger>th {
+    color: #ffffff;
+    background-color: #ff5c75;
+  }
+  table .table-warning, table .table-warning>td, table .table-warning>th {
+    color: #ffffff;
+    background-color: #FFCE67;
+  }
+**/
+
+  /**
+  * Battlesnake Brand Colors
+  */
+  .bg-battlesnake-pink {
+    background-color: #E80987;
+  }
+
+  .bg-battlesnake-purple {
+    background-color: #3E338F;
+  }
+
+  .bg-battlesnake-light-pink {
+    background-color: #E37CB2;
+
+  }
+
+  .bg-battlesnake-light-purple {
+    background-color: #732E89;
+  }
+
+  /** Splash Page Tweaks */
+  .page-content .splash {
+    max-width: 450px;
+  }
+
+  /* Trophy Colors and Badges */
+  .text-gold {
+    color: #E7BD42 !important;
+  }
+
+  .text-silver {
+    color: #AAA9AD !important;
+  }
+
+  .text-bronze {
+    color: #9C5221 !important;
+  }
+
+  .badge.badge-gold {
+    background-color: #E7BD42;
+    color: white;
+  }
+
+  .badge.badge-silver {
+    background-color: #AAA9AD;
+    color: white;
+  }
+
+  .badge.badge-bronze {
+    background-color: #9C5221;
+    color: white;
+  }
+
+  div.notification-message>p {
+    margin-bottom: 0px;
+  }
+
+  div.unread-notification-message>p {
+    font-weight: bold;
+  }
+
+  .badge.tech-tag-language {
+    background-color: #788db4;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .badge.tech-tag-platform {
+    background-color: #788db4;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .badge.tech-tag-game-mode {
+    background-color: #788db4;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .badge.tech-tag-strategy {
+    background-color: #788db4;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .badge.tech-tag-meta {
+    background-color: #788db4;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .badge.tech-tag-personality {
+    background-color: #4c89c8;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .badge.tech-tag-generic {
+    background-color: #788db4;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .live-pulse {
+    background: black;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+    margin: 0px;
+    height: 0.5rem;
+    width: 0.5rem;
+    transform: scale(1);
+    display: inline-block;
+  }
+
+  .live-pulse.red {
+    background: rgba(255, 82, 82, 1);
+    box-shadow: 0 0 0 0 rgba(255, 82, 82, 1);
+    animation: live-pulse-red 2s infinite;
+  }
+
+  @keyframes live-pulse-red {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(255, 82, 82, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(255, 82, 82, 0);
+    }
+  }
+
+  /* make form help text smaller */
+  form small.form-text {
+    font-size: 60%;
+  }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
+
+
+  <!-- Page Specific Style Tags -->
+  
+
+  
+  
+  
+</head>
+
+<body class="layout-horizontal menu-auto-hide">
+  
+  
+
+<div class="header-wrapper">
+  <div class="header-top">
+    <!-- START MOBILE MENU TRIGGER -->
+    <ul class="mobile-only navbar-nav nav-left">
+      <li class="nav-item">
+        <a href="#" data-toggle-state="aside-left-open">
+          <i class="icon dripicons-align-left"></i>
+        </a>
+      </li>
+    </ul>
+    <!-- END MOBILE MENU TRIGGER -->
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 col-lg-3">
+          <!-- START LOGO -->
+          <div class="navbar-site-logo">
+            <a href="/" title="Battlesnake">
+              <img src="https://media.battlesnake.com/play/img/battlesnake-logo-nav.svg">
+            </a>
+          </div>
+          <!-- END LOGO -->
+        </div>
+        <div class="col-lg-9">
+          <!-- START TOP TOOLBAR WRAPPER -->
+          <div class="top-toolbar-wrapper">
+            <nav class="top-toolbar navbar flex-nowrap">
+              <ul class="navbar-nav nav-right">
+                
+                <li class="nav-item">
+                  <a href="/live/">
+                    <span class="badge badge-light" style="position:relative; top: -2px">
+                      <i class="live-pulse red"></i> LIVE
+                    </span>
+                  </a>
+                </li>
+                
+                <li class="nav-item">
+                  <a href="/docs/">
+                    Docs
+                  </a>
+                </li>
+                <li class="nav-item" style="position: relative;">
+                  <a href="/store/">
+                    Store
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/news/">
+                    Blog
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/partner/contact/">
+                    Host Competition
+                  </a>
+                </li>
+                
+                <li class="nav-item">
+                  <a href="/register/" class="nav-link">Create Account</a>
+                </li>
+                <li class="nav-item">
+                  <a href="/login/" class="nav-link">Sign In</a>
+                </li>
+                
+              </ul>
+            </nav>
+          </div>
+          <!-- END TOP TOOLBAR WRAPPER -->
+        </div>
+      </div>
+    </div>
+    <!-- START MOBILE TOOLBAR TRIGGER -->
+    <ul class="mobile-only navbar-nav nav-right">
+      <li class="nav-item">
+        <a href="#" data-toggle-state="mobile-topbar-toggle">
+          <i class="icon dripicons-dots-3 rotate-90"></i>
+        </a>
+      </li>
+    </ul>
+    <!-- END MOBILE TOOLBAR TRIGGER -->
+  </div>
+  <!-- START HEADER BOTTOM -->
+  <div class="header-bottom">
+    <div class="container">
+      <!-- START MAIN MENU -->
+      <nav class="main-menu">
+        <ul class="nav metismenu">
+          <li class="sidebar-header mobile-only"><span>NAVIGATION</span></li>
+          <li class="mr-auto">
+            
+            <p><a class="btn btn-secondary d-none d-lg-inline-block"  style="color: white !important; background-color: #FF5A09; border-color: #FF5A09" href="/fall-league"><strong>REGISTER NOW FOR FALL LEAGUE 2021!</strong></a></p>
+            
+          </li>
+          <li>
+            <a href="/challenges/">
+              <span class="hide-menu">Challenges</span>
+            </a>
+          </li>
+          <li>
+            
+            <a class="has-arrow " href="#" aria-expanded="true">
+              <span class="hide-menu">Global Arenas</span>
+            </a>
+            <ul aria-expanded="false" class="arena-dropdown-list collapse">
+              
+              
+              
+              <li><a href="/arena/global/" aria-expanded="false">Global Arena</a>
+              </li>
+              
+              
+              
+              <li><a href="/arena/global-duels/" aria-expanded="false">Global Duels</a>
+              </li>
+              
+              
+              
+              <li><a href="/arena/global-royale/" aria-expanded="false">Global Royale</a>
+              </li>
+              
+              
+              
+              <li><a href="/arena/global-royale-galaxy-brain/" aria-expanded="false">Global Royale (Galaxy Brain)</a>
+              </li>
+              
+              
+
+              
+            </ul>
+            
+          </li>
+          
+          <li>
+            <a href="#">
+              <span class="hide-menu">Fall League 2021</span>
+            </a>
+            <ul class="collapse">
+              <li>
+                <a href="/league/fall-league-2021/">Overview</a>
+              </li>
+              
+            </ul>
+          </li>
+          
+          <li>
+            <a class="p-0" href="/account/games/create/">
+              <button class="btn btn-accent" href="/account/games/create/">
+                <strong>PLAY GAME</strong>
+              </button>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- END MAIN MENU -->
+    </div>
+  </div>
+  <!-- END HEADER BOTTOM -->
+</div>
+
+
+
+  
+
+  <div class="content-wrapper">
+    <main class="content container">
+      
+      
+      
+
+      
+      
+      
+      <section class="page-content">
+        
+<div class="card">
+  <div class="embed-responsive embed-responsive-1by1" style="max-height: 600px;">
+    <iframe
+      id="iframe_game"
+      src="https://board.battlesnake.com/?engine=https%3A//engine.battlesnake.com&game=fbe39900-f4aa-44b2-b978-aecf0d332c06&turn=50&hideLogo=true"
+      scrolling="no"
+      class="embed-responsive-item">
+    </iframe>
+  </div>
+  <div class="container-fluid">
+    <div class="row p-2">
+      <div class="col">
+        <a href="#" class="btn btn-sm btn-block btn-primary js-share-game-at-turn">
+          <strong>SHARE GAME</strong>
+        </a>
+      </div>
+      <div class="col">
+        <a href="/g/fbe39900-f4aa-44b2-b978-aecf0d332c06/gif/" class="btn btn-sm btn-block btn-primary">
+          <strong>VIEW GIF</strong>
+        </a>
+      </div>
+      
+      
+    </div>
+  </div>
+</div>
+
+<div class="row d-none d-md-block">
+  <div class="col">
+    <div class="card card-tabs">
+      <div class="card-header">
+        <div class="card-title">
+          Game Statistics
+        </div>
+        <ul class="nav nav-tabs primary-tabs justify-content-end">
+          <li class="nav-item" role="presentation">
+            <a href="#tab-length" class="nav-link active" data-toggle="tab" aria-expanded="true">
+              Length
+            </a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a href="#tab-health" class="nav-link" data-toggle="tab" aria-expanded="true">
+              Health
+            </a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a href="#tab-latency" class="nav-link" data-toggle="tab" aria-expanded="true">
+              Latency
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="card-body p-0">
+        <div class="row">
+          <div class="col-3">
+              <table class="table table-borderless table-sm">
+                <tbody>
+                  
+                  <tr>
+                    <td class="p-l-20">
+                      <p class="p-0 m-0">
+                        <a href="/u/rileyjraso/augustus/">Augustus</a>
+                      </p>
+                      
+<style>
+  .d-snake.gs_YGqfJgrryrxBkRGFB7JYvDbC svg {
+    fill: #66023C;
+  }
+</style><span class="d-snake gs_YGqfJgrryrxBkRGFB7JYvDbC d-snake-tail" style="width: 20px; height: 20px; transform: scaleX(-1); display: inline-block"><svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M68,0H0V100H68a32,32,0,0,0,32-32V32A32,32,0,0,0,68,0ZM25.16,55.44V44.56l42.06-6.39L89.63,50,67.22,61.83ZM1.5,83.9V53.34L17.67,68.62ZM17.67,31.38,1.5,46.66V16.1ZM1.5,48,3,46.65,9,41l15.2,3.54v11L9,59,3,53.35,1.5,52Z"/></svg></span><span class="d-snake align-middle d-snake-body" style="width: 80px; height: 20px; background-color: #66023C; display: inline-block"></span><span class="d-snake gs_YGqfJgrryrxBkRGFB7JYvDbC d-snake-head" style="width: 20px; height: 20px; display: inline-block"><svg id="root" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M92.11 43.77l-.34-1.42a26.91 26.91 0 0 0-9-14.32l10.68-6.33 1.15 4.82a18.28 18.28 0 0 1-.08 9.67z"/><path d="M0 100h100L56 55.39l44-39.89V.11L0 0zm21.78-71.45a9.26 9.26 0 1 1-9.26-9.26 9.26 9.26 0 0 1 9.26 9.26z"/></svg></span>
+
+
+                    </td>
+                  </tr>
+                  
+                  <tr>
+                    <td class="p-l-20">
+                      <p class="p-0 m-0">
+                        <a href="/u/sdorra/cautious-octo-pancake/">cautious-octo-pancake</a>
+                      </p>
+                      
+<style>
+  .d-snake.gs_JTCdxPrCMHbj7vFM4YKcrBdC svg {
+    fill: #00D084;
+  }
+</style><span class="d-snake gs_JTCdxPrCMHbj7vFM4YKcrBdC d-snake-tail" style="width: 20px; height: 20px; transform: scaleX(-1); display: inline-block"><svg id="root" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M23 48c2 12 2 26 4 26 0 0-2 0 0 0s1-19-1-28c-1-10-2-19-1-28S31 1 42 0c10-1 19 5 25 12 5 7 7 11 8 21l1 12c0 3-2 17-1 21 1 5 8 7 8 7 8 3 16-1 17 1 0 2-3 5-8 6-11 3-24 6-30-4-4-8-2-18-2-26-1-9-1-20-6-28-2-3-6-5-9-4s-2 4-2 6c0 20 9 42 2 61-4 8-11 16-21 15l-4-1-2-1c-3-2-6-2-9-2-4 1-5 4-9 4V0c17 2 22 38 23 48z"/></svg></span><span class="d-snake align-middle d-snake-body" style="width: 80px; height: 20px; background-color: #00D084; display: inline-block"></span><span class="d-snake gs_JTCdxPrCMHbj7vFM4YKcrBdC d-snake-head" style="width: 20px; height: 20px; display: inline-block"><svg id="root" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M25.91 21.49a3.65 3.65 0 0 1 .58.05 9.64 9.64 0 1 0 0 13.8 3.65 3.65 0 0 1-.58.05c-2.75 0-4.9-3.05-4.9-6.95s2.15-6.95 4.9-6.95z"/><path d="M100 43.78v-8.7a35 35 0 0 0-35-35L0 0v100h65.6c18.49 0 33-10.34 34.23-28.5h-7.24V43.78zm-80.22-2.7a12.64 12.64 0 1 1 12.63-12.64 12.65 12.65 0 0 1-12.63 12.64zM50 57.64a13.85 13.85 0 0 1 10.33-13.39V71A13.85 13.85 0 0 1 50 57.64zM64.6 71.5V43.78h9.74V71.5zm23.73 0h-9.74V43.78h9.74z"/></svg></span>
+
+
+                    </td>
+                  </tr>
+                  
+                  <tr>
+                    <td class="p-l-20">
+                      <p class="p-0 m-0">
+                        <a href="/u/oiyouyeahyou/learning-snake/">Learning Snake</a>
+                      </p>
+                      
+<style>
+  .d-snake.gs_YKMqWFfjMKWKVTGd76YRySCM svg {
+    fill: #ff0000;
+  }
+</style><span class="d-snake gs_YKMqWFfjMKWKVTGd76YRySCM d-snake-tail" style="width: 20px; height: 20px; transform: scaleX(-1); display: inline-block"><svg id="root" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path class="st0" d="M100 28.5C98.75 10.5 84 0 65 0H0v100h65c18.5 0 35-10 35-28.5v-43z"/></svg></span><span class="d-snake align-middle d-snake-body" style="width: 80px; height: 20px; background-color: #ff0000; display: inline-block"></span><span class="d-snake gs_YKMqWFfjMKWKVTGd76YRySCM d-snake-head" style="width: 20px; height: 20px; display: inline-block"><svg id="root" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M73.01 85.04l19.18-9.87-19.42-10-17.73 9.87 17.97 10zm.11-50l19.15-9.87-19.46-10.04L55.07 25l18.05 10.04z"/><path d="M100 50L73.12 35.04 55.07 25l17.74-9.87L100 0H0v100.07h100L73.01 85.04l-17.97-10 17.73-9.87L100 50z"/></svg></span>
+
+
+                    </td>
+                  </tr>
+                  
+                  <tr>
+                    <td class="p-l-20">
+                      <p class="p-0 m-0">
+                        <a href="/u/itzamna/itzamna/">itzamna</a>
+                      </p>
+                      
+<style>
+  .d-snake.gs_fQGcMhKmYdjHDdyb6BmxqbYY svg {
+    fill: #FF4F00;
+  }
+</style><span class="d-snake gs_fQGcMhKmYdjHDdyb6BmxqbYY d-snake-tail" style="width: 20px; height: 20px; transform: scaleX(-1); display: inline-block"><svg id="root" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M0 100l36-30v18l64-22-40-3 1-18L0 0v100z"/></svg></span><span class="d-snake align-middle d-snake-body" style="width: 80px; height: 20px; background-color: #FF4F00; display: inline-block"></span><span class="d-snake gs_fQGcMhKmYdjHDdyb6BmxqbYY d-snake-head" style="width: 20px; height: 20px; display: inline-block"><svg id="root" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M92.11 43.77l-.34-1.42a26.91 26.91 0 0 0-9-14.32l10.68-6.33 1.15 4.82a18.28 18.28 0 0 1-.08 9.67z"/><path d="M0 100h100L56 55.39l44-39.89V.11L0 0zm21.78-71.45a9.26 9.26 0 1 1-9.26-9.26 9.26 9.26 0 0 1 9.26 9.26z"/></svg></span>
+
+
+                    </td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+          </div>
+          <div class="col-9">
+            <div style="height: 100%" class="tab-content">
+              <div style="height: 100%" class="tab-pane fadeIn active" id="tab-length">
+                <div style="height: 100%">
+                  <canvas id="chart-length"></canvas>
+                </div>
+              </div>
+              <div style="height: 100%" class="tab-pane fadeIn" id="tab-health">
+                <div style="height: 100%">
+                  <canvas id="chart-health"></canvas>
+                </div>
+              </div>
+              <div style="height: 100%" class="tab-pane fadeIn" id="tab-latency">
+                <div style="height: 100%">
+                  <canvas id="chart-latency"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row m-b-50">
+  <div class="col">
+    <p class="text-center m-b-0">
+      Global Arena - Played Today
+    </p>
+    <p class="text-center text-muted">
+      <small>fbe39900-f4aa-44b2-b978-aecf0d332c06</small>
+    </p>
+  </div>
+</div>
+
+<div class="modal fade bd-example-modal-sm" id="addFavoriteGameModal" tabindex="-1" role="dialog" aria-labelledby="addFavoriteGameModalLabel" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addFavoriteGameModalLabel">Add Favorite Game</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="zmdi zmdi-close"></span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <small id="favorite-game-warning" class="text-danger d-none">You must provide a title for this favorite game</small>
+        <form id="addFavoriteGameForm" action="/g/gam_KK4DQjhvxJwfqBRQTqYwY9V6/save/" method="POST">
+          <input type="hidden" name="csrfmiddlewaretoken" value="NQrwwyk3UfMcOZesjjXVp76lzuiSaZlw0weTtbstICitNewHdbDINr9stvT38TVB">
+          <div class="form-group">
+            <input class="form-control form-control-lg" type="text" id="favoriteGameTitle" name="title" value="Standard - 21-Sep-2021" placeholder="Give this game a title (required)" maxlength="300" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-outline" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary add-favorite-game-button">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+      </section>
+    </main>
+  </div>
+
+  
+  <div class="content container footer">
+  <div class="row mt-lg-4 m-b-50">
+    <div class="col-6 col-sm-3 col-lg-2">
+      <h6 class="text-muted">Resources</h6>
+      <ul class="list-unstyled">
+        <li><a class="text-dark" href="/faq/">FAQ</a></li>
+        <li><a class="text-dark" href="/docs/">Docs</a></li>
+        <li><a class="text-dark" href="/store/">Store</a></li>
+        <li><a class="text-dark" href="/news/">Blog</a></li>
+        <li><a class="text-dark" href="/calendar/">Calendar</a></li>
+      </ul>
+    </div>
+    <div class="col-6 col-sm-3 col-lg-2">
+      <h6 class="text-muted">Community</h6>
+      <ul class="list-unstyled">
+        <li><a class="text-dark" href="/discord/">Discord</a></li>
+        <li><a class="text-dark" href="/feedback/">Feedback</a></li>
+        <li><a class="text-dark" href="/showcase/">Showcase</a></li>
+        <li><a class="text-dark" href="/github/">GitHub</a></li>
+        <li><a class="text-dark" href="/live/">Live Streams</a></li>
+      </ul>
+    </div>
+    <div class="col-6 col-sm-3 col-lg-2">
+      <h6 class="text-muted">Follow</h6>
+      <ul class="list-unstyled">
+        <li><a class="text-dark" href="/twitch/">Twitch</a></li>
+        <li><a class="text-dark" href="/youtube/">YouTube</a></li>
+        <li><a class="text-dark" href="/instagram/">Instagram</a></li>
+        <li><a class="text-dark" href="/twitter/">Twitter</a></li>
+        <li><a class="text-dark" href="/reddit/">Reddit</a></li>
+      </ul>
+    </div>
+    <div class="col-6 col-sm-3 col-lg-2">
+      <h6 class="text-muted">About</h6>
+      <ul class="list-unstyled">
+        <li><a class="text-dark" href="/mission/">Our Mission</a></li>
+        <li><a class="text-dark" href="/conduct/">Code of Conduct</a></li>
+        <li><a class="text-dark" href="/diversity/">Diversity</a></li>
+        <li><a class="text-dark" href="/about/contact/">Contact</a></li>
+        
+        <li><a class="text-dark" href="/careers/">Careers</a></li>
+        
+      </ul>
+    </div>
+    <div class="col-12 col-lg-4">
+      <h6 class="text-muted">Copyright &copy; 2021 Battlesnake Inc.</h6>
+      <ul class="list-unstyled">
+        <li><a class="text-dark" href="/privacy/">Privacy Policy</a></li>
+        <li><a class="text-dark" href="/terms/">Terms of Service</a></li>
+      </ul>
+      <p class="small text-muted">Version 1.6.18</p>
+    </div>
+  </div>
+  <div class="row m-b-100">
+    <div class="col">
+      <p class="text-center text-secondary">Battlesnake is proudly supported by</p>
+      <p class="text-center">
+        <a href="https://aws.amazon.com/what-is-cloud-computing">
+          <img class="w-50 mx-2" src="https://media.battlesnake.com/play/img/partner-logos/footer-aws.png" alt="Amazon Web Services">
+        </a>
+        <a href="https://jobs.rbc.com/ca/en/featuredopportunities/technology-jobs">
+          <img class="w-50 mx-2" src="https://media.battlesnake.com/play/img/partner-logos/footer-rbc.png" alt="RBC">
+        </a>
+        <a href="https://github.com">
+          <img class="w-75 mx-2" src="https://media.battlesnake.com/play/img/partner-logos/footer-github-v2.png" alt="GitHub">
+        </a>
+      </p>
+      <p class="text-center">
+        <a class="text-secondary" target="_blank" href="/partner/contact/">
+          <small>Interested in becoming a partner?</small>
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+
+  
+
+  
+
+
+<script src="/static/ui/theme/vendor/jquery/dist/jquery.min.js"></script>
+<script src="/static/ui/theme/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/ui/theme/vendor/metismenu/dist/metisMenu.js"></script>
+<script src="/static/ui/theme/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="/static/ui/theme/vendor/select2/select2.min.js"></script>
+<script src="/static/ui/theme/vendor/switchery-npm/index.js"></script>
+
+<script>
+    // debounce
+    // --------------------
+    window.debounce = function(func, wait, immediate) {
+      var timeout;
+      return function() {
+        var context = this,
+          args = arguments;
+        var later = function() {
+          timeout = null;
+          if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+      };
+    };
+
+    // -----------------------------------------------------------------------------
+    // 2. App Sidebars
+    // -----------------------------------------------------------------------------
+
+    (function(window, document, $, undefined) {
+      "use strict";
+      $(function() {
+        // init sidebars
+        // --------------------
+        $(".nav.metismenu").metisMenu();
+        // switch sidebar state mobile/desktop based on breakpoints
+        // ----------------------------------------------------------
+        var switchMenuState = function() {
+          var $body = $("body"),
+            $menuHeaderControls = $(".header-controls");
+          if ($(window).width() < 992) {
+            $body.removeClass("mini-sidebar");
+            $menuHeaderControls.hide();
+          } else if ($(window).width() > 992) {
+            $body.removeClass("aside-left-open");
+            $menuHeaderControls.show();
+          }
+        };
+        $(window).on("resize", function() {
+          debounce(switchMenuState, 300, false)();
+        });
+        // If sidebar is set to static
+        // ------------------------------------------------
+        if ($("body.fixed-menu")) {
+          $("body.fixed-menu .main-menu").mCustomScrollbar({
+            theme: "minimal-dark",
+            scrollInertia: 100,
+            setTop: "-999999px",
+            mouseWheel: {
+              preventDefault: true
+            }
+          });
+        }
+
+        // Toggle menu states
+        // ----------------------------------
+        var $toggleElement = $("[data-toggle-state]");
+        $("[data-toggle-state]").on("click", function(e) {
+          e.stopPropagation();
+          var $body = $("body"),
+            element = $(this),
+            className = element.data("toggleState"),
+            //key = element.data('key'),
+            $target = $body;
+          if (className) {
+            if ($target.hasClass(className)) {
+              $target.removeClass(className);
+            } else {
+              $target.addClass(className);
+            }
+          }
+          menuIconState(className);
+          backdropState(className);
+        });
+
+        // Toggle menu icon on Default Menu open/close
+        // ----------------------------------
+        var menuIconState = function(className) {
+          if (className === "mini-sidebar") {
+            if ($("body.mini-sidebar").length > 0) {
+              $('[data-toggle-state="mini-sidebar"] > i')
+                .removeClass("la-dot-circle-o")
+                .addClass("la-circle");
+            } else {
+              $('[data-toggle-state="mini-sidebar"] > i')
+                .removeClass("la-circle")
+                .addClass("la-dot-circle-o");
+            }
+          }
+        };
+        // Load backdrop when sidebar is open
+        // ----------------------------------
+        var backdropState = function(className) {
+          var backDrop =
+            '<div class="aside-overlay-fixed" data-aos="fade-in" data-aos-duration="300"></div>';
+          if (
+            $("body.aside-right-open").length > 0 ||
+            $("body.aside-left-open").length > 0 ||
+            $("body.mail-compose-open").length > 0
+          ) {
+            $("body").append(backDrop);
+            $(".aside-overlay-fixed").on("click", function() {
+              $(this)
+                .fadeOut("fast")
+                .remove();
+              $("body").removeClass(
+                "aside-right-open aside-left-open mail-compose-open"
+              );
+            });
+          }
+        };
+      });
+    })(window, document, window.jQuery);
+
+    // Initialize Select2 Inputs
+    (function(window, document, $, undefined) {
+      "use strict";
+      $(function() {
+        $("select.select2").select2();
+      });
+    })(window, document, window.jQuery);
+
+    // Initialize Switchery Inputs
+    (function(window, document, $, undefined) {
+      "use strict";
+      $(function() {
+        if ($(".js-switch").length > 0) {
+          var elems = Array.prototype.slice.call($(".js-switch"));
+          elems.forEach(function(html) {
+            var switchery = new Switchery(html, {
+              size: "small",
+              color: "#7468bd",
+              secondaryColor: "#F4F3F9"
+            });
+          });
+        }
+      });
+    })(window, document, window.jQuery);
+
+    /****
+     * Card Actions
+     *****/
+    (function(window, document, $, undefined) {
+      "use strict";
+      $(function() {
+        $("[data-q-action]").on("click", function(e) {
+          e.stopPropagation();
+          var $this = $(this),
+            action = $(this).data("q-action"),
+            $card = $(this).parents(".card");
+
+          switch (action) {
+            /*-----------------------------------------------------------------------
+            Site Search Open/Close
+            -----------------------------------------------------------------------*/
+            /**
+             * Action: Open
+             **/
+            case "open-site-search":
+              var $target = $(".top-toolbar.navbar-desktop .navbar-form");
+              $target.find(".navbar-search").focus();
+              $target.addClass("open");
+
+              break;
+
+              /**
+               * Action: Close
+               **/
+            case "close-site-search":
+              var $target = $(".top-toolbar .navbar-form");
+              $target.find(".navbar-search").val("");
+              $target.removeClass("open");
+
+              break;
+
+              /*-----------------------------------------------------------------------
+              Notifications Open/Close Config
+              -----------------------------------------------------------------------*/
+              /**
+               * Action: Open
+               **/
+            case "open-notifi-config":
+              $this
+                .children(".icon")
+                .toggleClass("dripicons-gear dripicons-arrow-thin-left");
+              $this.data("q-action", "close-notifi-config");
+              var $target = $this
+                .closest(".card")
+                .find(".card-container-wrapper .card-container");
+
+              $target.animate({
+                  left: "-300px"
+                },
+                400
+              );
+
+              break;
+
+              /**
+               * Action: Close
+               **/
+            case "close-notifi-config":
+              $this
+                .children(".icon")
+                .toggleClass("dripicons-arrow-thin-left dripicons-gear");
+              $this.data("q-action", "open-notifi-config");
+              var $target = $this
+                .closest(".card")
+                .find(".card-container-wrapper .card-container");
+
+              $target.animate({
+                  left: "0px"
+                },
+                400
+              );
+
+              break;
+
+              /*-----------------------------------------------------------------------
+              Template Page Sidebars
+              -----------------------------------------------------------------------*/
+              /**
+               * Action: Open/Close
+               **/
+            case "page-aside-right-open":
+              if (
+                Modernizr.mq("(max-width: " + QuantumPro.APP_MEDIAQUERY.XLARGE + ")")
+              ) {
+                var $target = $(".aside-right"),
+                  $backdropTarget = $("body");
+
+                $target.toggleClass("open");
+
+                var addClickEvent = function() {
+                  $(".aside-overlay-fixed").on("touchend click", function(e) {
+                    $(this)
+                      .fadeOut("fast")
+                      .remove();
+                    $target.removeClass("open");
+                    return false;
+                  });
+                };
+                if ($target.hasClass("open")) {
+                  var backDrop =
+                    '<div class="aside-overlay-fixed" data-aos="fade-in" data-aos-duration="300"></div>';
+                  $backdropTarget.append(backDrop);
+                  addClickEvent();
+                } else {
+                  $(".aside-overlay-fixed").trigger("click");
+                }
+              }
+
+              break;
+
+              /**
+               * Action: Open/Close
+               **/
+            case "page-aside-left-open":
+              if (Modernizr.mq("(max-width:992px)")) {
+                var $target = $(".aside-left"),
+                  $backdropTarget = $("body");
+
+                $target.toggleClass("open");
+
+                var addClickEvent = function() {
+                  $(".aside-overlay-fixed").on("touchend click", function(e) {
+                    $(this)
+                      .fadeOut("fast")
+                      .remove();
+                    $target.removeClass("open");
+                    return false;
+                  });
+                };
+
+                if ($target.hasClass("open")) {
+                  var backDrop =
+                    '<div class="aside-overlay-fixed" data-aos="fade-in" data-aos-duration="300"></div>';
+                  $backdropTarget.append(backDrop);
+                  addClickEvent();
+                } else {
+                  $(".aside-overlay-fixed").trigger("click");
+                }
+              }
+
+              break;
+
+              /*-----------------------------------------------------------------------
+              Card Actions
+              -----------------------------------------------------------------------*/
+              /**
+               * Action: Expand Fullscreen
+               **/
+            case "card-expand":
+              $card.toggleClass(action);
+              $this
+                .children("i")
+                .toggleClass("dripicons-expand-2 icon dripicons-contract-2");
+              break;
+              /**
+               * Action: Remove
+               **/
+            case "card-remove":
+              $card.fadeOut();
+              break;
+              /**
+               * Action: Collapse
+               **/
+            case "card-collapsed":
+              $card.toggleClass(action);
+              $card.find(".card-body").slideToggle();
+              $this.children("i").toggleClass("collapsedRotate");
+              break;
+          }
+        });
+      });
+    })(window, document, window.jQuery);
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.1/clipboard.min.js" integrity="sha256-hIvIxeqhGZF+VVeM55k0mJvWpQ6gTkWk3Emc+NmowYA="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/domready/1.0.8/ready.min.js" integrity="sha256-z7v8HmIeZylwLaPn0X0Ym8dFyV0vkFVe4BkVW/iuwmQ="
+  crossorigin="anonymous"></script>
+<script src="https://cdn.rawgit.com/xcash/bootstrap-autocomplete/v2.0.0/dist/latest/bootstrap-autocomplete.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mousetrap/1.6.2/mousetrap.min.js" integrity="sha256-fHzjsajIgwWDvn3rf3b1IxdXX4PoIml763//KcQaA44="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/humanize-plus/1.8.2/humanize.min.js" integrity="sha256-Z40lwCDUZWoaLrFMV5A3UDn5/yBaPotFU5RFnvLEbf8="
+  crossorigin="anonymous"></script>
+
+<!-- Time and timezone things. Should consider replacing with date-fns... -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.7/jstz.min.js"
+    integrity="sha256-bt5sKtbHgPbh+pz59UcZPl0t3VrNmD8NUbPu8lF4Ilc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
+    integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.28/moment-timezone-with-data-2012-2022.min.js"
+    integrity="sha256-INxZFv2x+u08Zsr5+18PswtsP090GMB83ZZRgOIYTf0=" crossorigin="anonymous"></script>
+
+
+<script>
+  var battlesnake = {}
+
+  /**
+   * ClipboardJS integration on buttons
+   */
+  $('[data-clipboard-text]').tooltip({
+    trigger: 'click',
+    placement: 'top'
+  })
+
+  battlesnake.setTooltip = function (triggerElem, message) {
+    $(triggerElem)
+      .tooltip('dispose')
+      .attr('data-original-title', message)
+      .tooltip('show')
+  }
+
+  battlesnake.hideTooltip = function () {
+    setTimeout(function () {
+      // Blanket-hide all
+      $('[data-clipboard-text]').tooltip('dispose')
+    }, 1000)
+  }
+
+  var clipboard = new ClipboardJS('[data-clipboard-text]')
+
+  clipboard.on('success', function (event) {
+    battlesnake.setTooltip(event.trigger, 'Copied!')
+    battlesnake.hideTooltip()
+  })
+
+  clipboard.on('error', function (event) {
+    battlesnake.setTooltip('Failed to copy!')
+    battlesnake.hideTooltip()
+  })
+
+  battlesnake.settings = {
+    BOARD_URL: 'https://board.battlesnake.com',
+    ENGINE_URL: 'https://engine.battlesnake.com'
+  }
+
+  function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method))
+  }
+
+  $.ajaxSetup({
+    beforeSend: function (xhr, settings) {
+      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+        xhr.setRequestHeader("X-CSRFToken", 'NQrwwyk3UfMcOZesjjXVp76lzuiSaZlw0weTtbstICitNewHdbDINr9stvT38TVB')
+      }
+    }
+  })
+
+  window.__battlesnake = battlesnake;
+
+  /**
+   * Disable form submits after click to prevent double submits
+   */
+   (function($) {
+    $('form[method=post]').submit(function(e) {
+      $(e.target).find("button[type=submit]").each(function() {
+        $(this).prop('disabled', true);
+      });
+    });
+   })(jQuery);
+
+  /**
+   * Localize times and timezones.
+   * .tz-display --> displays browser timezone, ie "America/Vancouver"
+   * .tz-localize --> converts ISO UTC into local time and formats
+   */
+  (function($) {
+    var targetTZ = jstz.determine() || 'UTC';
+    $('.tz-display').text(targetTZ.name());
+    $('.tz-localize').each(function(i) {
+      var localized = moment($(this).data('tz-src'), moment.ISO_8601).tz(targetTZ.name())
+      $(this).text(localized.format($(this).data('tz-dst')));
+    });
+  })(jQuery);
+
+  /**
+   * jquery.countUp
+   * @author hisayoshi hayashi: HYS INC.
+   * @license MIT license
+   *
+   */
+  (function($) {
+    $.fn.countUp = function(options) {
+      var start_num = Number($(this).text());
+      var d = {
+        start: 0,
+        last: 100,
+        duration: 1000,
+        frame: 33,
+        update: null,
+        complete: null
+      };
+      var o = $.extend(d, options);
+      var $that = $(this);
+
+      o.last = parseInt(o.last);
+      o.duration = parseInt(o.duration);
+      o.frame = parseInt(o.frame);
+
+      $that.each(function(i) {
+        var $t = $(this);
+        var total_frame = 0;
+        var split = (o.last - o.start) / (o.duration / 33);
+        var value = o.start;
+
+        var clear = setInterval(function() {
+          value = Math.round(value + split);
+          $t.text(value);
+
+          if (typeof o.update == 'function') {
+            o.update.call($t, value);
+          }
+
+          if (total_frame > o.duration) {
+            clearInterval(clear);
+            $t.text(o.last);
+
+            if (typeof o.complete == 'function') {
+              o.complete.call($t, value);
+            }
+          }
+          total_frame += o.frame;
+        }, o.frame);
+      });
+      return $that;
+    };
+  })(jQuery);
+</script>
+
+
+  <!-- Page Specific JS Imports -->
+   
+
+  <!-- Page Specific JS - DEPRECATED, USE javascript BELOW -->
+  <script>
+    domready(function () {
+      
+var shareButtonClass = '.js-share-game-at-turn'
+var gameIframeId = 'iframe_game'
+var pageUrlWithoutQuerystring = window.location.origin + window.location.pathname
+var turnCount = 0
+var clipboard = new ClipboardJS(shareButtonClass)
+var $shareButton = $(shareButtonClass)
+var $gameIframe = $('#' + gameIframeId)
+
+var acceptedKeyCodes = [
+  'left',
+  'right',
+  'space',
+  'r',
+]
+
+var isSmallScreen = $(window).width() < 992 // Bootstrap `md` breakpoint
+
+// Set the initial share button text to copy
+$shareButton.attr('data-clipboard-text', pageUrlWithoutQuerystring)
+
+clipboard.on('success', function (event) {
+  if (turnCount === 0) {
+    __battlesnake.setTooltip(
+      event.trigger,
+      'Copied shareable URL to your clipboard!'
+    )
+  } else {
+    __battlesnake.setTooltip(
+      event.trigger,
+      'Copied shareable URL at turn ' + turnCount + ' to your clipboard!'
+    )
+  }
+  __battlesnake.hideTooltip()
+})
+
+$shareButton.on('click', function (e) {
+  e.preventDefault()
+})
+
+// Capture and forward keyboard events to the Board iframe
+var gameIframe = document.getElementById(gameIframeId)
+Mousetrap.bind(acceptedKeyCodes, function(e) {
+  e.preventDefault();
+  if (gameIframe) {
+    gameIframe.contentWindow.postMessage({
+      code: e.code,
+      keyCode: e.keyCode // DEPRECATED: Remove after next Board deploy
+    }, __battlesnake.settings.BOARD_URL)
+  }
+})
+
+window.addEventListener('message', function (e) {
+  if (e.origin !== __battlesnake.settings.BOARD_URL) {
+    return;
+  }
+
+  var msg = e.data;
+
+  if (msg.action === 'SET_CURRENT_FRAME') {
+    if (!isSmallScreen) {
+      turnCount = msg.frame.turn
+      $shareButton.attr('data-clipboard-text', pageUrlWithoutQuerystring + '?turn=' + turnCount)
+    }
+  }
+}, false)
+
+
+$gameIframe.on('load', function () {
+  // Use Bootstrap breakpoint
+  if (isSmallScreen) {
+    var iframeSrc = $(this).attr('src')
+    // If we're in a narrow view where the media controls don't display,
+    // simply autoplay the game
+    if (!~iframeSrc.indexOf('autoplay')) {
+      $(this).attr('src', iframeSrc + '&autoplay=true')
+    }
+  }
+
+  $shareButton.removeClass('d-none')
+});
+
+
+
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
+
+  <script>
+    domready(function () {
+      $('#notification-badge').hide();
+      $('.notification-message-clear').hide();
+      $('.notification-message-empty').hide();
+
+
+      // 
+
+      // 
+
+      $('a.notifcations-dropdown').click(function () {
+
+        // mark the current set of notifications as "read"
+        ids = ""
+        $('.notification-message').each(function (index) {
+          ids += $(this).data("msgid") + ",";
+        });
+
+        $.ajax({
+          url: '/account/messages/json/read/', method: 'POST', data: "ids=" + ids
+        }).done(function (data) {
+          // clear the badge
+          $('#notification-badge').hide();
+        });
+      });
+
+      $('li.dropdown-notifications').on('hidden.bs.dropdown', function () {
+        $('.notification-message').each(function (index) {
+          $(this).removeClass("unread-notification-message");
+        });
+      })
+    })
+  </script>
+
+
+  </script>
+
+  <!-- Page Specific Script Tags -->
+  
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@0.5.7/chartjs-plugin-annotation.min.js"></script>
+
+<script>
+domready(function () {
+  $('#addFavoriteGameModal').on('hidden.bs.modal', function (e) {
+    $("#favorite-game-warning").addClass("d-none");
+    $("#favoriteGameTitle").val("");
+  })
+
+  $("button.add-favorite-game-button").click(function(){
+    $("#favorite-game-warning").addClass("d-none");
+
+    title = $("#favoriteGameTitle").val();
+    console.log(title)
+    if(title) {
+      $("#addFavoriteGameForm").submit();
+    }
+    else {
+      $("#favorite-game-warning").removeClass("d-none");
+    }
+  });
+
+  const createChart = function (ctx) {
+    var gradients = {};
+    var datasets = [];
+
+    
+    gradients.gs_YGqfJgrryrxBkRGFB7JYvDbC = ctx.createLinearGradient(0, 0, 0, 240);
+    gradients.gs_YGqfJgrryrxBkRGFB7JYvDbC.addColorStop(0, Chart.helpers.color('#66023C').alpha(0.1).rgbString());
+    gradients.gs_YGqfJgrryrxBkRGFB7JYvDbC.addColorStop(1, Chart.helpers.color('#ffffff').alpha(0).rgbString());
+
+    datasets.push({
+      snakeID: "gs_YGqfJgrryrxBkRGFB7JYvDbC",
+      label: "Augustus",
+      // fill: false,
+      borderColor: "#66023C",
+      borderWidth: 2,
+      backgroundColor: gradients.gs_YGqfJgrryrxBkRGFB7JYvDbC,
+      data: []
+    });
+    
+    gradients.gs_JTCdxPrCMHbj7vFM4YKcrBdC = ctx.createLinearGradient(0, 0, 0, 240);
+    gradients.gs_JTCdxPrCMHbj7vFM4YKcrBdC.addColorStop(0, Chart.helpers.color('#00D084').alpha(0.1).rgbString());
+    gradients.gs_JTCdxPrCMHbj7vFM4YKcrBdC.addColorStop(1, Chart.helpers.color('#ffffff').alpha(0).rgbString());
+
+    datasets.push({
+      snakeID: "gs_JTCdxPrCMHbj7vFM4YKcrBdC",
+      label: "cautious-octo-pancake",
+      // fill: false,
+      borderColor: "#00D084",
+      borderWidth: 2,
+      backgroundColor: gradients.gs_JTCdxPrCMHbj7vFM4YKcrBdC,
+      data: []
+    });
+    
+    gradients.gs_YKMqWFfjMKWKVTGd76YRySCM = ctx.createLinearGradient(0, 0, 0, 240);
+    gradients.gs_YKMqWFfjMKWKVTGd76YRySCM.addColorStop(0, Chart.helpers.color('#ff0000').alpha(0.1).rgbString());
+    gradients.gs_YKMqWFfjMKWKVTGd76YRySCM.addColorStop(1, Chart.helpers.color('#ffffff').alpha(0).rgbString());
+
+    datasets.push({
+      snakeID: "gs_YKMqWFfjMKWKVTGd76YRySCM",
+      label: "Learning Snake",
+      // fill: false,
+      borderColor: "#ff0000",
+      borderWidth: 2,
+      backgroundColor: gradients.gs_YKMqWFfjMKWKVTGd76YRySCM,
+      data: []
+    });
+    
+    gradients.gs_fQGcMhKmYdjHDdyb6BmxqbYY = ctx.createLinearGradient(0, 0, 0, 240);
+    gradients.gs_fQGcMhKmYdjHDdyb6BmxqbYY.addColorStop(0, Chart.helpers.color('#FF4F00').alpha(0.1).rgbString());
+    gradients.gs_fQGcMhKmYdjHDdyb6BmxqbYY.addColorStop(1, Chart.helpers.color('#ffffff').alpha(0).rgbString());
+
+    datasets.push({
+      snakeID: "gs_fQGcMhKmYdjHDdyb6BmxqbYY",
+      label: "itzamna",
+      // fill: false,
+      borderColor: "#FF4F00",
+      borderWidth: 2,
+      backgroundColor: gradients.gs_fQGcMhKmYdjHDdyb6BmxqbYY,
+      data: []
+    });
+    
+
+    var config = {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: datasets
+      },
+      options: {
+        title: {
+          display: false,
+        },
+        tooltips: {
+          mode: 'index',
+          intersect: false,
+          xPadding: 10,
+          yPadding: 10,
+          caretPadding: 10,
+          displayColors: false,
+          itemSort: (a, b, data) => b.yLabel - a.yLabel
+        },
+        legend: {
+          display: false
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          xAxes: [{
+            display: false,
+          }],
+          yAxes: [{
+            display: false,
+            ticks: {
+              beginAtZero: true,
+              suggestedMax: 0  // This gets adjusted as we draw the chart
+            }
+          }]
+        },
+        elements: {
+          line: {
+            tension: 0
+          },
+          point: {
+            radius: 0,
+            borderWidth: 0
+          }
+        },
+        layout: {
+          padding: {
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0
+          }
+        },
+        annotation: {
+          annotations: [
+            {
+              type: "line",
+              drawTime: "afterDatasetsDraw",
+              mode: "vertical",
+              scaleID: "x-axis-0",
+              value: "", // Set by the frame
+              borderColor: "black",
+              borderWidth: 2,
+            },
+          ]
+        }
+      }
+    };
+
+    return new Chart(ctx, config);
+  };
+
+  var healthChart = createChart(document.getElementById("chart-health").getContext("2d"));
+  var lengthChart = createChart(document.getElementById("chart-length").getContext("2d"));
+  var latencyChart = createChart(document.getElementById("chart-latency").getContext("2d"));
+
+  window.__battlesnake.hasShownGameOverModal = false;
+
+  window.addEventListener('message', function (e) {
+    if (e.origin !== __battlesnake.settings.BOARD_URL) {
+      return;
+    }
+
+    var msg = e.data;
+
+    if (msg.action === 'GAME_OVER') {
+      if (!window.__battlesnake.hasShownGameOverModal) {
+        window.__battlesnake.hasShownGameOverModal = true;
+        fetch(window.location + 'end/')
+        .then(function (response) {
+          return response.json()
+        }).then(function (data) {
+          if (data.modal) {
+            $('#gameOverModal').remove();
+            $('body').append($(data.modal))
+            $('#gameOverModal').modal('show');
+          }
+        });
+      }
+
+    } else if (msg.action === 'SET_CURRENT_FRAME') {
+      // Update health chart
+      if (msg.frame.turn > healthChart.data.labels.length) {
+        healthChart.data.labels.push("Turn " + msg.frame.turn);
+        healthChart.data.datasets.forEach((dataset) => {
+          for (var i = 0; i < msg.frame.snakes.length; i++) {
+            var snake = msg.frame.snakes[i];
+            if (dataset.snakeID == snake.id) {
+              if (!snake.isDead) {
+                dataset.data.push(snake.health);
+              } else {
+                dataset.data.push(0);
+              }
+            }
+          }
+        });
+
+        var maxY = 0;
+        healthChart.data.datasets.forEach((dataset) => {
+          maxY = Math.max(maxY, Math.max(...dataset.data));
+        });
+        healthChart.config.options.scales.yAxes[0].ticks.suggestedMax = maxY * 1.2;
+      }
+      healthChart.config.options.annotation.annotations[0].value = "Turn " + msg.frame.turn;
+      healthChart.update();
+
+      // Update length chart
+      if (msg.frame.turn > lengthChart.data.labels.length) {
+        lengthChart.data.labels.push("Turn " + msg.frame.turn);
+        lengthChart.data.datasets.forEach((dataset) => {
+          for (var i = 0; i < msg.frame.snakes.length; i++) {
+            var snake = msg.frame.snakes[i];
+            if (dataset.snakeID == snake.id) {
+              if (!snake.isDead) {
+                dataset.data.push(snake.body.length);
+              } else {
+                dataset.data.push(0);
+              }
+            }
+          }
+        });
+
+        var maxY = 0;
+        lengthChart.data.datasets.forEach((dataset) => {
+          maxY = Math.max(maxY, Math.max(...dataset.data));
+        });
+        lengthChart.config.options.scales.yAxes[0].ticks.suggestedMax = maxY * 1.2;
+      }
+      lengthChart.config.options.annotation.annotations[0].value = "Turn " + msg.frame.turn;
+      lengthChart.update();
+
+      // Update latency chart
+      if (msg.frame.turn > latencyChart.data.labels.length) {
+        latencyChart.data.labels.push("Turn " + msg.frame.turn);
+        latencyChart.data.datasets.forEach((dataset) => {
+          for (var i = 0; i < msg.frame.snakes.length; i++) {
+            var snake = msg.frame.snakes[i];
+            if (dataset.snakeID == snake.id) {
+              if (!snake.isDead) {
+                var latency = parseInt(snake.latency);
+                if (latency == 0) {
+                  latency = 500;
+                }
+                dataset.data.push(latency);
+              } else {
+                dataset.data.push(0);
+              }
+            }
+          }
+        });
+
+        var maxY = 0;
+        latencyChart.data.datasets.forEach((dataset) => {
+          maxY = Math.max(maxY, Math.max(...dataset.data));
+        });
+        latencyChart.config.options.scales.yAxes[0].ticks.suggestedMax = maxY * 1.2;
+      }
+      latencyChart.config.options.annotation.annotations[0].value = "Turn " + msg.frame.turn;
+      latencyChart.update();
+    }
+  });
+});
+</script>
+
+<div class="modal fade" id="arenaMatchMakingModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered"" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <p class="text-primary text-center"><strong><span class="status-text" style="text-transform: capitalize;"></span></strong></p>
+        <ul class="list-group list-group-flush borderless battlesnakes"></ul>
+        <div class="spinner text-center">
+          <p class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+
+    function addOpponentToModal(battlesnake) {
+      $('#arenaMatchMakingModal ul.battlesnakes').append($(
+        '<li class="text-center list-group-item border-0">' + battlesnake.name + '<br> <small>by ' + battlesnake.author + '</small></li>'
+      ));
+    }
+
+    $('#arenaMatchMakingModal').on('show.bs.modal', function (e) {
+      var gameMode = $(e.relatedTarget).data('game-mode');
+      $('#arenaMatchMakingModal .status-text').text('Building ' + gameMode + ' Bhumba...');
+    });
+
+    $('#arenaMatchMakingModal').on('shown.bs.modal', function (e) {
+      var leaderboardSnakeID = $(e.relatedTarget).data('leaderboard-snake-id');
+      var gameMode = $(e.relatedTarget).data('game-mode');
+
+      $.ajax({
+        url: "/arena/play/" + leaderboardSnakeID + "/" + gameMode + "/",
+        type: "POST",
+        success: function (resp) {
+          for (var i = 0; i < resp.battlesnakes.length; i++) {
+            var timeout = (i * 750) + Math.floor(Math.random() * 250);
+            setTimeout(addOpponentToModal, timeout, resp.battlesnakes[i]);
+            if (i == resp.battlesnakes.length - 1) {
+              setTimeout(function () {
+                $('#arenaMatchMakingModal div.spinner').remove();
+                $('#arenaMatchMakingModal .status-text').addClass('text-accent').text('Loading Game...');
+              }, timeout);
+              setTimeout(function () {
+                window.location = resp.gameURL;
+              }, timeout + 1500);
+            }
+          }
+        },
+        error: function (resp) {
+          alert(resp.responseText);
+          $('#arenaMatchMakingModal').modal('hide');
+        }
+      });
+    });
+  });
+</script>
+
+
+
+</body>
+
+</html>
