@@ -55,7 +55,7 @@ func TestEatFuture(t *testing.T) {
 			Width:  10,
 			Snakes: []model.Battlesnake{me},
 			Food: []model.Coord{
-				{2, 1},
+				{1, 1},
 				{3, 0},
 				{4, 0},
 				{7, 0},
