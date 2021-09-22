@@ -1,19 +1,23 @@
-package move
+package tree
 
-import "github.com/itzamna314/battlesnake/model"
+import (
+	"github.com/itzamna314/battlesnake/model"
+	"github.com/itzamna314/battlesnake/move"
+)
 
-func BuildTree(start *model.GameState, depth int) *model.TreeNode {
+func Build(start *model.GameState, depth int) *TreeNode {
 	initialState := start.Clone()
-	root := model.TreeNode{
+	root := TreeNode{
 		State: &initialState,
 	}
+
 	expand(&root, depth)
 
 	return &root
 }
 
 // expand expands children of node via DFS up to depth
-func expand(node *model.TreeNode, depth int) {
+func expand(node *TreeNode, depth int) {
 	// If we're at the bottom, stop
 	if depth <= 0 {
 		return
@@ -24,16 +28,16 @@ func expand(node *model.TreeNode, depth int) {
 		return
 	}
 
-	moves := model.Options(&node.State.You.Head)
-	for dir, move := range moves {
+	opts := model.Options(&node.State.You.Head)
+	for dir, opt := range opts {
 		// Advance game state in direction
 		next := node.State.Clone()
 		next.Move(model.Direction(dir))
 
 		// Build child and recurse
-		child := model.TreeNode{
+		child := TreeNode{
 			Parent: node,
-			Weight: moveWeight(node.State, &move.Coord),
+			Weight: move.Weight(node.State, &opt.Coord),
 			State:  &next,
 		}
 

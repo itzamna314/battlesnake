@@ -19,8 +19,8 @@ const (
 	Certain = 1.0
 )
 
-func moveWeight(state *model.GameState, coord *model.Coord) float64 {
-	if isCertainDeath(state, coord) {
+func Weight(state *model.GameState, coord *model.Coord) float64 {
+	if model.YouWillDie(state, coord) {
 		return Death
 	}
 

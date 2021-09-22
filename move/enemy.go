@@ -4,8 +4,6 @@ import "github.com/itzamna314/battlesnake/model"
 
 // Calculate weight for moving You to coord in state
 func weightEnemies(state *model.GameState, coord *model.Coord) float64 {
-	vis := state.Future[coord.X][coord.Y]
-
 	// No enemies
 	if len(state.Board.Snakes) <= 1 {
 		return Nothing
@@ -17,19 +15,14 @@ func weightEnemies(state *model.GameState, coord *model.Coord) float64 {
 			continue
 		}
 
-		if vis.Enemies[i] == Certain {
+		prob := state.EnemyGuesses[i].Prob(coord)
+
+		if prob == Certain {
 			return Death
 		}
 
-		// Ignore low-probability enemies
-		if vis.Enemies[i] < 0.75 {
-			continue
-		}
-
 		// Avoid with weight of negative probability
-		if enemy.Length >= state.You.Length {
-			weight += -1 * vis.Enemies[i]
-		}
+		weight -= prob
 	}
 
 	return weight / float64(len(state.Board.Snakes)-1)

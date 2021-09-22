@@ -14,11 +14,10 @@ func weightFood(state *model.GameState, coord *model.Coord) float64 {
 	// Divide by number of foods where this move changes the distance
 	var finalWeight, numWeights float64
 
-	for _, food := range state.Board.Food {
+	for _, food := range state.FoodGuesses {
 		var (
-			headDist = state.You.Head.Dist(&food)
-			myDist   = coord.Dist(&food)
-			foodProb = state.Future[food.X][food.Y].Food
+			headDist = state.You.Head.Dist(&food.Coord)
+			myDist   = coord.Dist(&food.Coord)
 		)
 
 		// We didn't get closer. Ignore
@@ -28,7 +27,7 @@ func weightFood(state *model.GameState, coord *model.Coord) float64 {
 
 		distDiffPct := float64(headDist-myDist) / float64(headDist)
 
-		finalWeight += baseWeight * distDiffPct * foodProb
+		finalWeight += baseWeight * distDiffPct * food.Probability
 		numWeights++
 	}
 
