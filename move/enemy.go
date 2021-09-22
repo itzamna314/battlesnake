@@ -1,15 +1,9 @@
 package move
 
-import (
-	"fmt"
-
-	"github.com/itzamna314/battlesnake/model"
-)
+import "github.com/itzamna314/battlesnake/model"
 
 // Calculate weight for moving You to coord in state
 func weightEnemies(state *model.GameState, coord *model.Coord) float64 {
-	fmt.Printf("Calculating enemy weight at coord %s\n", coord)
-
 	vis := state.Future[coord.X][coord.Y]
 
 	// No enemies

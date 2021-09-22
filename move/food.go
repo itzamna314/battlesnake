@@ -9,40 +9,27 @@ func weightFood(state *model.GameState, coord *model.Coord) float64 {
 		baseWeight *= -1
 	}
 
-	// Find closest food to our head
-	var (
-		closestFoods []model.Coord
-		minDist      int
-	)
-	for _, food := range state.Board.Food {
-		dist := state.You.Head.Dist(&food)
-
-		if minDist == 0 || dist < minDist {
-			minDist = dist
-			closestFoods = []model.Coord{food}
-		} else if dist == minDist {
-			closestFoods = append(closestFoods, food)
-		}
-	}
-
-	// No food
-	if minDist == 0 {
-		return 0
-	}
-
-	// Prefer to move toward or away from the closest foods
-	// Divide by number of closest foods
-	// If there are many tied at the same distance from head,
-	// lower priority and only count the ones in the right direction
+	// Prefer to move toward or away from foods
+	// Weight foods more strongly by the likelihood that they will remain
+	// Divide by number of foods where this move changes the distance
 	var finalWeight, numWeights float64
 
-	for _, food := range closestFoods {
-		myDist := coord.Dist(&food)
-		if myDist < minDist {
-			amtCloser := float64(minDist-myDist) / float64(minDist)
-			finalWeight += baseWeight * amtCloser
-			numWeights++
+	for _, food := range state.Board.Food {
+		var (
+			headDist = state.You.Head.Dist(&food)
+			myDist   = coord.Dist(&food)
+			foodProb = state.Future[food.X][food.Y].Food
+		)
+
+		// We didn't get closer. Ignore
+		if myDist == headDist {
+			continue
 		}
+
+		distDiffPct := float64(headDist-myDist) / float64(headDist)
+
+		finalWeight += baseWeight * distDiffPct * foodProb
+		numWeights++
 	}
 
 	if numWeights == 0 {

@@ -1,10 +1,6 @@
 package move
 
-import (
-	"fmt"
-
-	"github.com/itzamna314/battlesnake/model"
-)
+import "github.com/itzamna314/battlesnake/model"
 
 const (
 	// Certain death is -1
@@ -20,13 +16,8 @@ const (
 	Food = 0.15
 )
 
-func moveWeight(state *model.GameState, coord *model.Coord) (w float64) {
-	defer func() {
-		fmt.Printf("Calculated weight for coord %s: %v\n", coord, w)
-	}()
-
+func moveWeight(state *model.GameState, coord *model.Coord) float64 {
 	if isCertainDeath(state, coord) {
-		fmt.Printf("Certain death at %s\n", coord)
 		return Death
 	}
 
@@ -35,16 +26,12 @@ func moveWeight(state *model.GameState, coord *model.Coord) (w float64) {
 
 	weight += weightEnemies(state, coord)
 
-	fmt.Printf("Calculated enemy weight %s: %v\n", coord, weight)
-
 	// Nothing more certain than Death
 	if weight <= Death {
 		return Death
 	}
 
 	weight += weightFood(state, coord)
-
-	fmt.Printf("Calculated food weight %s: %v\n", coord, weight)
 
 	// Don't die over food
 	if weight < Avoid {

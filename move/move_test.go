@@ -19,8 +19,9 @@ func TestEatOne(t *testing.T) {
 	// Arrange
 	me := model.Battlesnake{
 		// Length 3, facing right
-		Head: model.Coord{X: 2, Y: 0},
-		Body: []model.Coord{{X: 2, Y: 0}, {X: 1, Y: 0}, {X: 0, Y: 0}},
+		Head:   model.Coord{X: 2, Y: 0},
+		Body:   []model.Coord{{X: 2, Y: 0}, {X: 1, Y: 0}, {X: 0, Y: 0}},
+		Health: 1,
 	}
 	state := model.GameState{
 		Board: model.Board{
@@ -36,7 +37,7 @@ func TestEatOne(t *testing.T) {
 
 	nextMove := move.Next(state)
 	if nextMove.Move != "up" {
-		t.Errorf("snake did not eat food, went %s", nextMove.Move)
+		t.Errorf("snake did not eat food at (2,1), went %s", nextMove.Move)
 	}
 }
 
@@ -44,8 +45,9 @@ func TestEatFuture(t *testing.T) {
 	// Arrange
 	me := model.Battlesnake{
 		// Length 3, facing right
-		Head: model.Coord{X: 2, Y: 0},
-		Body: []model.Coord{{X: 2, Y: 0}, {X: 1, Y: 0}, {X: 0, Y: 0}},
+		Head:   model.Coord{X: 2, Y: 0},
+		Body:   []model.Coord{{X: 2, Y: 0}, {X: 1, Y: 0}, {X: 0, Y: 0}},
+		Health: 1,
 	}
 	state := model.GameState{
 		Board: model.Board{
