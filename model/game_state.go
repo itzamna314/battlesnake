@@ -26,35 +26,27 @@ func (g *GameState) Clone() GameState {
 	}
 }
 
-func (g *GameState) MoveSnake(snake Battlesnake, dir Direction) {
-	if !snake.Head.Hit(&snake.Body[0]) {
-		panic("illegal snake")
-	}
-
+func (g *GameState) Move(dir Direction) {
 	// Copy each body segment to next
 	// Head will remain copied into neck
-	for i := len(snake.Body) - 1; i > 0; i-- {
+	for i := len(g.You.Body) - 1; i > 0; i-- {
 		prev := i - 1
-		snake.Body[i] = snake.Body[prev]
+		g.You.Body[i] = g.You.Body[prev]
 	}
 
-	snake.Head = snake.Head.Step(dir)
-	snake.Body[0] = snake.Head
+	g.You.Head = g.You.Head.Step(dir)
+	g.You.Body[0] = g.You.Head
 
 	for i, s := range g.Board.Snakes {
-		if s.ID == snake.ID {
-			g.Board.Snakes[i] = snake
+		if s.ID == g.You.ID {
+			g.Board.Snakes[i] = g.You
 			break
 		}
 	}
 
-	if snake.ID == g.You.ID {
-		g.You = snake
-	}
-
 	// Eat any food
 	for i, food := range g.Board.Food {
-		if food.Hit(&snake.Head) {
+		if food.Hit(&g.You.Head) {
 			g.Board.Food = append(g.Board.Food[:i], g.Board.Food[i+1:]...)
 			break
 		}

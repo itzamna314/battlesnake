@@ -28,7 +28,7 @@ func expand(node *model.TreeNode, depth int) {
 	for dir, move := range moves {
 		// Advance game state in direction
 		next := node.State.Clone()
-		next.MoveSnake(next.You, model.Direction(dir))
+		next.Move(model.Direction(dir))
 
 		// Build child and recurse
 		child := model.TreeNode{
