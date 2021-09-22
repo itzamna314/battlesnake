@@ -1,8 +1,10 @@
-package move
+package model
 
-import "github.com/itzamna314/battlesnake/model"
+func YouWillDie(state *GameState, coord *Coord) bool {
+	return SnakeWillDie(state, coord, &state.You)
+}
 
-func isCertainDeath(state *model.GameState, coord *model.Coord) bool {
+func SnakeWillDie(state *GameState, coord *Coord, snake *Battlesnake) bool {
 	if coord.X < 0 {
 		return true
 	} else if coord.X >= state.Board.Width {
@@ -16,7 +18,7 @@ func isCertainDeath(state *model.GameState, coord *model.Coord) bool {
 	}
 
 	// Don't hit self
-	for _, body := range state.You.Body {
+	for _, body := range snake.Body {
 		if coord.Hit(&body) {
 			return true
 		}

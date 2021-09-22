@@ -1,4 +1,4 @@
-package move_test
+package api_test
 
 import (
 	"bytes"
@@ -12,7 +12,6 @@ import (
 
 	"github.com/itzamna314/battlesnake/api"
 	"github.com/itzamna314/battlesnake/model"
-	"github.com/itzamna314/battlesnake/move"
 )
 
 func TestEatOne(t *testing.T) {
@@ -35,7 +34,7 @@ func TestEatOne(t *testing.T) {
 		You: me,
 	}
 
-	nextMove := move.Next(state)
+	nextMove := api.NextMove(state)
 	if nextMove.Move != "up" {
 		t.Errorf("snake did not eat food at (2,1), went %s", nextMove.Move)
 	}
@@ -64,7 +63,7 @@ func TestEatFuture(t *testing.T) {
 		You: me,
 	}
 
-	nextMove := move.Next(state)
+	nextMove := api.NextMove(state)
 	if nextMove.Move != "right" {
 		t.Errorf("snake did not eat 2 food, went %s", nextMove.Move)
 	}
@@ -85,7 +84,6 @@ func TestNoCrash(t *testing.T) {
 }
 
 func TestWithEnemies(t *testing.T) {
-	// Arrange
 	me := model.Battlesnake{
 		// Length 3, facing right
 		ID:     "me",
@@ -112,7 +110,7 @@ func TestWithEnemies(t *testing.T) {
 		You: me,
 	}
 
-	nextMove := move.Next(state)
+	nextMove := api.NextMove(state)
 	if nextMove.Move != "up" {
 		t.Errorf("snake did not eat food at (2,1), went %s", nextMove.Move)
 	}
