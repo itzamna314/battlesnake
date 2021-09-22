@@ -3,8 +3,9 @@ package move
 import "github.com/itzamna314/battlesnake/model"
 
 func BuildTree(start *model.GameState, depth int) *model.TreeNode {
+	initialState := start.Clone()
 	root := model.TreeNode{
-		State: start,
+		State: &initialState,
 	}
 	expand(&root, depth)
 

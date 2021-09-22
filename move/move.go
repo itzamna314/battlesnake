@@ -12,7 +12,7 @@ import (
 // where to move -- valid moves are "up", "down", "left", or "right".
 // We've provided some code and comments to get you started.
 func Next(state model.GameState) model.BattlesnakeMoveResponse {
-	tree := BuildTree(&state, 6)
+	tree := BuildTree(&state, 1)
 
 	log.Println("Choosing from possible moves:")
 	var (
