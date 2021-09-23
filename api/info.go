@@ -30,6 +30,6 @@ func info() model.BattlesnakeInfoResponse {
 		Author:     "Johnny Lawrence",
 		Color:      "#000000",
 		Head:       "evil",
-		Tail:       "mystic-moon",
+		Tail:       "small-rattle",
 	}
 }
