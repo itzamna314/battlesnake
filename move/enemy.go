@@ -20,9 +20,10 @@ func weightEnemies(state *model.GameState, coord *model.Coord) float64 {
 			return Death
 		}
 
-		// Avoid with weight of negative probability
+		// Avoid with weight of twice negative probability
 		weight -= prob
 	}
 
-	return weight
+	// Double weight to increase enemy avoid priority
+	return weight * 2
 }
