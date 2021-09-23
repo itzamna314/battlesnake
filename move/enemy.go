@@ -16,7 +16,6 @@ func weightEnemies(state *model.GameState, coord *model.Coord) float64 {
 		}
 
 		prob := state.EnemyGuesses[i].Prob(coord)
-
 		if prob == Certain {
 			return Death
 		}

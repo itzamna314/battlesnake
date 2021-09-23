@@ -27,12 +27,14 @@ func Weight(state *model.GameState, coord *model.Coord) float64 {
 	// Compute food weight
 	weight := Base
 
-	weight += weightEnemies(state, coord)
+	enemy := weightEnemies(state, coord)
 
 	// Nothing more certain than Death
-	if weight <= Death {
+	if enemy <= Death {
 		return Death
 	}
+
+	weight += enemy
 
 	weight += weightFood(state, coord)
 
