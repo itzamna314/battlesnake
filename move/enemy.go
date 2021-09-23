@@ -24,5 +24,5 @@ func weightEnemies(state *model.GameState, coord *model.Coord) float64 {
 		weight -= prob
 	}
 
-	return weight / float64(len(state.Board.Snakes)-1)
+	return weight
 }
