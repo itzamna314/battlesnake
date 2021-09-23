@@ -71,17 +71,19 @@ func (g *GameState) Move(dir Direction) {
 
 	// Move self (deterministic)
 	g.You.MoveDet(dir, ate)
+}
 
+func (g *GameState) MoveEnemies() {
 	for i, snake := range g.Board.Snakes {
 		if snake.ID == g.You.ID {
 			continue
 		}
 
-		g.MoveEnemy(i)
+		g.moveEnemy(i)
 	}
 }
 
-func (g *GameState) MoveEnemy(idx int) {
+func (g *GameState) moveEnemy(idx int) {
 	enemy := g.Board.Snakes[idx]
 	if len(enemy.Body) == 0 {
 		return

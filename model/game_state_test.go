@@ -52,7 +52,8 @@ func TestMoveGameState(t *testing.T) {
 		}
 	}
 
-	// Assert that enemy has been projected
+	// Move the enemies
+	state.MoveEnemies()
 	// Certain remaining body segments
 	enemy = state.Board.Snakes[1]
 	if len(enemy.Body) != 2 {

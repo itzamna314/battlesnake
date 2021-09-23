@@ -30,6 +30,12 @@ func expand(node *TreeNode, depth int) {
 
 	opts := model.Options(&node.State.You.Head)
 	for dir, opt := range opts {
+		// Handle for enemy movement
+		node.State.MoveEnemies()
+
+		// Calculate weight based on enemy predictions
+		weight := move.Weight(node.State, &opt.Coord)
+
 		// Advance game state in direction
 		next := node.State.Clone()
 		next.Move(model.Direction(dir))
@@ -37,7 +43,7 @@ func expand(node *TreeNode, depth int) {
 		// Build child and recurse
 		child := TreeNode{
 			Parent: node,
-			Weight: move.Weight(node.State, &opt.Coord),
+			Weight: weight,
 			State:  &next,
 		}
 
