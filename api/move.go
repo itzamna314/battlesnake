@@ -33,7 +33,7 @@ func Move(w http.ResponseWriter, r *http.Request) {
 // where to move -- valid moves are "up", "down", "left", or "right".
 // We've provided some code and comments to get you started.
 func NextMove(state model.GameState) model.BattlesnakeMoveResponse {
-	moveTree := tree.Build(&state, 1)
+	moveTree := tree.Build(&state, 6)
 
 	log.Println("Choosing from possible moves:")
 	var (
