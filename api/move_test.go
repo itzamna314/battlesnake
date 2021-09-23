@@ -116,6 +116,43 @@ func TestWithEnemies(t *testing.T) {
 	}
 }
 
+func TestFoodOrDeath(t *testing.T) {
+	me := model.Battlesnake{
+		ID:   "me",
+		Head: model.Coord{X: 4, Y: 6},
+		Body: []model.Coord{
+			{X: 4, Y: 6}, {X: 5, Y: 6}, {X: 6, Y: 6}, {X: 6, Y: 7}, {X: 7, Y: 7}, {X: 8, Y: 7},
+		},
+		Health: 20,
+	}
+	enemy := model.Battlesnake{
+		ID:   "enemy",
+		Head: model.Coord{X: 3, Y: 4},
+		Body: []model.Coord{
+			{X: 3, Y: 5}, {X: 4, Y: 5}, {X: 5, Y: 5}, {X: 6, Y: 5},
+		},
+		Health: 80,
+	}
+	state := model.GameState{
+		Board: model.Board{
+			Height: 10,
+			Width:  10,
+			Snakes: []model.Battlesnake{me, enemy},
+			Food: []model.Coord{
+				{4, 4},
+				{5, 4},
+				{4, 3},
+			},
+		},
+		You: me,
+	}
+
+	nextMove := api.NextMove(state)
+	if nextMove.Move == "down" {
+		t.Errorf("snake went down into death")
+	}
+}
+
 func server() *httptest.Server {
 	hnd := api.Build()
 	svr := httptest.NewServer(hnd)

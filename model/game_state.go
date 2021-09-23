@@ -14,6 +14,16 @@ func (g *GameState) initGuesses() {
 	// Initialize enemy guesses if necessary
 	if len(g.EnemyGuesses) == 0 {
 		g.EnemyGuesses = make(SnakeVision, len(g.Board.Snakes))
+
+		for i, snake := range g.Board.Snakes {
+			if snake.ID == g.You.ID {
+				continue
+			}
+
+			for _, body := range g.Board.Snakes[i].Body {
+				g.EnemyGuesses[i].Set(&body, Certain)
+			}
+		}
 	}
 
 	// Initialize food if necessary
@@ -110,11 +120,12 @@ func (g *GameState) MoveEnemy(idx int) {
 		}
 	}
 
+	// Clear guess for tail if we didn't eat
+	if !ate {
+		tail := enemy.Body[len(enemy.Body)-1]
+		g.EnemyGuesses[idx].Clear(&tail)
+	}
+
 	// Move enemy snake probabilistically
 	g.Board.Snakes[idx].MoveProb(ate)
-
-	// Record certainties
-	for _, body := range g.Board.Snakes[idx].Body {
-		g.EnemyGuesses[idx].Set(&body, Certain)
-	}
 }

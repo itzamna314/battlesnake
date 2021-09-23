@@ -1,8 +1,14 @@
 package model
 
+import "fmt"
+
 type GuessCoord struct {
 	Coord
 	Probability float64
+}
+
+func (g *GuessCoord) String() string {
+	return fmt.Sprintf("%s[%4f]", g.Coord, g.Probability)
 }
 
 type GuessCoordSet []GuessCoord
