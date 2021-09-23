@@ -27,9 +27,9 @@ func info() model.BattlesnakeInfoResponse {
 	log.Println("INFO")
 	return model.BattlesnakeInfoResponse{
 		APIVersion: "1",
-		Author:     "itzamna",
-		Color:      "#FF4F00",
-		Head:       "fang",
-		Tail:       "bolt",
+		Author:     "Johnny Lawrence",
+		Color:      "#000000",
+		Head:       "evil",
+		Tail:       "mystic-moon",
 	}
 }
