@@ -36,7 +36,7 @@ func Weight(state *model.GameState, coord *model.Coord) float64 {
 
 	weight += enemy
 
-	food := weightFood(state, coord)
+	food := WeightFood(state, coord)
 
 	weight += food
 
