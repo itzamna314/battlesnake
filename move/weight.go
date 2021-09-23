@@ -1,10 +1,6 @@
 package move
 
-import (
-	"fmt"
-
-	"github.com/itzamna314/battlesnake/model"
-)
+import "github.com/itzamna314/battlesnake/model"
 
 const (
 	// Certain death is -1
@@ -30,8 +26,6 @@ func Weight(state *model.GameState, coord *model.Coord) float64 {
 
 	// Compute food weight
 	weight := Base
-
-	fmt.Printf("Calculating enemy weight: %v\n", state.EnemyGuesses)
 
 	enemy := weightEnemies(state, coord)
 

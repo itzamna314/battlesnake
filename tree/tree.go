@@ -1,8 +1,6 @@
 package tree
 
 import (
-	"fmt"
-
 	"github.com/itzamna314/battlesnake/model"
 	"github.com/itzamna314/battlesnake/move"
 )
@@ -35,8 +33,6 @@ func expand(node *TreeNode, depth int) {
 		// Advance game state in direction
 		next := node.State.Clone()
 		next.Move(model.Direction(dir))
-
-		fmt.Printf("Built next enemies from %s %s:\n%v\n", node.State.You.Head, model.Direction(dir), next.EnemyGuesses)
 
 		// Build child and recurse
 		child := TreeNode{
