@@ -30,14 +30,14 @@ func TestSingleFood(t *testing.T) {
 	state := input.Clone()
 
 	w := move.WeightFood(&state, &game.Coord{2, 1})
-	if w != 0.15 {
-		t.Errorf("Expected weight for guaranteed food, low health at (2,1) 0.15, got %v", w)
+	if w <= 0 {
+		t.Errorf("Expected positive weight for guaranteed food, low health at (2,1), got %v", w)
 	}
 
 	state.You.Health = 99
 	w = move.WeightFood(&state, &game.Coord{2, 1})
-	if w != -0.15 {
-		t.Errorf("Expected weight for guaranteed food, high health at (2,1) -0.15, got %v", w)
+	if w > 0 {
+		t.Errorf("Expected negative or 0 weight for guaranteed food, high health at (2,1), got %v", w)
 	}
 }
 
