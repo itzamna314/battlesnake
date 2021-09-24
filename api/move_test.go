@@ -1,17 +1,11 @@
 package api_test
 
 import (
-	"bytes"
-	"fmt"
-	"net/http/httptest"
-	"os/exec"
-	"regexp"
-	"strconv"
-	"strings"
 	"testing"
 
 	"github.com/itzamna314/battlesnake/api"
 	"github.com/itzamna314/battlesnake/model"
+	"github.com/itzamna314/battlesnake/testdata"
 )
 
 func TestEatOne(t *testing.T) {
@@ -66,20 +60,6 @@ func TestEatFuture(t *testing.T) {
 	nextMove := api.NextMove(state)
 	if nextMove.Move != "right" {
 		t.Errorf("snake did not eat 2 food, went %s", nextMove.Move)
-	}
-}
-
-func TestNoCrash(t *testing.T) {
-	testServer := server()
-	defer testServer.Close()
-
-	result, err := play(t, testServer.URL)
-	if err != nil {
-		t.Errorf("Unexpected error %s", err)
-	}
-
-	if result.Turn < 25 {
-		t.Errorf("Expected to live minimum 25 turns, lived for %d", result.Turn)
 	}
 }
 
@@ -153,46 +133,32 @@ func TestFoodOrDeath(t *testing.T) {
 	}
 }
 
-func server() *httptest.Server {
-	hnd := api.Build()
-	svr := httptest.NewServer(hnd)
-
-	return svr
-}
-
-type playResult struct {
-	Turn int
-}
-
-// play runs a solo game on a 5x5 grid, with no food
-func play(t *testing.T, url string) (*playResult, error) {
-	cmd := exec.Command("battlesnake", "play", "-W", "5", "-H", "5", "--name", "test", "--url", url, "-g", "solo", "--foodSpawnChance", "0", "-v")
-
-	var buf bytes.Buffer
-
-	cmd.Stdout = &buf
-	cmd.Stderr = &buf
-
-	// Execute the command
-	if err := cmd.Run(); err != nil {
-		return nil, err
+func TestFrames(t *testing.T) {
+	testCases := []struct {
+		frame        string
+		allowedMoves []model.Direction
+	}{
+		{"afraid_to_eat", []model.Direction{model.Up}},
 	}
 
-	output := buf.String()
-	t.Logf(output)
+	for _, tt := range testCases {
+		t.Run(tt.frame, func(t *testing.T) {
+			input, ok := testdata.Frame(tt.frame)
+			if !ok {
+				t.Fatalf("Failed to find frame %s", tt.frame)
+			}
 
-	bufLines := strings.Split(output, "\n")
-	outLine := bufLines[len(bufLines)-2]
+			state := input.Clone()
+			nextMove := api.NextMove(state)
 
-	re := regexp.MustCompile(`\[DONE\]: Game completed after (\d+) turns.`)
-	matches := re.FindStringSubmatch(outLine)
-	if len(matches) != 2 {
-		return nil, fmt.Errorf("Unexpected regexp match %v", matches)
+			for _, mv := range tt.allowedMoves {
+				if mv.String() == nextMove.Move {
+					t.Logf("Made allowed move %s", mv)
+					return
+				}
+			}
+
+			t.Errorf("Made disallowed move %s. Allowed: %v", nextMove.Move, tt.allowedMoves)
+		})
 	}
-
-	numTurns, err := strconv.Atoi(matches[1])
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse num turns %s as int: %s", matches[1], err)
-	}
-	return &playResult{numTurns}, nil
 }
