@@ -1,8 +1,8 @@
 package move
 
-import "github.com/itzamna314/battlesnake/model"
+import "github.com/itzamna314/battlesnake/game"
 
-func WeightFood(state *model.GameState, coord *model.Coord) float64 {
+func WeightFood(state *game.GameState, coord *game.Coord) float64 {
 	baseWeight := Food
 
 	if !wantFood(state) {
@@ -38,7 +38,7 @@ func WeightFood(state *model.GameState, coord *model.Coord) float64 {
 	return finalWeight / numWeights
 }
 
-func wantFood(state *model.GameState) bool {
+func wantFood(state *game.GameState) bool {
 	if state.You.Health < 20 {
 		return true
 	}

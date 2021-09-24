@@ -1,4 +1,4 @@
-package model
+package game
 
 const (
 	Certain    = 1.0

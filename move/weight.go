@@ -1,6 +1,6 @@
 package move
 
-import "github.com/itzamna314/battlesnake/model"
+import "github.com/itzamna314/battlesnake/game"
 
 const (
 	// Certain death is -1
@@ -21,8 +21,8 @@ const (
 	Certain = 1.0
 )
 
-func Weight(state *model.GameState, coord *model.Coord) float64 {
-	if model.YouWillDie(state, coord) {
+func Weight(state *game.GameState, coord *game.Coord) float64 {
+	if game.YouWillDie(state, coord) {
 		return Death
 	}
 

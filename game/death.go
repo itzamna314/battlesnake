@@ -1,4 +1,4 @@
-package model
+package game
 
 func YouWillDie(state *GameState, coord *Coord) bool {
 	return SnakeWillDie(state, coord, &state.You)
