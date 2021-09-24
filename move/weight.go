@@ -14,6 +14,8 @@ const (
 	Nothing = 0.0
 	// Value of food
 	Food = 0.15
+	// Value of hazard
+	Hazard = -0.3
 
 	// Probabilities
 	Certain = 1.0
