@@ -20,10 +20,15 @@ func weightEnemies(state *model.GameState, coord *model.Coord) float64 {
 			return Death
 		}
 
-		// Avoid with weight of twice negative probability
-		weight -= prob
+		// If we are shorter, avoid with weight of probability
+		// Otherwise, attack with weight of collision probability
+		// STRIKE FIRST STRIKE HARD NO MERCY
+		if enemy.Length >= state.You.Length {
+			weight -= prob
+		} else {
+			weight += prob
+		}
 	}
 
-	// Double weight to increase enemy avoid priority
-	return weight * 2
+	return weight
 }

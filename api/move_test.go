@@ -139,6 +139,7 @@ func TestFrames(t *testing.T) {
 		allowedMoves []model.Direction
 	}{
 		{"afraid_to_eat", []model.Direction{model.Up}},
+		{"no_mercy", []model.Direction{model.Right}},
 	}
 
 	for _, tt := range testCases {
