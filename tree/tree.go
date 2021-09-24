@@ -28,10 +28,11 @@ func expand(node *TreeNode, depth int) {
 		return
 	}
 
+	// Guess where enemies will go before assessing options
+	node.State.MoveEnemies()
+
 	opts := model.Options(&node.State.You.Head)
 	for dir, opt := range opts {
-		// Handle for enemy movement
-		node.State.MoveEnemies()
 
 		// Calculate weight based on enemy predictions
 		weight := move.Weight(node.State, &opt.Coord)
