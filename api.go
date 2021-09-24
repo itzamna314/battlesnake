@@ -1,10 +1,10 @@
-package api
+package main
 
 import (
 	"net/http"
 )
 
-func Build() http.Handler {
+func Handler() http.Handler {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", Index)

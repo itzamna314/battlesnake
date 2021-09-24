@@ -4,8 +4,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-
-	"github.com/itzamna314/battlesnake/api"
 )
 
 // Main Entrypoint
@@ -15,7 +13,7 @@ func main() {
 		port = "8080"
 	}
 
-	handler := api.Build()
+	handler := Handler()
 
 	log.Printf("Starting Battlesnake Server at http://0.0.0.0:%s...\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, handler))
