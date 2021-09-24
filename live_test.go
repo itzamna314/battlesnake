@@ -1,4 +1,4 @@
-package api_test
+package main
 
 import (
 	"bytes"
@@ -9,8 +9,6 @@ import (
 	"strconv"
 	"strings"
 	"testing"
-
-	"github.com/itzamna314/battlesnake/api"
 )
 
 func TestNoCrash(t *testing.T) {
@@ -28,7 +26,7 @@ func TestNoCrash(t *testing.T) {
 }
 
 func server() *httptest.Server {
-	hnd := api.Build()
+	hnd := Handler()
 	svr := httptest.NewServer(hnd)
 
 	return svr
