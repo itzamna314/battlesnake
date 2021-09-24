@@ -1,32 +1,32 @@
-package model_test
+package game_test
 
 import (
 	"testing"
 
-	"github.com/itzamna314/battlesnake/model"
+	"github.com/itzamna314/battlesnake/game"
 )
 
 func TestMoveGameState(t *testing.T) {
-	me := model.Battlesnake{
+	me := game.Battlesnake{
 		// Length 3, facing right
 		ID:     "me",
-		Head:   model.Coord{X: 2, Y: 0},
-		Body:   []model.Coord{{X: 2, Y: 0}, {X: 1, Y: 0}, {X: 0, Y: 0}},
+		Head:   game.Coord{X: 2, Y: 0},
+		Body:   []game.Coord{{X: 2, Y: 0}, {X: 1, Y: 0}, {X: 0, Y: 0}},
 		Health: 80,
 	}
-	enemy := model.Battlesnake{
+	enemy := game.Battlesnake{
 		// Length 3, facing down
 		ID:     "enemy",
-		Head:   model.Coord{X: 8, Y: 8},
-		Body:   []model.Coord{{X: 8, Y: 8}, {X: 9, Y: 8}, {X: 9, Y: 9}},
+		Head:   game.Coord{X: 8, Y: 8},
+		Body:   []game.Coord{{X: 8, Y: 8}, {X: 9, Y: 8}, {X: 9, Y: 9}},
 		Health: 80,
 	}
-	input := model.GameState{
-		Board: model.Board{
+	input := game.GameState{
+		Board: game.Board{
 			Height: 10,
 			Width:  10,
-			Snakes: []model.Battlesnake{me, enemy},
-			Food: []model.Coord{
+			Snakes: []game.Battlesnake{me, enemy},
+			Food: []game.Coord{
 				{2, 1},
 			},
 		},
@@ -37,17 +37,17 @@ func TestMoveGameState(t *testing.T) {
 	state := input.Clone()
 
 	// Project me moving up
-	state.Move(model.Up)
+	state.Move(game.Up)
 
 	// Assert that I'm in the right place
-	assertHit(t, &model.Coord{2, 1}, &state.You.Head)
-	assertHit(t, &model.Coord{2, 1}, &state.You.Body[0])
-	assertHit(t, &model.Coord{2, 0}, &state.You.Body[1])
-	assertHit(t, &model.Coord{1, 0}, &state.You.Body[2])
+	assertHit(t, &game.Coord{2, 1}, &state.You.Head)
+	assertHit(t, &game.Coord{2, 1}, &state.You.Body[0])
+	assertHit(t, &game.Coord{2, 0}, &state.You.Body[1])
+	assertHit(t, &game.Coord{1, 0}, &state.You.Body[2])
 
 	// Assert that I ate the food
 	for _, food := range state.Board.Food {
-		if food.Hit(&model.Coord{2, 1}) {
+		if food.Hit(&game.Coord{2, 1}) {
 			t.Errorf("Expected food at (2,1) to be eaten by me")
 		}
 	}
@@ -60,8 +60,8 @@ func TestMoveGameState(t *testing.T) {
 		t.Fatalf("Expected enemy to be length 2 due to uncertainty, was %d", len(enemy.Body))
 	}
 
-	assertHit(t, &model.Coord{8, 8}, &enemy.Body[0])
-	assertHit(t, &model.Coord{9, 8}, &enemy.Body[1])
+	assertHit(t, &game.Coord{8, 8}, &enemy.Body[0])
+	assertHit(t, &game.Coord{9, 8}, &enemy.Body[1])
 
 	// Validate guesses, including certain ones
 	if len(state.EnemyGuesses) != 2 {
@@ -74,32 +74,32 @@ func TestMoveGameState(t *testing.T) {
 			len(guesses))
 	}
 
-	neck := guesses.Prob(&model.Coord{8, 8})
-	if neck != model.Certain {
+	neck := guesses.Prob(&game.Coord{8, 8})
+	if neck != game.Certain {
 		t.Errorf("Expected neck probability to be Certain (1.0), was %v", neck)
 	}
-	tail := guesses.Prob(&model.Coord{9, 8})
-	if tail != model.Certain {
+	tail := guesses.Prob(&game.Coord{9, 8})
+	if tail != game.Certain {
 		t.Errorf("Expected tail probability to be Certain (1.0), was %v", neck)
 	}
 
 	oneThird := 1.0 / 3.0
 
-	headUp := guesses.Prob(&model.Coord{8, 9})
+	headUp := guesses.Prob(&game.Coord{8, 9})
 	if headUp != oneThird {
 		t.Errorf("Expected head up probability to be 1/3, was %v", headUp)
 	}
-	headLeft := guesses.Prob(&model.Coord{7, 8})
+	headLeft := guesses.Prob(&game.Coord{7, 8})
 	if headUp != oneThird {
 		t.Errorf("Expected head left probability to be 1/3, was %v", headLeft)
 	}
-	headDown := guesses.Prob(&model.Coord{8, 7})
+	headDown := guesses.Prob(&game.Coord{8, 7})
 	if headDown != oneThird {
 		t.Errorf("Expected head down probability to be 1/3, was %v", headDown)
 	}
 }
 
-func assertHit(t *testing.T, exp, act *model.Coord) bool {
+func assertHit(t *testing.T, exp, act *game.Coord) bool {
 	t.Helper()
 
 	hits := exp.Hit(act)

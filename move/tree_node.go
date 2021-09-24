@@ -1,14 +1,14 @@
-package tree
+package move
 
 import (
 	"bytes"
 	"fmt"
 
-	"github.com/itzamna314/battlesnake/model"
+	"github.com/itzamna314/battlesnake/game"
 )
 
 type TreeNode struct {
-	State    *model.GameState
+	State    *game.GameState
 	Parent   *TreeNode
 	Children [4]*TreeNode
 	Weight   float64

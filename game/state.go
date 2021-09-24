@@ -1,4 +1,4 @@
-package model
+package game
 
 type GameState struct {
 	Game  Game        `json:"game"`

@@ -8,6 +8,14 @@ import (
 	"github.com/itzamna314/battlesnake/model"
 )
 
+type BattlesnakeInfoResponse struct {
+	APIVersion string `json:"apiversion"`
+	Author     string `json:"author"`
+	Color      string `json:"color"`
+	Head       string `json:"head"`
+	Tail       string `json:"tail"`
+}
+
 // Index is called when you register your Battlesnake on play.battlesnake.com
 // See https://docs.battlesnake.com/guides/getting-started#step-4-register-your-battlesnake
 // It controls your Battlesnake appearance and author permissions.

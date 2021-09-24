@@ -11,6 +11,11 @@ import (
 	"github.com/itzamna314/battlesnake/tree"
 )
 
+type BattlesnakeMoveResponse struct {
+	Move  string `json:"move"`
+	Shout string `json:"shout,omitempty"`
+}
+
 func Move(w http.ResponseWriter, r *http.Request) {
 	state := model.GameState{}
 	err := json.NewDecoder(r.Body).Decode(&state)

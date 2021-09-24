@@ -1,9 +1,9 @@
 package move
 
-import "github.com/itzamna314/battlesnake/model"
+import "github.com/itzamna314/battlesnake/game"
 
 // Calculate weight for moving You to coord in state
-func weightEnemies(state *model.GameState, coord *model.Coord) float64 {
+func weightEnemies(state *game.GameState, coord *game.Coord) float64 {
 	// No enemies
 	if len(state.Board.Snakes) <= 1 {
 		return Nothing

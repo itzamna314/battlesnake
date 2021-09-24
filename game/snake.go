@@ -1,4 +1,4 @@
-package model
+package game
 
 type Battlesnake struct {
 	ID      string  `json:"id"`

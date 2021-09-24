@@ -1,4 +1,4 @@
-package model
+package game
 
 type Board struct {
 	Height int           `json:"height"`
