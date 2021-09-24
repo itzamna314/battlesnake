@@ -6,17 +6,17 @@ import (
 	"io/fs"
 	"strings"
 
-	"github.com/itzamna314/battlesnake/model"
+	"github.com/itzamna314/battlesnake/game"
 )
 
 var (
 	//go:embed frames
 	frameFiles   embed.FS
-	frameLibrary map[string]model.GameState
+	frameLibrary map[string]game.GameState
 )
 
 func init() {
-	frameLibrary = make(map[string]model.GameState)
+	frameLibrary = make(map[string]game.GameState)
 
 	err := fs.WalkDir(frameFiles, ".", func(path string, de fs.DirEntry, err error) error {
 		if de.IsDir() {
@@ -33,7 +33,7 @@ func init() {
 			return err
 		}
 
-		var gs model.GameState
+		var gs game.GameState
 		if err := json.Unmarshal(bb, &gs); err != nil {
 			return err
 		}
@@ -46,7 +46,7 @@ func init() {
 	}
 }
 
-func Frame(name string) (model.GameState, bool) {
+func Frame(name string) (game.GameState, bool) {
 	gs, ok := frameLibrary[name]
 	return gs, ok
 }

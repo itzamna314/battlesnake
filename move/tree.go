@@ -4,7 +4,7 @@ import (
 	"github.com/itzamna314/battlesnake/game"
 )
 
-func Build(start *game.GameState, depth int) *TreeNode {
+func BuildTree(start *game.GameState, depth int) *TreeNode {
 	initialState := start.Clone()
 	root := TreeNode{
 		State: &initialState,

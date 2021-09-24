@@ -5,11 +5,11 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/itzamna314/battlesnake/model"
+	"github.com/itzamna314/battlesnake/game"
 )
 
 func End(w http.ResponseWriter, r *http.Request) {
-	state := model.GameState{}
+	state := game.GameState{}
 	err := json.NewDecoder(r.Body).Decode(&state)
 	if err != nil {
 		log.Printf("ERROR: Failed to decode end json, %s", err)
@@ -23,6 +23,6 @@ func End(w http.ResponseWriter, r *http.Request) {
 
 // This function is called when a game your Battlesnake was in has ended.
 // It's purely for informational purposes, you don't have to make any decisions here.
-func end(state model.GameState) {
+func end(state game.GameState) {
 	log.Printf("%s END\n\n", state.Game.ID)
 }

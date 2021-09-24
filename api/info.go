@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-
-	"github.com/itzamna314/battlesnake/model"
 )
 
 type BattlesnakeInfoResponse struct {
@@ -22,6 +20,7 @@ type BattlesnakeInfoResponse struct {
 // For customization options, see https://docs.battlesnake.com/references/personalization
 // TIP: If you open your Battlesnake URL in browser you should see this data.
 func Index(w http.ResponseWriter, r *http.Request) {
+	log.Println("INFO")
 	response := info()
 
 	w.Header().Set("Content-Type", "application/json")
@@ -31,9 +30,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func info() model.BattlesnakeInfoResponse {
-	log.Println("INFO")
-	return model.BattlesnakeInfoResponse{
+func info() BattlesnakeInfoResponse {
+	return BattlesnakeInfoResponse{
 		APIVersion: "1",
 		Author:     "Johnny Lawrence",
 		Color:      "#000000",
