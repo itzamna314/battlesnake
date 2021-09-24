@@ -118,7 +118,8 @@ func (g *GameState) moveEnemy(idx int) {
 	}
 
 	// Clear guess for tail if snake didn't eat
-	if enemy.Health < 99 {
+	ate := enemy.Health == 99
+	if !ate {
 		tail := enemy.Body[len(enemy.Body)-1]
 		g.EnemyGuesses[idx].Clear(&tail)
 	}
