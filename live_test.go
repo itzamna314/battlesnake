@@ -18,6 +18,7 @@ func TestNoCrash(t *testing.T) {
 	result, err := play(t, testServer.URL)
 	if err != nil {
 		t.Errorf("Unexpected error %s", err)
+		return
 	}
 
 	if result.Turn < 25 {
