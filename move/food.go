@@ -6,7 +6,7 @@ func WeightFood(state *model.GameState, coord *model.Coord) float64 {
 	baseWeight := Food
 
 	if !wantFood(state) {
-		baseWeight *= -1
+		baseWeight *= -0.25
 	}
 
 	// Prefer to move toward or away from foods
