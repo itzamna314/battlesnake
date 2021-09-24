@@ -42,8 +42,6 @@ func (g *GuessCoordSet) Mult(c *Coord, p float64) {
 			return
 		}
 	}
-
-	*g = append(*g, GuessCoord{*c, Impossible})
 }
 
 func (g *GuessCoordSet) Clear(c *Coord) {

@@ -106,7 +106,6 @@ func (g *GameState) moveEnemy(idx int) {
 
 	// Distribute move evenly among non-death options
 	// Check for eating at each one
-	var ate bool
 	headProb := 1.0 / float64(legalMoves)
 	for _, opt := range opts {
 		if opt == nil {
@@ -115,15 +114,11 @@ func (g *GameState) moveEnemy(idx int) {
 
 		g.EnemyGuesses[idx].Add(&opt.Coord, headProb)
 
-		// Arbitrary cutoff to assume they ate
-		if g.FoodGuesses.Prob(&opt.Coord) > 0.1 {
-			g.FoodGuesses.Mult(&opt.Coord, headProb)
-			ate = true
-		}
+		g.FoodGuesses.Mult(&opt.Coord, headProb)
 	}
 
-	// Clear guess for tail if we didn't eat
-	if !ate {
+	// Clear guess for tail if snake didn't eat
+	if enemy.Health < 99 {
 		tail := enemy.Body[len(enemy.Body)-1]
 		g.EnemyGuesses[idx].Clear(&tail)
 	}
