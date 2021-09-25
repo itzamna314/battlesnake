@@ -1,10 +1,6 @@
 package move
 
-import (
-	"fmt"
-
-	"github.com/itzamna314/battlesnake/game"
-)
+import "github.com/itzamna314/battlesnake/game"
 
 const (
 	// Certain death is -1
@@ -27,7 +23,6 @@ const (
 
 func Weight(state *game.GameState, coord *game.Coord) float64 {
 	if game.YouWillDie(state, coord) {
-		fmt.Printf("%s instant death\n", coord)
 		return Death
 	}
 
@@ -36,14 +31,12 @@ func Weight(state *game.GameState, coord *game.Coord) float64 {
 
 	enemy := weightEnemies(state, coord)
 	if enemy <= Death {
-		fmt.Printf("%s enemy death %v\n", coord, enemy)
 		return Death
 	}
 	weight += enemy
 
 	hazard := WeightHazard(state, coord)
 	if hazard <= Death {
-		fmt.Printf("%s hazard\n", coord)
 		return Death
 	}
 	weight += hazard
