@@ -30,16 +30,18 @@ func Weight(state *game.GameState, coord *game.Coord) float64 {
 	weight := Base
 
 	enemy := weightEnemies(state, coord)
-
-	// Nothing more certain than Death
 	if enemy <= Death {
 		return Death
 	}
-
 	weight += enemy
 
-	food := WeightFood(state, coord)
+	hazard := WeightHazard(state, coord)
+	if hazard <= Death {
+		return Death
+	}
+	weight += hazard
 
+	food := WeightFood(state, coord)
 	weight += food
 
 	// Don't die over food
