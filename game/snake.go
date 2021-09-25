@@ -31,33 +31,3 @@ func (b *Battlesnake) Clone() Battlesnake {
 
 	return clone
 }
-
-func (b *Battlesnake) MoveDet(dir Direction, ate bool) {
-	b.moveBody(ate)
-
-	// Step the head in direction, and copy to body
-	b.Head = b.Head.Step(dir)
-	b.Body[0] = b.Head
-}
-
-func (b *Battlesnake) MoveProb(ate bool) {
-	b.moveBody(ate)
-
-	// We don't know where the head went
-	// Remove from deterministic structure
-	b.Body = b.Body[1:]
-}
-
-func (b *Battlesnake) moveBody(ate bool) {
-	// If ate, grow tail
-	if ate {
-		b.Body = append(b.Body, b.Body[len(b.Body)-1])
-	}
-
-	// Copy each body segment to next
-	// Head will remain copied into neck
-	for i := len(b.Body) - 1; i > 0; i-- {
-		next := i - 1
-		b.Body[i] = b.Body[next]
-	}
-}

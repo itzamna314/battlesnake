@@ -1,11 +1,14 @@
 package move
 
-import "github.com/itzamna314/battlesnake/game"
+import (
+	"github.com/itzamna314/battlesnake/game"
+	"github.com/itzamna314/battlesnake/predict"
+)
 
 func BuildTree(start *game.GameState, depth int) *TreeNode {
-	initialState := start.Clone()
+	initialState := predict.Initialize(start)
 	root := TreeNode{
-		State: &initialState,
+		State: initialState,
 	}
 
 	expand(&root, depth)
@@ -28,7 +31,7 @@ func expand(node *TreeNode, depth int) {
 	// Guess where enemies will go before assessing options
 	node.State.MoveEnemies()
 
-	opts := game.Options(&node.State.You.Head)
+	opts := predict.Options(&node.State.You.Head)
 	for dir, opt := range opts {
 
 		// Calculate weight based on enemy predictions
@@ -42,7 +45,7 @@ func expand(node *TreeNode, depth int) {
 		child := TreeNode{
 			Parent: node,
 			Weight: weight,
-			State:  &next,
+			State:  next,
 		}
 
 		expand(&child, depth-1)

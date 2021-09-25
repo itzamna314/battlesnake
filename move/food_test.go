@@ -5,6 +5,7 @@ import (
 
 	"github.com/itzamna314/battlesnake/game"
 	"github.com/itzamna314/battlesnake/move"
+	"github.com/itzamna314/battlesnake/predict"
 )
 
 func TestSingleFood(t *testing.T) {
@@ -27,15 +28,15 @@ func TestSingleFood(t *testing.T) {
 		You: me,
 	}
 
-	state := input.Clone()
+	state := predict.Initialize(&input)
 
-	w := move.WeightFood(&state, &game.Coord{2, 1})
+	w := move.WeightFood(state, &game.Coord{2, 1})
 	if w <= 0 {
 		t.Errorf("Expected positive weight for guaranteed food, low health at (2,1), got %v", w)
 	}
 
 	state.You.Health = 99
-	w = move.WeightFood(&state, &game.Coord{2, 1})
+	w = move.WeightFood(state, &game.Coord{2, 1})
 	if w > 0 {
 		t.Errorf("Expected negative or 0 weight for guaranteed food, high health at (2,1), got %v", w)
 	}
@@ -65,12 +66,12 @@ func TestMaxFood(t *testing.T) {
 		You: me,
 	}
 
-	state := input.Clone()
+	state := predict.Initialize(&input)
 
 	legalMoves := []game.Coord{{0, 1}, {1, 2}, {2, 1}}
 
 	for _, l := range legalMoves {
-		w := move.Weight(&state, &l)
+		w := move.Weight(state, &l)
 		if w < 0 || w > 1 {
 			t.Errorf("Weight exceeding bounds for %s: %v", l, w)
 		}

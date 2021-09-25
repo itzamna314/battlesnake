@@ -1,8 +1,11 @@
 package move
 
-import "github.com/itzamna314/battlesnake/game"
+import (
+	"github.com/itzamna314/battlesnake/game"
+	"github.com/itzamna314/battlesnake/predict"
+)
 
-func WeightFood(state *game.GameState, coord *game.Coord) float64 {
+func WeightFood(state *predict.State, coord *game.Coord) float64 {
 	baseWeight := Food
 
 	if !wantFood(state) {
@@ -57,7 +60,7 @@ NextFood:
 	return finalWeight / numWeights
 }
 
-func wantFood(state *game.GameState) bool {
+func wantFood(state *predict.State) bool {
 	if state.You.Health < 50 {
 		return true
 	}
