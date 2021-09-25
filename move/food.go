@@ -39,7 +39,7 @@ func WeightFood(state *game.GameState, coord *game.Coord) float64 {
 }
 
 func wantFood(state *game.GameState) bool {
-	if state.You.Health < 20 {
+	if state.You.Health < 50 {
 		return true
 	}
 
