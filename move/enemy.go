@@ -22,13 +22,14 @@ func weightEnemies(state *game.GameState, coord *game.Coord) float64 {
 		weight -= prob
 
 		// If we are shorter, avoid with weight of probability
-		// Otherwise, attack with weight of collision probability
+		// Otherwise, attack with reduced weight of collision probability
 		// STRIKE FIRST STRIKE HARD NO MERCY
+		// But also don't chase a short snake into a long snake
 		prob = state.HeadGuesses[i].Prob(coord)
 		if enemy.Length >= state.You.Length {
 			weight -= prob
 		} else {
-			weight += prob
+			weight += (prob * 0.3)
 		}
 	}
 
