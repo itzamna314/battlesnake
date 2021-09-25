@@ -14,6 +14,7 @@ func WeightFood(state *game.GameState, coord *game.Coord) float64 {
 	// Divide by number of foods where this move changes the distance
 	var finalWeight, numWeights float64
 
+NextFood:
 	for _, food := range state.FoodGuesses {
 		var (
 			headDist = state.You.Head.Dist(&food.Coord)
@@ -23,6 +24,24 @@ func WeightFood(state *game.GameState, coord *game.Coord) float64 {
 		// We didn't get closer. Ignore
 		if myDist == headDist {
 			continue
+		}
+
+		// Check to see if this food is contested
+		// If any snake is closer than us, ignore this food
+		// If a longer or equal snake is the same distance, ignore
+		for _, snake := range state.Board.Snakes {
+			if snake.ID == state.You.ID {
+				continue
+			}
+
+			eDist := snake.Head.Dist(&food.Coord)
+			if eDist < myDist {
+				continue NextFood
+			}
+
+			if eDist == myDist && snake.Length >= state.You.Length {
+				continue NextFood
+			}
 		}
 
 		distDiffPct := float64(headDist-myDist) / float64(headDist)
