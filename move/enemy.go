@@ -15,14 +15,16 @@ func weightEnemies(state *game.GameState, coord *game.Coord) float64 {
 			continue
 		}
 
-		prob := state.EnemyGuesses[i].Prob(coord)
+		prob := state.BodyGuesses[i].Prob(coord)
 		if prob == Certain {
 			return Death
 		}
+		weight -= prob
 
 		// If we are shorter, avoid with weight of probability
 		// Otherwise, attack with weight of collision probability
 		// STRIKE FIRST STRIKE HARD NO MERCY
+		prob = state.HeadGuesses[i].Prob(coord)
 		if enemy.Length >= state.You.Length {
 			weight -= prob
 		} else {
