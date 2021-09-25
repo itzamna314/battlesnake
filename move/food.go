@@ -43,12 +43,14 @@ func wantFood(state *game.GameState) bool {
 		return true
 	}
 
+	acceptableLength := state.You.Length - 2
+
 	for _, snake := range state.Board.Snakes {
 		if snake.ID == state.You.ID {
 			continue
 		}
 
-		if snake.Length >= state.You.Length {
+		if snake.Length >= acceptableLength {
 			return true
 		}
 	}
