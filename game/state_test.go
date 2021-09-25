@@ -64,13 +64,13 @@ func TestMoveGameState(t *testing.T) {
 	assertHit(t, &game.Coord{9, 8}, &enemy.Body[1])
 
 	// Validate guesses, including certain ones
-	if len(state.EnemyGuesses) != 2 {
+	if len(state.BodyGuesses) != 2 {
 		t.Fatalf("2 snakes required for easy lookup")
 	}
 
-	guesses := state.EnemyGuesses[1]
-	if len(guesses) != 5 {
-		t.Fatalf("Expected 5 guesses: 2 certain body segments, 3 head guesses. Got %d",
+	guesses := state.BodyGuesses[1]
+	if len(guesses) != 2 {
+		t.Errorf("Expected 2 certain body segments. Got %d",
 			len(guesses))
 	}
 
@@ -84,6 +84,12 @@ func TestMoveGameState(t *testing.T) {
 	}
 
 	oneThird := 1.0 / 3.0
+
+	guesses = state.HeadGuesses[1]
+	if len(guesses) != 3 {
+		t.Errorf("Expected 3 possible head guesses. Got %d",
+			len(guesses))
+	}
 
 	headUp := guesses.Prob(&game.Coord{8, 9})
 	if headUp != oneThird {
