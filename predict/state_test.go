@@ -1,9 +1,11 @@
-package game_test
+package predict_test
 
 import (
 	"testing"
 
 	"github.com/itzamna314/battlesnake/game"
+	"github.com/itzamna314/battlesnake/guess"
+	"github.com/itzamna314/battlesnake/predict"
 )
 
 func TestMoveGameState(t *testing.T) {
@@ -34,7 +36,7 @@ func TestMoveGameState(t *testing.T) {
 	}
 
 	// Clone input to initialize data structures
-	state := input.Clone()
+	state := predict.Initialize(&input)
 
 	// Project me moving up
 	state.Move(game.Up)
@@ -54,6 +56,7 @@ func TestMoveGameState(t *testing.T) {
 
 	// Move the enemies
 	state.MoveEnemies()
+
 	// Certain remaining body segments
 	enemy = state.Board.Snakes[1]
 	if len(enemy.Body) != 2 {
@@ -75,11 +78,11 @@ func TestMoveGameState(t *testing.T) {
 	}
 
 	neck := guesses.Prob(&game.Coord{8, 8})
-	if neck != game.Certain {
+	if neck != guess.Certain {
 		t.Errorf("Expected neck probability to be Certain (1.0), was %v", neck)
 	}
 	tail := guesses.Prob(&game.Coord{9, 8})
-	if tail != game.Certain {
+	if tail != guess.Certain {
 		t.Errorf("Expected tail probability to be Certain (1.0), was %v", neck)
 	}
 

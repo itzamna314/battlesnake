@@ -155,8 +155,7 @@ func TestFrames(t *testing.T) {
 				t.Fatalf("Failed to find frame %s", tt.frame)
 			}
 
-			state := input.Clone()
-			next := move.Next(state)
+			next := move.Next(input)
 
 			for _, allowed := range tt.allowedMoves {
 				if allowed == next {

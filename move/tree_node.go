@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/itzamna314/battlesnake/game"
+	"github.com/itzamna314/battlesnake/predict"
 )
 
 type TreeNode struct {
-	State    *game.GameState
+	State    *predict.State
 	Parent   *TreeNode
 	Children [4]*TreeNode
 	Weight   float64
