@@ -12,14 +12,19 @@ type Board struct {
 
 func (b *Board) Clone() Board {
 	clone := Board{
-		Height: b.Height,
-		Width:  b.Width,
-		Food:   make([]Coord, len(b.Food)),
-		Snakes: make([]Battlesnake, len(b.Snakes)),
+		Height:  b.Height,
+		Width:   b.Width,
+		Food:    make([]Coord, len(b.Food)),
+		Hazards: make([]Coord, len(b.Hazards)),
+		Snakes:  make([]Battlesnake, len(b.Snakes)),
 	}
 
 	for i, f := range b.Food {
 		clone.Food[i] = f
+	}
+
+	for i, h := range b.Hazards {
+		clone.Hazards[i] = h
 	}
 
 	for i, s := range b.Snakes {
