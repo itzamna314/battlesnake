@@ -127,7 +127,7 @@ func (g *GameState) moveEnemy(idx int) {
 
 		// Distribute move evenly among non-death options
 		// Check for eating at each one
-		headProb := 1.0 / float64(legalMoves)
+		headProb := 1.0 / float64(legalMoves) * headGuess.Probability
 		for _, opt := range opts {
 			if opt == nil {
 				continue
