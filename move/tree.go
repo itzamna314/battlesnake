@@ -1,8 +1,6 @@
 package move
 
-import (
-	"github.com/itzamna314/battlesnake/game"
-)
+import "github.com/itzamna314/battlesnake/game"
 
 func BuildTree(start *game.GameState, depth int) *TreeNode {
 	initialState := start.Clone()
@@ -63,6 +61,9 @@ func expand(node *TreeNode, depth int) {
 		}
 	}
 
-	node.Weight = node.Weight + (bestChild * 0.5)
-	return
+	if bestChild <= -1.0 {
+		node.Weight = -1.0
+	} else {
+		node.Weight = node.Weight + (bestChild * 0.5)
+	}
 }
