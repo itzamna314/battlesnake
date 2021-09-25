@@ -17,6 +17,9 @@ RULES=$(echo ${GAME_JSONL} | jq 'select(.Type == "game_end")')
 
 OUT=$(cat <<EOF
 {
+  "meta": {
+    "source": "${RAW_URL}"
+  },
   "game": {
     "id": "unit-test",
     "ruleset": $(echo ${RULES} | jq '.Data.Ruleset'),
