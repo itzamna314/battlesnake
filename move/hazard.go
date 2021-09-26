@@ -13,11 +13,11 @@ func WeightHazard(state *predict.State, coord *game.Coord) float64 {
 				continue
 			}
 
-			if state.You.Health <= 0 {
-				return Death
+			if state.You.Health <= 20 {
+				return Hazard * 2
 			}
 
-			return Nothing
+			return Hazard
 		}
 	}
 
