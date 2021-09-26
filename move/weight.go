@@ -39,10 +39,11 @@ func Weight(state *predict.State, coord *game.Coord) float64 {
 	weight += enemy
 
 	hazard := WeightHazard(state, coord)
-	if hazard <= Death {
+	weight += hazard
+	if weight <= Death {
+		fmt.Printf("%s hazard death\n", coord)
 		return Death
 	}
-	weight += hazard
 
 	food := WeightFood(state, coord)
 	weight += food
