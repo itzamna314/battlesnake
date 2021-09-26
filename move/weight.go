@@ -18,7 +18,7 @@ const (
 	// Base value of food
 	Food = 0.15
 	// Value of hazard
-	Hazard = -0.1
+	Hazard = -0.2
 	// Required to live
 	Mandatory = 1.0
 
