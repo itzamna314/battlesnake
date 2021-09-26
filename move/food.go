@@ -12,6 +12,10 @@ func WeightFood(state *predict.State, coord *game.Coord) float64 {
 		baseWeight *= -0.25
 	}
 
+	if needFood(state) {
+		baseWeight = Mandatory
+	}
+
 	// Prefer to move toward or away from foods
 	// Weight foods more strongly by the likelihood that they will remain
 	// Divide by number of foods where this move changes the distance
@@ -78,4 +82,8 @@ func wantFood(state *predict.State) bool {
 	}
 
 	return false
+}
+
+func needFood(state *predict.State) bool {
+	return state.You.Health < 20
 }

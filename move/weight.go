@@ -15,10 +15,12 @@ const (
 
 	// From modifier funcs, this means no modifier
 	Nothing = 0.0
-	// Value of food
+	// Base value of food
 	Food = 0.15
 	// Value of hazard
-	Hazard = -0.3
+	Hazard = -0.1
+	// Required to live
+	Mandatory = 1.0
 
 	// Probabilities
 	Certain = 1.0
@@ -41,7 +43,6 @@ func Weight(state *predict.State, coord *game.Coord) float64 {
 	hazard := WeightHazard(state, coord)
 	weight += hazard
 	if weight <= Death {
-		fmt.Printf("%s hazard death\n", coord)
 		return Death
 	}
 
