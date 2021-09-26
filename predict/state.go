@@ -85,6 +85,19 @@ func (p *State) Move(dir game.Direction) {
 		}
 	}
 
+	if ate {
+		p.You.Health = 100
+	} else {
+		p.You.Health -= 1
+
+		for _, hazard := range p.Board.Hazards {
+			if hazard.Hit(&step) {
+				p.You.Health -= 15
+				break
+			}
+		}
+	}
+
 	// Move body
 	p.moveSnakeBody(&p.You, ate)
 
@@ -140,12 +153,26 @@ func (p *State) moveEnemy(idx int) {
 			}
 
 			p.HeadGuesses[idx].Add(&opt.Coord, headProb)
-			p.FoodGuesses.Mult(&opt.Coord, headProb)
+
+			eatProb := p.FoodGuesses.Mult(&opt.Coord, headProb)
+			if eatProb > 0 {
+				wouldRestore := float64(100 - enemy.Health)
+				p.Board.Snakes[idx].Health += int32(wouldRestore * eatProb)
+			}
+
+			for _, hazard := range p.Board.Hazards {
+				if hazard.Hit(&opt.Coord) {
+					pNotEat := 1 - eatProb
+					p.Board.Snakes[idx].Health -= int32(15 * headProb * pNotEat)
+				}
+			}
 		}
 
 		p.HeadGuesses[idx].Clear(&headGuess.Coord)
 		p.BodyGuesses[idx].Set(&headGuess.Coord, headGuess.Probability)
 	}
+
+	p.Board.Snakes[idx].Health -= 1
 
 	// Clear guess for tail if snake didn't eat
 	ate := enemy.Health == 100

@@ -1,8 +1,6 @@
 package predict
 
-import (
-	"github.com/itzamna314/battlesnake/game"
-)
+import "github.com/itzamna314/battlesnake/game"
 
 func YouWillDie(state *State, coord *game.Coord) bool {
 	return SnakeWillDie(state, coord, &state.You)
@@ -26,6 +24,11 @@ func SnakeWillDie(state *State, coord *game.Coord, snake *game.Battlesnake) bool
 		if coord.Hit(&body) {
 			return true
 		}
+	}
+
+	// Don't starve
+	if snake.Health <= 0 {
+		return true
 	}
 
 	return false
