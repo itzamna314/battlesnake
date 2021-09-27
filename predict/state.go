@@ -89,7 +89,7 @@ func (s *State) Move(snake *game.Battlesnake, dir game.Direction) {
 
 		for _, hazard := range s.Board.Hazards {
 			if hazard.Hit(&step) {
-				s.You.Health -= 15
+				snake.Health -= 15
 				break
 			}
 		}

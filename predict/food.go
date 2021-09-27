@@ -2,14 +2,14 @@ package predict
 
 import "github.com/itzamna314/battlesnake/game"
 
-func (s *State) weightFood(coord *game.Coord, snake *game.Battlesnake) int32 {
+func (s *State) weightFood(coord *game.Coord, me *game.Battlesnake) int32 {
 	baseWeight := FoodNotHungry
 
-	if s.wantFood(snake) {
+	if s.wantFood(me) {
 		baseWeight = FoodHungry
 	}
 
-	if s.needFood(snake) {
+	if s.needFood(me) {
 		baseWeight = FoodStarving
 	}
 
@@ -21,35 +21,28 @@ func (s *State) weightFood(coord *game.Coord, snake *game.Battlesnake) int32 {
 NextFood:
 	for _, food := range s.FoodGuesses {
 		var (
-			headDist = s.You.Head.Dist(&food.Coord)
-			myDist   = coord.Dist(&food.Coord)
+			coordDist = coord.Dist(&food.Coord)
 		)
-
-		// We didn't get closer. Ignore
-		if myDist == headDist {
-			continue
-		}
 
 		// Check to see if this food is contested
 		// If any snake is closer than us, ignore this food
 		// If a longer or equal snake is the same distance, ignore
 		for _, snake := range s.Board.Snakes {
-			if snake.ID == s.You.ID {
+			if snake.ID == me.ID {
 				continue
 			}
 
 			eDist := snake.Head.Dist(&food.Coord)
-			if eDist < myDist {
+			if eDist < coordDist {
 				continue NextFood
 			}
 
-			if eDist == myDist && snake.Length >= s.You.Length {
+			if eDist == coordDist && snake.Length >= me.Length {
 				continue NextFood
 			}
 		}
 
-		distDiffPct := float64(headDist-myDist) / float64(headDist)
-		finalWeight += int32(float64(baseWeight) * distDiffPct * food.Probability)
+		finalWeight += int32(float64(baseWeight) * food.Probability)
 	}
 
 	return finalWeight

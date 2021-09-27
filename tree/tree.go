@@ -2,6 +2,7 @@ package tree
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"math/rand"
 
@@ -67,6 +68,8 @@ func Search(ctx context.Context, state *game.GameState, snake *game.Battlesnake,
 		if best.Parent == nil {
 			continue
 		}
+
+		fmt.Printf("Best move %s[%v] (%v)\n", best.Coord, best.Depth, best.Weight)
 
 		// We want to find the move who's parent is root
 		for cur := best; cur.Parent != nil; cur = cur.Parent {
