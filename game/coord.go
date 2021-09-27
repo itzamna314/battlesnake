@@ -60,3 +60,16 @@ func (c *Coord) StepToward(other *Coord) Direction {
 func (c Coord) String() string {
 	return fmt.Sprintf("(%d,%d)", c.X, c.Y)
 }
+
+type PossibleMoves [4]*Coord
+
+func Options(myHead *Coord) PossibleMoves {
+	var opts [4]*Coord
+
+	opts[Up] = &Coord{myHead.X, myHead.Y + 1}
+	opts[Down] = &Coord{myHead.X, myHead.Y - 1}
+	opts[Left] = &Coord{myHead.X - 1, myHead.Y}
+	opts[Right] = &Coord{myHead.X + 1, myHead.Y}
+
+	return opts
+}

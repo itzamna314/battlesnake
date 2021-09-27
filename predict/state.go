@@ -3,6 +3,7 @@ package predict
 import (
 	"github.com/itzamna314/battlesnake/game"
 	"github.com/itzamna314/battlesnake/guess"
+	"github.com/itzamna314/battlesnake/tree"
 )
 
 type State struct {
@@ -14,14 +15,12 @@ type State struct {
 	FoodGuesses guess.CoordSet
 }
 
-func Initialize(gs *game.GameState) *State {
-	ps := State{
-		Board: gs.Board.Clone(),
-		You:   gs.You.Clone(),
-	}
+func (s *State) Init(gs *game.GameState) {
+	s.Board = gs.Board.Clone()
+	s.You = gs.You.Clone()
 
 	// Initialize body guesses
-	ps.BodyGuesses = make(SnakeVision, len(gs.Board.Snakes))
+	s.BodyGuesses = make(SnakeVision, len(gs.Board.Snakes))
 
 	for i, snake := range gs.Board.Snakes {
 		if snake.ID == gs.You.ID {
@@ -29,36 +28,34 @@ func Initialize(gs *game.GameState) *State {
 		}
 
 		for _, body := range gs.Board.Snakes[i].Body {
-			ps.BodyGuesses[i].Set(&body, guess.Certain)
+			s.BodyGuesses[i].Set(&body, guess.Certain)
 		}
 	}
 
 	// Initialize head guesses
-	ps.HeadGuesses = make(SnakeVision, len(gs.Board.Snakes))
+	s.HeadGuesses = make(SnakeVision, len(gs.Board.Snakes))
 
 	for i, snake := range gs.Board.Snakes {
 		if snake.ID == gs.You.ID {
 			continue
 		}
 
-		ps.HeadGuesses[i].Set(&gs.Board.Snakes[i].Head, guess.Certain)
+		s.HeadGuesses[i].Set(&s.Board.Snakes[i].Head, guess.Certain)
 	}
 
 	// Initialize food
 	for _, food := range gs.Board.Food {
-		ps.FoodGuesses.Set(&food, guess.Certain)
+		s.FoodGuesses.Set(&food, guess.Certain)
 	}
-
-	return &ps
 }
 
-func (p *State) Clone() *State {
+func (s *State) Clone() tree.SnakeBrain {
 	clone := State{
-		Board:       p.Board.Clone(),
-		You:         p.You.Clone(),
-		HeadGuesses: p.HeadGuesses.Clone(),
-		BodyGuesses: p.BodyGuesses.Clone(),
-		FoodGuesses: p.FoodGuesses.Clone(),
+		Board:       s.Board.Clone(),
+		You:         s.You.Clone(),
+		HeadGuesses: s.HeadGuesses.Clone(),
+		BodyGuesses: s.BodyGuesses.Clone(),
+		FoodGuesses: s.FoodGuesses.Clone(),
 	}
 
 	return &clone
@@ -68,56 +65,60 @@ const (
 	ateFoodCutoff = 0.1
 )
 
-func (p *State) Move(dir game.Direction) {
+func (s *State) Move(snake *game.Battlesnake, dir game.Direction) {
 	// Eat any food
 	var ate bool
-	step := p.You.Head.Step(dir)
+	step := snake.Head.Step(dir)
 
-	if p.FoodGuesses.Prob(&step) > ateFoodCutoff {
+	if s.FoodGuesses.Prob(&step) > ateFoodCutoff {
 		ate = true
-		p.FoodGuesses.Clear(&step)
+		s.FoodGuesses.Clear(&step)
 
-		for i, food := range p.Board.Food {
+		for i, food := range s.Board.Food {
 			if food.Hit(&step) {
-				p.Board.Food = append(p.Board.Food[:i], p.Board.Food[i+1:]...)
+				s.Board.Food = append(s.Board.Food[:i], s.Board.Food[i+1:]...)
 				break
 			}
 		}
 	}
 
 	if ate {
-		p.You.Health = 100
+		snake.Health = 100
 	} else {
-		p.You.Health -= 1
+		snake.Health -= 1
 
-		for _, hazard := range p.Board.Hazards {
+		for _, hazard := range s.Board.Hazards {
 			if hazard.Hit(&step) {
-				p.You.Health -= 15
+				s.You.Health -= 15
 				break
 			}
 		}
 	}
 
 	// Move body
-	p.moveSnakeBody(&p.You, ate)
+	s.moveSnakeBody(snake, ate)
 
 	// Step the head in direction, and copy to body
-	p.You.Head = p.You.Head.Step(dir)
-	p.You.Body[0] = p.You.Head
-}
+	snake.Head = step
+	snake.Body[0] = snake.Head
 
-func (p *State) MoveEnemies() {
-	for i, snake := range p.Board.Snakes {
-		if snake.ID == p.You.ID {
-			continue
-		}
-
-		p.moveEnemy(i)
+	if snake.ID == s.You.ID {
+		s.You = *snake
 	}
 }
 
-func (p *State) moveEnemy(idx int) {
-	enemy := p.Board.Snakes[idx]
+func (s *State) MoveEnemies(me *game.Battlesnake) {
+	for i, snake := range s.Board.Snakes {
+		if snake.ID == me.ID {
+			continue
+		}
+
+		s.moveEnemy(i)
+	}
+}
+
+func (s *State) moveEnemy(idx int) {
+	enemy := s.Board.Snakes[idx]
 	if len(enemy.Body) == 0 {
 		return
 	}
@@ -125,18 +126,17 @@ func (p *State) moveEnemy(idx int) {
 	// Move enemies probabilistically based on last certain segment
 	// If no certain segments remain, do not continue validation
 	// Filter out certain death options
-
-	for _, headGuess := range p.HeadGuesses[idx] {
-		opts := Options(&headGuess.Coord)
+	for _, headGuess := range s.HeadGuesses[idx] {
+		opts := game.Options(&headGuess.Coord)
 		var legalMoves int
 
 		for i, opt := range opts {
-			if SnakeWillDie(p, &opt.Coord, &enemy) {
+			if SnakeWillDie(s, opt, &enemy) {
 				opts[i] = nil
 				continue
 			}
 
-			if p.BodyGuesses[idx].Prob(&opt.Coord) > 0 {
+			if s.BodyGuesses[idx].Prob(opt) > 0.75 {
 				opts[i] = nil
 				continue
 			}
@@ -152,39 +152,39 @@ func (p *State) moveEnemy(idx int) {
 				continue
 			}
 
-			p.HeadGuesses[idx].Add(&opt.Coord, headProb)
+			s.HeadGuesses[idx].Add(opt, headProb)
 
-			eatProb := p.FoodGuesses.Mult(&opt.Coord, headProb)
+			eatProb := s.FoodGuesses.Mult(opt, headProb)
 			if eatProb > 0 {
 				wouldRestore := float64(100 - enemy.Health)
-				p.Board.Snakes[idx].Health += int32(wouldRestore * eatProb)
+				s.Board.Snakes[idx].Health += int32(wouldRestore * eatProb)
 			}
 
-			for _, hazard := range p.Board.Hazards {
-				if hazard.Hit(&opt.Coord) {
+			for _, hazard := range s.Board.Hazards {
+				if hazard.Hit(opt) {
 					pNotEat := 1 - eatProb
-					p.Board.Snakes[idx].Health -= int32(15 * headProb * pNotEat)
+					s.Board.Snakes[idx].Health -= int32(15 * headProb * pNotEat)
 				}
 			}
 		}
 
-		p.HeadGuesses[idx].Clear(&headGuess.Coord)
-		p.BodyGuesses[idx].Set(&headGuess.Coord, headGuess.Probability)
+		s.HeadGuesses[idx].Clear(&headGuess.Coord)
+		s.BodyGuesses[idx].Set(&headGuess.Coord, headGuess.Probability)
 	}
 
-	p.Board.Snakes[idx].Health -= 1
+	s.Board.Snakes[idx].Health -= 1
 
 	// Clear guess for tail if snake didn't eat
 	ate := enemy.Health == 100
 	if !ate {
 		tail := enemy.Body[len(enemy.Body)-1]
-		p.BodyGuesses[idx].Clear(&tail)
+		s.BodyGuesses[idx].Clear(&tail)
 	}
 
 	// Move enemy snake probabilistically
-	p.moveSnakeBody(&p.Board.Snakes[idx], ate)
+	s.moveSnakeBody(&s.Board.Snakes[idx], ate)
 
 	// We don't know where the head went
 	// Remove from deterministic structure
-	p.Board.Snakes[idx].Body = enemy.Body[1:]
+	s.Board.Snakes[idx].Body = enemy.Body[1:]
 }

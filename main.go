@@ -1,9 +1,14 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 	"os"
+)
+
+var (
+	timeout = flag.Int("latency", 200, "maximum time to wait before responding")
 )
 
 // Main Entrypoint

@@ -1,12 +1,19 @@
-package move_test
+package predict_test
 
 import (
+	"context"
 	"testing"
+	"time"
 
 	"github.com/itzamna314/battlesnake/game"
-	"github.com/itzamna314/battlesnake/move"
-	"github.com/itzamna314/battlesnake/testdata"
+	"github.com/itzamna314/battlesnake/predict"
+	"github.com/itzamna314/battlesnake/tree"
 )
+
+func testTimeout() context.Context {
+	ctx, _ := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	return ctx
+}
 
 func TestEatOne(t *testing.T) {
 	// Arrange
@@ -28,7 +35,7 @@ func TestEatOne(t *testing.T) {
 		You: me,
 	}
 
-	mv := move.Next(state)
+	mv := tree.Search(testTimeout(), &state, &me, &predict.State{})
 	if mv != game.Up {
 		t.Errorf("snake did not eat food at (2,1), went %s", mv)
 	}
@@ -57,7 +64,7 @@ func TestEatFuture(t *testing.T) {
 		You: me,
 	}
 
-	mv := move.Next(state)
+	mv := tree.Search(testTimeout(), &state, &me, &predict.State{})
 	if mv != game.Right {
 		t.Errorf("snake did not eat 2 food, went %s", mv)
 	}
@@ -90,7 +97,7 @@ func TestWithEnemies(t *testing.T) {
 		You: me,
 	}
 
-	mv := move.Next(state)
+	mv := tree.Search(testTimeout(), &state, &me, &predict.State{})
 	if mv != game.Up {
 		t.Errorf("snake did not eat food at (2,1), went %s", mv)
 	}
@@ -127,45 +134,8 @@ func TestFoodOrDeath(t *testing.T) {
 		You: me,
 	}
 
-	mv := move.Next(state)
+	mv := tree.Search(testTimeout(), &state, &me, &predict.State{})
 	if mv == game.Down {
 		t.Errorf("snake went down into death")
-	}
-}
-
-func TestFrames(t *testing.T) {
-	testCases := []struct {
-		frame        string
-		allowedMoves []game.Direction
-	}{
-		{"afraid_to_eat", []game.Direction{game.Up}},
-		{"no_mercy", []game.Direction{game.Right}},
-		{"enemy_ate", []game.Direction{game.Down}},
-		{"leave_hazard", []game.Direction{game.Left}},
-		{"over_chase", []game.Direction{game.Right}},
-		{"corner_crash", []game.Direction{game.Left}},
-		{"bad_joust", []game.Direction{game.Down}},
-		{"pessimistic", []game.Direction{game.Left, game.Up}},
-		{"hungry_hazard", []game.Direction{game.Right}},
-	}
-
-	for _, tt := range testCases {
-		t.Run(tt.frame, func(t *testing.T) {
-			input, ok := testdata.Frame(tt.frame)
-			if !ok {
-				t.Fatalf("Failed to find frame %s", tt.frame)
-			}
-
-			next := move.Next(input)
-
-			for _, allowed := range tt.allowedMoves {
-				if allowed == next {
-					t.Logf("Made allowed move %s", next)
-					return
-				}
-			}
-
-			t.Errorf("Made disallowed move %s. Allowed: %v", next, tt.allowedMoves)
-		})
 	}
 }

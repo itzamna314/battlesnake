@@ -27,6 +27,9 @@ func TestNoCrash(t *testing.T) {
 }
 
 func server() *httptest.Server {
+	to := 5
+	timeout = &to
+
 	hnd := Handler()
 	svr := httptest.NewServer(hnd)
 
