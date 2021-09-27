@@ -1,12 +1,15 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/itzamna314/battlesnake/game"
-	"github.com/itzamna314/battlesnake/move"
+	"github.com/itzamna314/battlesnake/predict"
+	"github.com/itzamna314/battlesnake/tree"
 )
 
 type BattlesnakeMoveResponse struct {
@@ -22,7 +25,14 @@ func Move(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	direction := move.Next(state)
+	// Read timeout from flag
+	to := time.Duration(*timeout)
+	ctx, _ := context.WithTimeout(r.Context(), to*time.Millisecond)
+
+	direction := tree.Search(ctx, &state, &state.You, &predict.State{})
+
+	log.Printf("MOVE: %s\n", direction)
+
 	response := BattlesnakeMoveResponse{
 		Move: direction.String(),
 	}

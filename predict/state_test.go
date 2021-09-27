@@ -36,10 +36,11 @@ func TestMoveGameState(t *testing.T) {
 	}
 
 	// Clone input to initialize data structures
-	state := predict.Initialize(&input)
+	var state predict.State
+	state.Init(&input)
 
 	// Project me moving up
-	state.Move(game.Up)
+	state.Move(&me, game.Up)
 
 	// Assert that I'm in the right place
 	assertHit(t, &game.Coord{2, 1}, &state.You.Head)
@@ -55,7 +56,7 @@ func TestMoveGameState(t *testing.T) {
 	}
 
 	// Move the enemies
-	state.MoveEnemies()
+	state.MoveEnemies(&me)
 
 	// Certain remaining body segments
 	enemy = state.Board.Snakes[1]
