@@ -25,7 +25,7 @@ func (s *State) weightEnemies(coord *game.Coord, snake *game.Battlesnake) int32 
 
 		// An enemy body is certain death
 		// If we're not sure, multiply probability by death
-		weight -= int32(prob * float64(CertainDeath))
+		weight += int32(prob * float64(CertainDeath))
 
 		// If we are shorter, avoid with weight of probability
 		// Otherwise, attack with reduced weight of collision probability
@@ -33,8 +33,7 @@ func (s *State) weightEnemies(coord *game.Coord, snake *game.Battlesnake) int32 
 		// But also don't chase a short snake into a long snake
 		prob = s.HeadGuesses[i].Prob(coord)
 		if enemy.Length >= snake.Length {
-			wDeath := int32(prob * float64(CertainDeath))
-			weight += wDeath
+			weight += int32(prob * float64(AvoidEnemies))
 		} else {
 			weight += int32(prob * float64(EnemyKill))
 		}
