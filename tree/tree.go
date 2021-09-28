@@ -15,10 +15,14 @@ type Tree struct {
 	// best holds the tree's current best node(s)
 	best []*Node
 
-	// curDepth tracks how far we traversed
+	// cur fields tracks the level we're currently expanding
 	curBest       []*Node
-	curBestWeight int32
+	curBestWeight float64
 	curDepth      int
+	curWidth      int
+
+	// next fields track the next level we would expand
+	nextWidth int
 
 	// weight holds the current set of nodes to weight
 	weight chan *Node

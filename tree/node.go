@@ -15,7 +15,7 @@ type Node struct {
 	Brain     SnakeBrain
 
 	Depth  int
-	Weight int32
+	Weight float64
 }
 
 func (n *Node) String() string {
