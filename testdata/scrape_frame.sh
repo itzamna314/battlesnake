@@ -30,10 +30,10 @@ OUT=$(cat <<EOF
     "height": $(echo ${RULES} | jq '.Data.Height'),
     "width": $(echo ${RULES} | jq '.Data.Width'),
     "food": $(echo ${FRAME} | jq '.Data.Food'),
-	"snakes": $(echo ${FRAME} | jq ' [ .Data.Snakes[] | select(.Death == null) | . += {"head": .Body[0], "length": .Body | length } ]'),
+	  "snakes": $(echo ${FRAME} | jq ' [ .Data.Snakes[] | select(.Death == null) | . += {"head": .Body[0], "length": .Body | length } ]'),
     "hazards": $(echo ${FRAME} | jq '.Data.Hazards')
   },
-  "you": $(echo ${FRAME} | jq '.Data.Snakes[] | . += {"head": .Body[0], "length": .Body | length } | select(.Name == "Cobra Kai Never Die")') 
+  "you": $(echo ${FRAME} | jq '.Data.Snakes[] | . += {"head": .Body[0], "length": .Body | length } | select(.Name == "testing")') 
 }
 EOF
 )

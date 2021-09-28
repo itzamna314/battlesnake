@@ -12,17 +12,20 @@ import (
 func TestFrames(t *testing.T) {
 	testCases := []struct {
 		frame        string
+		depth        int
 		allowedMoves []game.Direction
 	}{
-		{"afraid_to_eat", []game.Direction{game.Up}},
-		{"no_mercy", []game.Direction{game.Right}},
-		{"enemy_ate", []game.Direction{game.Down}},
-		{"leave_hazard", []game.Direction{game.Left}},
-		{"over_chase", []game.Direction{game.Right}},
-		{"corner_crash", []game.Direction{game.Left}},
-		{"bad_joust", []game.Direction{game.Down}},
-		{"pessimistic", []game.Direction{game.Left, game.Up}},
-		{"hungry_hazard", []game.Direction{game.Right}},
+		{"afraid_to_eat", 7, []game.Direction{game.Up}},
+		{"no_mercy", 7, []game.Direction{game.Right}},
+		{"enemy_ate", 7, []game.Direction{game.Down}},
+		{"leave_hazard", 7, []game.Direction{game.Left}},
+		{"over_chase", 7, []game.Direction{game.Right}},
+		{"corner_crash", 7, []game.Direction{game.Left}},
+		{"bad_joust", 7, []game.Direction{game.Down}},
+		{"pessimistic", 7, []game.Direction{game.Left}},
+		{"hungry_hazard", 7, []game.Direction{game.Right}},
+		{"wont_eat", 7, []game.Direction{game.Up}},
+		{"risky_food", 7, []game.Direction{game.Down}},
 	}
 
 	for _, tt := range testCases {
@@ -32,7 +35,12 @@ func TestFrames(t *testing.T) {
 				t.Fatalf("Failed to find frame %s", tt.frame)
 			}
 
-			mv := tree.Search(testTimeout(), &input, &input.You, &predict.State{})
+			mv := tree.Search(testTimeout(),
+				&input,
+				&input.You,
+				&predict.State{},
+				tree.ConfigMaxDepth(tt.depth),
+			)
 
 			for _, allowed := range tt.allowedMoves {
 				if allowed == mv {

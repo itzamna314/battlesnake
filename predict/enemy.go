@@ -1,6 +1,8 @@
 package predict
 
 import (
+	"fmt"
+
 	"github.com/itzamna314/battlesnake/game"
 	"github.com/itzamna314/battlesnake/guess"
 )
@@ -18,6 +20,10 @@ func (s *State) weightEnemies(coord *game.Coord, snake *game.Battlesnake) int32 
 			continue
 		}
 
+		if coord.Hit(&game.Coord{2, 10}) {
+			fmt.Printf("Enemy %s probability body %v head %v\n", s.Board.Snakes[i].Name, s.BodyGuesses[i].Prob(coord), s.HeadGuesses[i].Prob(coord))
+		}
+
 		prob := s.BodyGuesses[i].Prob(coord)
 		if prob == guess.Certain {
 			return CertainDeath
@@ -33,7 +39,9 @@ func (s *State) weightEnemies(coord *game.Coord, snake *game.Battlesnake) int32 
 		// But also don't chase a short snake into a long snake
 		prob = s.HeadGuesses[i].Prob(coord)
 		if enemy.Length >= snake.Length {
-			weight += int32(prob * float64(AvoidEnemies))
+			weight += int32(prob * float64(CertainDeath))
+		} else if len(s.Board.Snakes) == 2 {
+			weight += int32(prob * float64(CertainWin))
 		} else {
 			weight += int32(prob * float64(EnemyKill))
 		}

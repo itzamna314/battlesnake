@@ -3,6 +3,8 @@ package tree
 import "context"
 
 func weightWorker(ctx context.Context, weight <-chan *Node, expand chan<- *Node) {
+	defer close(expand)
+
 	for {
 		select {
 		case <-ctx.Done():
