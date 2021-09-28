@@ -10,6 +10,8 @@ import (
 )
 
 type Tree struct {
+	MaxDepth int
+
 	// best holds the tree's current best node(s)
 	best []*Node
 
@@ -24,19 +26,28 @@ type Tree struct {
 	expand chan *Node
 }
 
-func Search(ctx context.Context, state *game.GameState, snake *game.Battlesnake, brain SnakeBrain) game.Direction {
+func Search(ctx context.Context,
+	state *game.GameState,
+	snake *game.Battlesnake,
+	brain SnakeBrain,
+	cfg ...ConfigFn,
+) game.Direction {
+	t := Tree{
+		// 100k buffer will hold 3^10 expansions, even without pruning
+		weight: make(chan *Node, 100000),
+		expand: make(chan *Node, 100000),
+	}
+
+	for _, c := range cfg {
+		c(&t)
+	}
+
 	brain.Init(state)
 
 	root := Node{
 		Coord: &snake.Head,
 		Snake: snake,
 		Brain: brain,
-	}
-
-	t := Tree{
-		// 100k buffer will hold 3^10 expansions, even without pruning
-		weight: make(chan *Node, 100000),
-		expand: make(chan *Node, 100000),
 	}
 
 	// start a weight worker
@@ -69,12 +80,13 @@ func Search(ctx context.Context, state *game.GameState, snake *game.Battlesnake,
 			continue
 		}
 
-		fmt.Printf("Best move %s[%v] (%v)\n", best.Coord, best.Depth, best.Weight)
-
 		// We want to find the move who's parent is root
 		for cur := best; cur.Parent != nil; cur = cur.Parent {
 			bestMove = cur.Direction
 		}
+
+		fmt.Printf("Best move [%d]:\n\t%s\n", best.Depth, best)
+
 		bestMoves = append(bestMoves, bestMove)
 	}
 

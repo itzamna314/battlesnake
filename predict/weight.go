@@ -10,16 +10,16 @@ const (
 	CertainDeath int32 = -1 << 30
 
 	// This is the maximum weight we'll put into avoiding enemies
-	AvoidEnemies int32 = -1 << 20
+	AvoidEnemies int32 = -1 << 12
 
 	// Neutral means we have no opinion about this coord
 	Neutral int32 = 0
 
 	// Apply this weight to food we would eat if we don't want to eat
-	FoodNotHungry int32 = 0 // -1 << 4
+	FoodNotHungry int32 = -1 << 4
 
 	// Apply this weight to all food on the board if we're hungry
-	FoodHungry int32 = 1 << 14
+	FoodHungry int32 = 1 << 12
 
 	// Apply this weight to all food on the board if we're starving
 	FoodStarving int32 = 1 << 16

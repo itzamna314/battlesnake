@@ -11,7 +11,7 @@ import (
 )
 
 func testTimeout() context.Context {
-	ctx, _ := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	ctx, _ := context.WithTimeout(context.Background(), 500*time.Millisecond)
 	return ctx
 }
 
@@ -137,5 +137,40 @@ func TestFoodOrDeath(t *testing.T) {
 	mv := tree.Search(testTimeout(), &state, &me, &predict.State{})
 	if mv == game.Down {
 		t.Errorf("snake went down into death")
+	}
+}
+
+func TestAvoidDeath(t *testing.T) {
+	me := game.Battlesnake{
+		ID:   "me",
+		Head: game.Coord{X: 4, Y: 6},
+		Body: []game.Coord{
+			{X: 8, Y: 6}, {X: 7, Y: 6}, {X: 6, Y: 6}, {X: 5, Y: 6}, {X: 5, Y: 7}, {X: 4, Y: 7}, {X: 3, Y: 7}, {X: 2, Y: 7}, {X: 2, Y: 7},
+		},
+		Health: 100,
+	}
+	enemy := game.Battlesnake{
+		ID:   "enemy",
+		Head: game.Coord{X: 3, Y: 4},
+		Body: []game.Coord{
+			{X: 7, Y: 5}, {X: 6, Y: 5}, {X: 5, Y: 5}, {X: 4, Y: 5}, {X: 4, Y: 4}, {X: 4, Y: 3}, {X: 5, Y: 3}, {X: 5, Y: 2}, {X: 5, Y: 1}, {X: 6, Y: 1}, {X: 7, Y: 1},
+		},
+		Health: 94,
+	}
+	state := game.GameState{
+		Board: game.Board{
+			Height: 11,
+			Width:  11,
+			Snakes: []game.Battlesnake{me, enemy},
+			Food: []game.Coord{
+				{8, 0},
+			},
+		},
+		You: me,
+	}
+
+	mv := tree.Search(testTimeout(), &state, &state.You, &predict.State{}, tree.ConfigMaxDepth(4))
+	if mv == game.Down {
+		t.Errorf("snake went down into possible head collision")
 	}
 }
