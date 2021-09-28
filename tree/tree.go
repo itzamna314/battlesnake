@@ -2,7 +2,6 @@ package tree
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"math/rand"
 
@@ -19,7 +18,7 @@ type Tree struct {
 	curBest       []*Node
 	curBestWeight float64
 	curDepth      int
-	curWidth      int
+	curLeft       int
 
 	// next fields track the next level we would expand
 	nextWidth int
@@ -88,8 +87,6 @@ func Search(ctx context.Context,
 		for cur := best; cur.Parent != nil; cur = cur.Parent {
 			bestMove = cur.Direction
 		}
-
-		fmt.Printf("Best move [%d]:\n\t%s\n", best.Depth, best)
 
 		bestMoves = append(bestMoves, bestMove)
 	}

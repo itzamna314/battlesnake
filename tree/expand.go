@@ -2,7 +2,6 @@ package tree
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/itzamna314/battlesnake/game"
 )
@@ -24,23 +23,6 @@ func (t *Tree) expandWorker(ctx context.Context) {
 				return
 			}
 
-			// Starting a new level. Store the results of the last depth.
-			// Re-set the current best
-			if exp.Depth > t.curDepth {
-				fmt.Printf("Finished depth %v, best:\n", t.curDepth)
-				for _, b := range t.curBest {
-					fmt.Printf("\t%s\n", b)
-				}
-				t.curDepth = exp.Depth
-				t.best = t.curBest
-				t.curBest = nil
-			}
-
-			// Ask the brain if we should abort search
-			if exp.Brain.Abort(exp.Weight) {
-				continue
-			}
-
 			if t.curBest == nil || exp.Weight > t.curBestWeight {
 				t.curBest = []*Node{exp}
 				t.curBestWeight = exp.Weight
@@ -48,34 +30,58 @@ func (t *Tree) expandWorker(ctx context.Context) {
 				t.curBest = append(t.curBest, exp)
 			}
 
-			// This is the final level. Stop expanding, and stream
-			// cur into best
-			if t.MaxDepth != 0 && exp.Depth == t.MaxDepth {
-				t.best = t.curBest
-
-				if exp.Coord.Hit(&game.Coord{2, 10}) {
-					fmt.Printf("Draining expand channel [%d]:\n\t%s\n", exp.Depth, exp)
+			// Expand this node if:
+			// * We want to explore the next level
+			// * The brain thinks its worth exploring this node further
+			if t.MaxDepth == 0 || t.curDepth < t.MaxDepth {
+				if !exp.Brain.Abort(exp.Weight) {
+					t.expandNode(ctx, exp)
 				}
-				continue
 			}
 
-			for dir, opt := range game.Options(exp.Coord) {
-				snakeClone := exp.Snake.Clone()
-				child := Node{
-					Direction: game.Direction(dir),
-					Snake:     &snakeClone,
-					Coord:     opt,
-					Brain:     exp.Brain.Clone(),
-					Parent:    exp,
-					Depth:     exp.Depth + 1,
-				}
+			// We're processing a finished node at the current level
+			t.curLeft--
 
-				select {
-				case <-ctx.Done():
-					return
-				case t.weight <- &child:
-				}
+			// Finishing a level. Store the results of the last depth.
+			// Re-set the current best
+			if t.curLeft <= 0 {
+				t.completeLevel()
 			}
 		}
 	}
+}
+
+func (t *Tree) expandNode(ctx context.Context, node *Node) {
+	for dir, opt := range game.Options(node.Coord) {
+		snakeClone := node.Snake.Clone()
+		child := Node{
+			Direction: game.Direction(dir),
+			Snake:     &snakeClone,
+			Coord:     opt,
+			Brain:     node.Brain.Clone(),
+			Parent:    node,
+			Depth:     node.Depth + 1,
+		}
+
+		select {
+		case <-ctx.Done():
+			return
+		case t.weight <- &child:
+			t.nextWidth++
+		}
+	}
+}
+
+// completeLevel marks the current level as complete
+// Called from the expand worker when we finish processing a level
+// of the tree.
+// Return true to continue traversal, false to exit
+func (t *Tree) completeLevel() {
+	t.best = t.curBest
+	t.curBest = nil
+
+	t.curLeft = t.nextWidth
+	t.nextWidth = 0
+
+	t.curDepth++
 }
