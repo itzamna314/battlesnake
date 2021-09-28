@@ -10,8 +10,8 @@ import (
 )
 
 type testBrain struct {
-	weightFunc func(*game.Coord, *game.Battlesnake) int32
-	abortFunc  func(int32) bool
+	weightFunc func(*game.Coord, *game.Battlesnake) float64
+	abortFunc  func(float64) bool
 }
 
 func (b *testBrain) Init(*game.GameState) {}
@@ -20,7 +20,7 @@ func (b *testBrain) Clone() tree.SnakeBrain {
 }
 
 // testBrain moves to the right
-func (b *testBrain) Weight(coord *game.Coord, snake *game.Battlesnake) int32 {
+func (b *testBrain) Weight(coord *game.Coord, snake *game.Battlesnake) float64 {
 	if b.weightFunc == nil {
 		panic("called testBrain.Weight with nil weightFunc")
 	}
@@ -29,7 +29,7 @@ func (b *testBrain) Weight(coord *game.Coord, snake *game.Battlesnake) int32 {
 }
 
 // testBrain never aborts
-func (b *testBrain) Abort(weight int32) bool {
+func (b *testBrain) Abort(weight float64) bool {
 	if b.abortFunc == nil {
 		return false
 	}
@@ -62,8 +62,8 @@ func TestRightSearch(t *testing.T) {
 
 	// This brain always pulls to the right
 	rightBrain := &testBrain{
-		weightFunc: func(coord *game.Coord, snake *game.Battlesnake) int32 {
-			return int32(coord.X)
+		weightFunc: func(coord *game.Coord, snake *game.Battlesnake) float64 {
+			return float64(coord.X)
 		},
 	}
 
@@ -101,12 +101,12 @@ func TestSeekSearch(t *testing.T) {
 	origDist := me.Head.Dist(target)
 
 	upBrain := &testBrain{
-		weightFunc: func(coord *game.Coord, snake *game.Battlesnake) int32 {
+		weightFunc: func(coord *game.Coord, snake *game.Battlesnake) float64 {
 			newDist := coord.Dist(target)
 
-			return int32(origDist - newDist)
+			return float64(origDist - newDist)
 		},
-		abortFunc: func(weight int32) bool {
+		abortFunc: func(weight float64) bool {
 			return weight < 0
 		},
 	}
@@ -129,7 +129,7 @@ func TestDeterioratingPath(t *testing.T) {
 	}
 	state := game.GameState{}
 
-	world := map[game.Coord]int32{
+	world := map[game.Coord]float64{
 		game.Coord{0, 4}: 2, game.Coord{1, 4}: 0, game.Coord{2, 4}: 0, game.Coord{3, 4}: 0, game.Coord{4, 4}: 0,
 		game.Coord{0, 3}: 2, game.Coord{1, 3}: 0, game.Coord{2, 3}: 0, game.Coord{3, 3}: 0, game.Coord{4, 3}: 0,
 		game.Coord{0, 2}: 2, game.Coord{1, 2}: 0, game.Coord{2, 2}: 0, game.Coord{3, 2}: 0, game.Coord{4, 2}: 0,
@@ -139,7 +139,7 @@ func TestDeterioratingPath(t *testing.T) {
 
 	// This brain follows the weights we describe in hardcoded world coordinates
 	worldBrain := &testBrain{
-		weightFunc: func(coord *game.Coord, snake *game.Battlesnake) int32 {
+		weightFunc: func(coord *game.Coord, snake *game.Battlesnake) float64 {
 			w, ok := world[*coord]
 			if !ok {
 				return -100

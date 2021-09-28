@@ -12,10 +12,10 @@ type SnakeBrain interface {
 	Clone() SnakeBrain
 	// Weight calculates the weight for the indicated snake index,
 	// based on the brain's internal data
-	Weight(*game.Coord, *game.Battlesnake) int32
+	Weight(*game.Coord, *game.Battlesnake) float64
 	// Abort takes a weight, and returns true if we can abort the search
 	// based on that weight
-	Abort(int32) bool
+	Abort(float64) bool
 	// Move moves the indicated snake. The brain should track that move
 	// in its internal data structure
 	Move(*game.Battlesnake, game.Direction)
