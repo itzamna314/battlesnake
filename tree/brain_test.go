@@ -18,7 +18,7 @@ func (b *testBrain) Clone() tree.SnakeBrain {
 // testBrain moves to the right
 func (b *testBrain) Weight(coord *game.Coord, snake *game.Battlesnake) float64 {
 	if b.weightFunc == nil {
-		panic("called testBrain.Weight with nil weightFunc")
+		return 0
 	}
 
 	return b.weightFunc(coord, snake)

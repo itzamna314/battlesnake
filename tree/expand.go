@@ -2,6 +2,7 @@ package tree
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/itzamna314/battlesnake/game"
 )
@@ -20,6 +21,7 @@ func (t *Tree) expandWorker(ctx context.Context) {
 			return
 		case exp, ok := <-t.expand:
 			if !ok {
+				fmt.Println("expand channel closed. Exit")
 				return
 			}
 
@@ -45,7 +47,13 @@ func (t *Tree) expandWorker(ctx context.Context) {
 			// Finishing a level. Store the results of the last depth.
 			// Re-set the current best
 			if t.curLeft <= 0 {
+				// Store the results of this level
 				t.completeLevel()
+
+				// Exit if this is the final level
+				if t.MaxDepth != 0 && t.curDepth > t.MaxDepth {
+					return
+				}
 			}
 		}
 	}
