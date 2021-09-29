@@ -4,8 +4,10 @@ import (
 	"context"
 	"log"
 	"math/rand"
+	"reflect"
 
 	"github.com/itzamna314/battlesnake/game"
+	"github.com/pbnjay/memory"
 )
 
 type Tree struct {
@@ -29,25 +31,18 @@ type Tree struct {
 	expand chan *Node
 }
 
+type SearchMetadata struct {
+	Depth   int
+	Memsize int
+}
+
 func Search(ctx context.Context,
 	state *game.GameState,
 	snake *game.Battlesnake,
 	brain SnakeBrain,
 	cfg ...ConfigFn,
 ) game.Direction {
-	t := Tree{
-		// 100k buffer will hold 3^10 expansions, even without pruning
-		weight: make(chan *Node, 100000),
-		expand: make(chan *Node, 100000),
-	}
-
-	/*
-		defer func() {
-			for _, b := range t.best {
-				fmt.Printf("Best node: %v\n", b)
-			}
-		}()
-	*/
+	var t Tree
 
 	for _, c := range cfg {
 		c(&t)
@@ -60,6 +55,17 @@ func Search(ctx context.Context,
 		Snake: snake,
 		Brain: brain,
 	}
+
+	freeMem := memory.FreeMemory()
+	nodeVal := reflect.TypeOf(root)
+	nodeSize := nodeVal.Size()
+	maxNodes := freeMem / uint64(nodeSize)
+
+	sizeToUse := maxNodes / 100
+	chBuffer := sizeToUse / 2
+
+	t.weight = make(chan *Node, chBuffer)
+	t.expand = make(chan *Node, chBuffer)
 
 	// start a weight worker
 	// We could start more workers here safely
