@@ -3,65 +3,60 @@ package predict
 import "github.com/itzamna314/battlesnake/game"
 
 const (
-	// Certain death means we will crash into a wall,
-	// or ourself, or another snake's
-	// Use 1 less bit than possible, so that
-	// CertainDeath + CertainDeath doesn't wrap around
-	CertainDeath int32 = -1 << 30
+	// Certain death is -1
+	Death = -1.0
+	// We start evaluating moves at 0.5
+	Base = 0.5
+	// Lowest-possible score we like
+	Avoid = 0.0
 
-	// This is the maximum weight we'll put into avoiding enemies
-	AvoidEnemies int32 = -1 << 12
+	// From modifier funcs, this means no modifier
+	Nothing = 0.0
 
-	// Neutral means we have no opinion about this coord
-	Neutral int32 = 0
+	// Base value of food
+	Food = 0.15
+	// Food value when we want to avoid eating
+	FoodAvoid = -0.0375
 
-	// Apply this weight to food we would eat if we don't want to eat
-	FoodNotHungry int32 = -1 << 4
-
-	// Apply this weight to all food on the board if we're hungry
-	FoodHungry int32 = 1 << 12
-
-	// Apply this weight to all food on the board if we're starving
-	FoodStarving int32 = 1 << 16
-
-	// EnemyKill means we will eliminate an enemy, but not win the game
-	// Increasing this weight will increase our aggression
-	EnemyKill int32 = 1 << 12
-
-	// CertainWin means we will collide with the final,
-	// shorter opponent's head and they cannot avoid us
-	// Use 1 less bit than possible, so that
-	// CertainWin + CertainWin doesn't wrap around
-	CertainWin int32 = 1 << 30
+	// Value of hazard
+	Hazard = -0.3
+	// Required to live
+	Mandatory = 1.0
 )
 
-func (s *State) Weight(coord *game.Coord, snake *game.Battlesnake) int32 {
+func (s *State) Weight(coord *game.Coord, snake *game.Battlesnake) float64 {
 	if SnakeWillDie(s, coord, snake) {
-		return CertainDeath
+		return Death
 	}
 
-	weight := Neutral
+	// Compute food weight
+	weight := Base
 
 	enemy := s.weightEnemies(coord, snake)
-	if enemy <= CertainDeath {
-		return CertainDeath
+	if enemy <= Death {
+		return Death
 	}
 	weight += enemy
 
-	/*
-		hazard := s.weightHazard(coord, snake)
-		weight += hazard
-		if weight < CertainDeath {
-			return CertainDeath
-		}
-	*/
+	hazard := s.weightHazard(coord, snake)
+	weight += hazard
+	if weight <= Death {
+		return Death
+	}
 
 	food := s.weightFood(coord, snake)
 	weight += food
 
+	// Don't die over food
+	if weight < Avoid {
+		return Avoid
+	} else if weight > Mandatory {
+		return Mandatory
+	}
+
 	return weight
 }
 
-func (s *State) Abort(weight int32) bool {
-	return weight <= CertainDeath
+func (s *State) Abort(weight float64) bool {
+	return weight <= Death
 }

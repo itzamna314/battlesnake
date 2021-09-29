@@ -30,11 +30,11 @@ func TestSingleFood(t *testing.T) {
 	testCases := []struct {
 		testName  string
 		health    int32
-		minWeight int32
-		maxWeight int32
+		minWeight float64
+		maxWeight float64
 	}{
-		{"low", 15, predict.Neutral, predict.CertainWin},
-		{"high", 99, predict.CertainDeath, predict.Neutral},
+		{"low_health", 15, predict.Avoid, predict.Mandatory},
+		{"high_health", 99, predict.Death, predict.Base},
 	}
 
 	for _, tt := range testCases {
@@ -52,7 +52,7 @@ func TestSingleFood(t *testing.T) {
 			}
 
 			if w > tt.maxWeight {
-				t.Errorf("Expected weight above %v, got %v", tt.maxWeight, w)
+				t.Errorf("Expected weight below %v, got %v", tt.maxWeight, w)
 			}
 		})
 	}
