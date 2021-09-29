@@ -2,7 +2,10 @@ module github.com/itzamna314/battlesnake
 
 go 1.17
 
-require github.com/BattlesnakeOfficial/rules v1.0.23-0.20210907215810-31faba642ccb
+require (
+	github.com/BattlesnakeOfficial/rules v1.0.23-0.20210907215810-31faba642ccb
+	github.com/pbnjay/memory v0.0.0-20210728143218-7b4eea64cf58
+)
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
