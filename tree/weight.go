@@ -17,6 +17,7 @@ func weightWorker(ctx context.Context, weight <-chan *Node, expand chan<- *Node)
 			nd.Brain.MoveEnemies(nd.Snake)
 
 			nd.Weight = nd.Brain.Weight(nd.Coord, nd.Snake)
+
 			if nd.Parent != nil {
 				nd.Weight += nd.Parent.Weight
 			}

@@ -2,7 +2,6 @@ package tree
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"math/rand"
 
@@ -42,6 +41,14 @@ func Search(ctx context.Context,
 		expand: make(chan *Node, 100000),
 	}
 
+	/*
+		defer func() {
+			for _, b := range t.best {
+				fmt.Printf("Best node: %v\n", b)
+			}
+		}()
+	*/
+
 	for _, c := range cfg {
 		c(&t)
 	}
@@ -79,8 +86,6 @@ func Search(ctx context.Context,
 
 	// Traverse the ancestry of best to find its starting move
 	for _, best := range t.best {
-		fmt.Printf("Best move %s [%v]\n", best, best.Depth)
-
 		// best is our root node. We didn't explore anything
 		if best.Parent == nil {
 			continue

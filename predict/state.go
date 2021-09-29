@@ -15,6 +15,8 @@ type State struct {
 	FoodGuesses guess.CoordSet
 }
 
+// Init sets up our predict State for tree traversal
+// This assumes we are predicting on behalf of You
 func (s *State) Init(gs *game.GameState) {
 	s.Board = gs.Board.Clone()
 	s.You = gs.You.Clone()
@@ -44,7 +46,27 @@ func (s *State) Init(gs *game.GameState) {
 	}
 
 	// Initialize food
-	for _, food := range gs.Board.Food {
+NextFood:
+	for i := 0; i < len(gs.Board.Food); i++ {
+		food := gs.Board.Food[i]
+
+		for _, snake := range gs.Board.Snakes {
+			if snake.ID == gs.You.ID {
+				continue
+			}
+
+			eDist := snake.Head.Dist(&food)
+			youDist := gs.You.Head.Dist(&food)
+
+			if eDist < youDist {
+				continue NextFood
+			}
+
+			if eDist == youDist && snake.Length >= gs.You.Length {
+				continue NextFood
+			}
+		}
+
 		s.FoodGuesses.Set(&food, guess.Certain)
 	}
 }

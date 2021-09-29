@@ -18,13 +18,13 @@ func TestFrames(t *testing.T) {
 		{"afraid_to_eat", 7, []game.Direction{game.Up}},
 		{"no_mercy", 7, []game.Direction{game.Right}},
 		{"enemy_ate", 7, []game.Direction{game.Down}},
-		{"leave_hazard", 7, []game.Direction{game.Left}},
+		{"leave_hazard", 7, []game.Direction{game.Up, game.Left}},
 		{"over_chase", 7, []game.Direction{game.Right}},
 		{"corner_crash", 7, []game.Direction{game.Left}},
 		{"bad_joust", 7, []game.Direction{game.Down}},
-		{"pessimistic", 7, []game.Direction{game.Left}},
-		{"hungry_hazard", 7, []game.Direction{game.Right}},
-		{"wont_eat", 7, []game.Direction{game.Up}},
+		{"pessimistic", 7, []game.Direction{game.Left, game.Up}},
+		{"hungry_hazard", 9, []game.Direction{game.Right}},
+		{"wont_eat", 8, []game.Direction{game.Up}},
 		{"risky_food", 7, []game.Direction{game.Down}},
 	}
 
