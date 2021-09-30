@@ -2,7 +2,6 @@ package tree
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/itzamna314/battlesnake/game"
 )
@@ -11,17 +10,12 @@ import (
 // It checks each next node to see if its our new best, and
 // adds all of its children to the weight channel
 func (t *Tree) expandWorker(ctx context.Context) {
-	defer func() {
-		close(t.weight)
-	}()
-
 	for {
 		select {
 		case <-ctx.Done():
 			return
 		case exp, ok := <-t.expand:
 			if !ok {
-				fmt.Println("expand channel closed. Exit")
 				return
 			}
 
@@ -47,11 +41,14 @@ func (t *Tree) expandWorker(ctx context.Context) {
 			// Finishing a level. Store the results of the last depth.
 			// Re-set the current best
 			if t.curLeft <= 0 {
-				// Store the results of this level
-				t.completeLevel()
+				// Store the results of this level, and queue up the next one
+				// When all of the next level has been queued, we can begin
+				// expanding it out
+				t.completeLevel(ctx)
 
 				// Exit if this is the final level
 				if t.MaxDepth != 0 && t.curDepth > t.MaxDepth {
+					close(t.weight)
 					return
 				}
 			}
@@ -71,12 +68,8 @@ func (t *Tree) expandNode(ctx context.Context, node *Node) {
 			Depth:     node.Depth + 1,
 		}
 
-		select {
-		case <-ctx.Done():
-			return
-		case t.weight <- &child:
-			t.nextWidth++
-		}
+		t.nextLevel[node.Depth] = append(t.nextLevel[node.Depth], &child)
+		t.nextWidth++
 	}
 }
 
@@ -84,12 +77,26 @@ func (t *Tree) expandNode(ctx context.Context, node *Node) {
 // Called from the expand worker when we finish processing a level
 // of the tree.
 // Return true to continue traversal, false to exit
-func (t *Tree) completeLevel() {
+func (t *Tree) completeLevel(ctx context.Context) {
 	t.best = t.curBest
 	t.curBest = nil
 
 	t.curLeft = t.nextWidth
 	t.nextWidth = 0
+
+	t.nextLevel = append(t.nextLevel, []*Node{})
+
+	go func(depth int) {
+		for _, n := range t.nextLevel[depth] {
+			select {
+			case t.weight <- n:
+			case <-ctx.Done():
+				close(t.weight)
+				return
+			}
+		}
+		t.nextLevel[depth] = nil
+	}(t.curDepth)
 
 	t.curDepth++
 }
