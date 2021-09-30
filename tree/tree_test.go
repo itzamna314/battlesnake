@@ -41,7 +41,7 @@ func TestExitContext(t *testing.T) {
 
 	select {
 	case <-done:
-	case <-time.After(20 * time.Millisecond):
+	case <-time.After(50 * time.Millisecond):
 		t.Fatalf("Search did not exit in time")
 	}
 }
