@@ -1,2 +1,2 @@
 language = "go"
-run = "go build -o bin/battlesnake .; ./bin/battlesnake"
+run = "go build -o bin/battlesnake .; ./bin/battlesnake -latency 150"
