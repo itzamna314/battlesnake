@@ -35,12 +35,14 @@ func TestFrames(t *testing.T) {
 				t.Fatalf("Failed to find frame %s", tt.frame)
 			}
 
-			mv := tree.Search(testTimeout(),
+			mv, meta := tree.Search(testTimeout(),
 				&input,
 				&input.You,
 				&predict.State{},
 				tree.ConfigMaxDepth(tt.depth),
 			)
+
+			t.Logf("Search meta %+v\n", meta)
 
 			for _, allowed := range tt.allowedMoves {
 				if allowed == mv {

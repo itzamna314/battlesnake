@@ -29,9 +29,9 @@ func Move(w http.ResponseWriter, r *http.Request) {
 	to := time.Duration(*timeout)
 	ctx, _ := context.WithTimeout(r.Context(), to*time.Millisecond)
 
-	direction := tree.Search(ctx, &state, &state.You, &predict.State{})
+	direction, meta := tree.Search(ctx, &state, &state.You, &predict.State{})
 
-	log.Printf("MOVE: %s\n", direction)
+	log.Printf("MOVE: %s Search Depth %d Weight %.2f\n", direction, meta.Depth, meta.Weight)
 
 	response := BattlesnakeMoveResponse{
 		Move: direction.String(),
