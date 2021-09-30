@@ -33,7 +33,7 @@ type Tree struct {
 
 type SearchMetadata struct {
 	Depth   int
-	Memsize int
+	Memsize string
 }
 
 func Search(ctx context.Context,
@@ -61,7 +61,7 @@ func Search(ctx context.Context,
 	nodeSize := nodeVal.Size()
 	maxNodes := freeMem / uint64(nodeSize)
 
-	sizeToUse := maxNodes / 100
+	sizeToUse := maxNodes / 1000
 	chBuffer := sizeToUse / 2
 
 	t.weight = make(chan *Node, chBuffer)
