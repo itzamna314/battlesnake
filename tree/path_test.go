@@ -38,7 +38,8 @@ func TestRightSearch(t *testing.T) {
 
 	ctx, _ := context.WithTimeout(context.Background(), 50*time.Millisecond)
 
-	mv := tree.Search(ctx, &state, &me, rightBrain)
+	mv, meta := tree.Search(ctx, &state, &me, rightBrain)
+	t.Logf("Search meta %+v\n", meta)
 	if mv != game.Right {
 		t.Errorf("quick search with right-only brain did not go right. Went %s", mv)
 	}
@@ -82,7 +83,8 @@ func TestSeekSearch(t *testing.T) {
 
 	ctx, _ := context.WithTimeout(context.Background(), 50*time.Millisecond)
 
-	mv := tree.Search(ctx, &state, &me, upBrain)
+	mv, meta := tree.Search(ctx, &state, &me, upBrain)
+	t.Logf("Search meta %+v\n", meta)
 	if mv != game.Up {
 		t.Errorf("quick search with right-only brain did not go right. Went %s", mv)
 	}
@@ -119,7 +121,8 @@ func TestDeterioratingPath(t *testing.T) {
 
 	ctx, _ := context.WithTimeout(context.Background(), 50*time.Millisecond)
 
-	mv := tree.Search(ctx, &state, &me, worldBrain)
+	mv, meta := tree.Search(ctx, &state, &me, worldBrain)
+	t.Logf("Search meta %+v\n", meta)
 	if mv != game.Left {
 		t.Errorf("did not take best path (left). Went %s", mv)
 	}

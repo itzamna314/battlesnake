@@ -4,10 +4,8 @@ import (
 	"context"
 	"log"
 	"math/rand"
-	"reflect"
 
 	"github.com/itzamna314/battlesnake/game"
-	"github.com/pbnjay/memory"
 )
 
 type Tree struct {
@@ -24,6 +22,7 @@ type Tree struct {
 
 	// next fields track the next level we would expand
 	nextWidth int
+	nextLevel [][]*Node
 
 	// weight holds the current set of nodes to weight
 	weight chan *Node
@@ -32,8 +31,8 @@ type Tree struct {
 }
 
 type SearchMetadata struct {
-	Depth   int
-	Memsize string
+	Depth  int
+	Weight float64
 }
 
 func Search(ctx context.Context,
@@ -41,8 +40,12 @@ func Search(ctx context.Context,
 	snake *game.Battlesnake,
 	brain SnakeBrain,
 	cfg ...ConfigFn,
-) game.Direction {
-	var t Tree
+) (game.Direction, *SearchMetadata) {
+	t := Tree{
+		weight:    make(chan *Node),
+		expand:    make(chan *Node),
+		nextLevel: make([][]*Node, 1),
+	}
 
 	for _, c := range cfg {
 		c(&t)
@@ -56,17 +59,6 @@ func Search(ctx context.Context,
 		Brain: brain,
 	}
 
-	freeMem := memory.FreeMemory()
-	nodeVal := reflect.TypeOf(root)
-	nodeSize := nodeVal.Size()
-	maxNodes := freeMem / uint64(nodeSize)
-
-	sizeToUse := maxNodes / 1000
-	chBuffer := sizeToUse / 2
-
-	t.weight = make(chan *Node, chBuffer)
-	t.expand = make(chan *Node, chBuffer)
-
 	// start a weight worker
 	// We could start more workers here safely
 	go weightWorker(ctx, t.weight, t.expand)
@@ -79,10 +71,12 @@ func Search(ctx context.Context,
 	// Block until cancelled
 	t.expandWorker(ctx)
 
+	var meta SearchMetadata
+
 	// Process results
 	if t.best == nil {
 		log.Printf("No safe moves detected (best nil)! Moving down\n")
-		return game.Down
+		return game.Down, &meta
 	}
 
 	var (
@@ -102,18 +96,20 @@ func Search(ctx context.Context,
 			bestMove = cur.Direction
 		}
 
+		meta.Depth = best.Depth
+		meta.Weight = best.Weight
 		bestMoves = append(bestMoves, bestMove)
 	}
 
 	if len(bestMoves) == 0 {
 		log.Printf("No safe moves detected (no child moves)! Moving down\n")
-		return game.Down
+		return game.Down, &meta
 	}
 
 	if len(bestMoves) == 1 {
-		return bestMoves[0]
+		return bestMoves[0], &meta
 	}
 
 	// Pick randomly if multiple best moves
-	return bestMoves[rand.Intn(len(bestMoves))]
+	return bestMoves[rand.Intn(len(bestMoves))], &meta
 }
