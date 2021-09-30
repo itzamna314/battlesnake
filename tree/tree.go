@@ -59,14 +59,17 @@ func Search(ctx context.Context,
 		Brain: brain,
 	}
 
+	// Send the root node for expansion
+	go func() {
+		select {
+		case t.expand <- &root:
+		case <-ctx.Done():
+		}
+	}()
+
 	// start a weight worker
 	// We could start more workers here safely
 	go weightWorker(ctx, t.weight, t.expand)
-
-	// Send the root node for expansion
-	go func() {
-		t.expand <- &root
-	}()
 
 	// Block until cancelled
 	t.expandWorker(ctx)
