@@ -48,7 +48,6 @@ func (t *Tree) expandWorker(ctx context.Context) {
 
 				// Exit if this is the final level
 				if t.MaxDepth != 0 && t.curDepth > t.MaxDepth {
-					close(t.weight)
 					return
 				}
 			}
@@ -91,7 +90,6 @@ func (t *Tree) completeLevel(ctx context.Context) {
 			select {
 			case t.weight <- n:
 			case <-ctx.Done():
-				close(t.weight)
 				return
 			}
 		}
