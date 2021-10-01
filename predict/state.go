@@ -153,12 +153,8 @@ func (s *State) moveEnemy(idx int) {
 		var legalMoves int
 
 		for i, opt := range opts {
-			if SnakeWillDie(s, opt, &enemy) {
-				opts[i] = nil
-				continue
-			}
 
-			if s.BodyGuesses[idx].Prob(opt) > 0.75 {
+			if SnakeWillDie(s, opt, &enemy) {
 				opts[i] = nil
 				continue
 			}
