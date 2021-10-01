@@ -57,12 +57,6 @@ func (s *State) Weight(coord *game.Coord, snake *game.Battlesnake) float64 {
 	}
 
 	food := s.weightFood(coord, snake)
-
-	// Don't die over food
-	if food < Avoid {
-		food = Avoid
-	}
-
 	weight += food
 
 	if weight > Mandatory {
