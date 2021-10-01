@@ -33,7 +33,7 @@ OUT=$(cat <<EOF
 	  "snakes": $(echo ${FRAME} | jq ' [ .Data.Snakes[] | select(.Death == null) | . += {"head": .Body[0], "length": .Body | length } ]'),
     "hazards": $(echo ${FRAME} | jq '.Data.Hazards')
   },
-  "you": $(echo ${FRAME} | jq '.Data.Snakes[] | . += {"head": .Body[0], "length": .Body | length } | select(.Name == "testing")') 
+  "you": $(echo ${FRAME} | jq '.Data.Snakes[] | . += {"head": .Body[0], "length": .Body | length } | select(.Name == "Cobra Kai Never Die")') 
 }
 EOF
 )
