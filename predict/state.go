@@ -25,28 +25,28 @@ func (s *State) Init(gs *game.GameState) {
 
 	// Sort snakes by length
 	// This allows us to project short snakes avoiding long ones
-	sort.Slice(gs.Board.Snakes, func(i, j int) bool {
-		return gs.Board.Snakes[i].Length > gs.Board.Snakes[j].Length
+	sort.Slice(s.Board.Snakes, func(i, j int) bool {
+		return s.Board.Snakes[i].Length > s.Board.Snakes[j].Length
 	})
 
 	// Initialize body guesses
-	s.BodyGuesses = make(SnakeVision, len(gs.Board.Snakes))
+	s.BodyGuesses = make(SnakeVision, len(s.Board.Snakes))
 
-	for i, snake := range gs.Board.Snakes {
-		if snake.ID == gs.You.ID {
+	for i, snake := range s.Board.Snakes {
+		if snake.ID == s.You.ID {
 			continue
 		}
 
-		for _, body := range gs.Board.Snakes[i].Body {
+		for _, body := range s.Board.Snakes[i].Body {
 			s.BodyGuesses[i].Set(&body, guess.Certain)
 		}
 	}
 
 	// Initialize head guesses
-	s.HeadGuesses = make(SnakeVision, len(gs.Board.Snakes))
+	s.HeadGuesses = make(SnakeVision, len(s.Board.Snakes))
 
-	for i, snake := range gs.Board.Snakes {
-		if snake.ID == gs.You.ID {
+	for i, snake := range s.Board.Snakes {
+		if snake.ID == s.You.ID {
 			continue
 		}
 
@@ -55,22 +55,22 @@ func (s *State) Init(gs *game.GameState) {
 
 	// Initialize food
 NextFood:
-	for i := 0; i < len(gs.Board.Food); i++ {
-		food := gs.Board.Food[i]
+	for i := 0; i < len(s.Board.Food); i++ {
+		food := s.Board.Food[i]
 
-		for _, snake := range gs.Board.Snakes {
-			if snake.ID == gs.You.ID {
+		for _, snake := range s.Board.Snakes {
+			if snake.ID == s.You.ID {
 				continue
 			}
 
 			eDist := snake.Head.Dist(&food)
-			youDist := gs.You.Head.Dist(&food)
+			youDist := s.You.Head.Dist(&food)
 
 			if eDist < youDist {
 				continue NextFood
 			}
 
-			if eDist == youDist && snake.Length >= gs.You.Length {
+			if eDist == youDist && snake.Length >= s.You.Length {
 				continue NextFood
 			}
 		}
