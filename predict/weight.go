@@ -1,10 +1,12 @@
 package predict
 
-import "github.com/itzamna314/battlesnake/game"
+import (
+	"math"
+
+	"github.com/itzamna314/battlesnake/game"
+)
 
 const (
-	// Certain death is -1
-	Death = -1.0
 	// We start evaluating moves at 0.5
 	Base = 0.5
 	// Lowest-possible score we like
@@ -18,10 +20,20 @@ const (
 	// Food value when we want to avoid eating
 	FoodAvoid = -0.0375
 
+	// Value of enemies that we need to avoid
+	EnemyAvoid = 3.0
+	// Value of enemies that we can kill
+	EnemyKill = 0.3
+
 	// Value of hazard
 	Hazard = -0.3
 	// Required to live
 	Mandatory = 1.0
+)
+
+var (
+	// Certain death is -infinity
+	Death = math.Inf(-1)
 )
 
 func (s *State) Weight(coord *game.Coord, snake *game.Battlesnake) float64 {
