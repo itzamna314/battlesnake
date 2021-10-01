@@ -26,7 +26,7 @@ func TestFrames(t *testing.T) {
 		{"hungry_hazard", 9, []game.Direction{game.Right}},
 		{"wont_eat", 8, []game.Direction{game.Up}},
 		{"risky_food", 7, []game.Direction{game.Down}},
-		{"juke_early", 6, []game.Direction{game.Down}},
+		{"juke_early", 7, []game.Direction{game.Down}},
 	}
 
 	for _, tt := range testCases {
