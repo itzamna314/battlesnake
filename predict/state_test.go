@@ -6,6 +6,7 @@ import (
 	"github.com/itzamna314/battlesnake/game"
 	"github.com/itzamna314/battlesnake/guess"
 	"github.com/itzamna314/battlesnake/predict"
+	"github.com/itzamna314/battlesnake/testdata"
 )
 
 func TestMoveGameState(t *testing.T) {
@@ -118,4 +119,40 @@ func assertHit(t *testing.T, exp, act *game.Coord) bool {
 	}
 
 	return hits
+}
+
+func TestMoveEnemies(t *testing.T) {
+	// Pick a frame with some challenging enemy movement
+	initial, _ := testdata.Frame("juke_early")
+
+	var ps predict.State
+	ps.Init(&initial)
+
+	ps.MoveEnemies(&initial.You)
+
+	// Assert moves on 'Untimely Neglected Wearable'
+	var (
+		unwIdx   int
+		unwSnake *game.Battlesnake
+	)
+	for i, snake := range ps.Board.Snakes {
+		if snake.Name == "Untimely Neglected Wearable" {
+			unwIdx = i
+			unwSnake = &ps.Board.Snakes[i]
+			break
+		}
+	}
+
+	t.Logf("Asserting movement for snake %s (%d)", ps.Board.Snakes[unwIdx].Name, unwIdx)
+
+	head := ps.HeadGuesses[unwIdx]
+	if len(head) != 1 {
+		t.Fatalf("Expected 1 head guess for %s: (3,5)", unwSnake.Name)
+	}
+
+	hProb := head.Prob(&game.Coord{3, 5})
+
+	if hProb != 1 {
+		t.Errorf("Expected head guess (3,5) with p %.2f, was at %s\n", hProb, &head[0])
+	}
 }
