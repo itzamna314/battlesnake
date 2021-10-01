@@ -21,7 +21,7 @@ const (
 	FoodAvoid = -0.0375
 
 	// Value of enemies that we need to avoid
-	EnemyAvoid = 3.0
+	EnemyAvoid = -3.0
 	// Value of enemies that we can kill
 	EnemyKill = 0.3
 
@@ -57,12 +57,15 @@ func (s *State) Weight(coord *game.Coord, snake *game.Battlesnake) float64 {
 	}
 
 	food := s.weightFood(coord, snake)
-	weight += food
 
 	// Don't die over food
-	if weight < Avoid {
-		return Avoid
-	} else if weight > Mandatory {
+	if food < Avoid {
+		food = Avoid
+	}
+
+	weight += food
+
+	if weight > Mandatory {
 		return Mandatory
 	}
 
