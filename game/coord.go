@@ -11,11 +11,21 @@ func (c *Coord) Hit(other *Coord) bool {
 	return c.X == other.X && c.Y == other.Y
 }
 
+// Dist calculates the manhattan distance between c and other
 func (c *Coord) Dist(other *Coord) int {
 	xDiff := c.X - other.X
 	yDiff := c.Y - other.Y
 
-	return (xDiff * xDiff) + (yDiff * yDiff)
+	// math.Abs requires a float conversion
+	if xDiff < 0 {
+		xDiff *= -1
+	}
+
+	if yDiff < 0 {
+		yDiff *= -1
+	}
+
+	return xDiff + yDiff
 }
 
 func (c *Coord) Step(dir Direction) Coord {
