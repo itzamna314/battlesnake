@@ -20,7 +20,12 @@ func SnakeWillDie(state *State, coord *game.Coord, snake *game.Battlesnake) bool
 	}
 
 	// Don't hit self
-	for _, body := range snake.Body {
+	for i, body := range snake.Body {
+		// Tail - it will move as long as we didn't eat last turn
+		if i == len(snake.Body)-1 && snake.Health < 100 {
+			break
+		}
+
 		if coord.Hit(&body) {
 			return true
 		}
