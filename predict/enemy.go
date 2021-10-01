@@ -22,7 +22,7 @@ func (s *State) weightEnemies(coord *game.Coord, snake *game.Battlesnake) float6
 		if prob == guess.Certain {
 			return Death
 		}
-		weight -= (prob * EnemyAvoid)
+		weight += (prob * EnemyAvoid)
 
 		// If we are shorter, avoid with weight of probability
 		// Otherwise, attack with reduced weight of collision probability
@@ -30,7 +30,7 @@ func (s *State) weightEnemies(coord *game.Coord, snake *game.Battlesnake) float6
 		// But also don't chase a short snake into a long snake
 		prob = s.HeadGuesses[i].Prob(coord)
 		if enemy.Length >= snake.Length {
-			weight -= (prob * EnemyAvoid)
+			weight += (prob * EnemyAvoid)
 		} else {
 			weight += (prob * EnemyKill)
 		}
