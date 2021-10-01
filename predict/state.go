@@ -1,6 +1,8 @@
 package predict
 
 import (
+	"sort"
+
 	"github.com/itzamna314/battlesnake/game"
 	"github.com/itzamna314/battlesnake/guess"
 	"github.com/itzamna314/battlesnake/tree"
@@ -20,6 +22,12 @@ type State struct {
 func (s *State) Init(gs *game.GameState) {
 	s.Board = gs.Board.Clone()
 	s.You = gs.You.Clone()
+
+	// Sort snakes by length
+	// This allows us to project short snakes avoiding long ones
+	sort.Slice(gs.Board.Snakes, func(i, j int) bool {
+		return gs.Board.Snakes[i].Length > gs.Board.Snakes[j].Length
+	})
 
 	// Initialize body guesses
 	s.BodyGuesses = make(SnakeVision, len(gs.Board.Snakes))
@@ -145,6 +153,16 @@ func (s *State) moveEnemy(idx int) {
 		return
 	}
 
+	// Clear guess for tail if snake didn't eat
+	ate := enemy.Health == 100
+	if !ate {
+		tail := enemy.Body[len(enemy.Body)-1]
+		s.BodyGuesses[idx].Clear(&tail)
+	}
+
+	// Move enemy snake probabilistically
+	s.moveSnakeBody(&s.Board.Snakes[idx], ate)
+
 	// Move enemies probabilistically based on last certain segment
 	// If no certain segments remain, do not continue validation
 	// Filter out certain death options
@@ -152,11 +170,39 @@ func (s *State) moveEnemy(idx int) {
 		opts := game.Options(&headGuess.Coord)
 		var legalMoves int
 
+	NextOpt:
 		for i, opt := range opts {
 
 			if SnakeWillDie(s, opt, &enemy) {
 				opts[i] = nil
 				continue
+			}
+
+			if s.BodyGuesses[idx].Prob(opt) >= 0.25 {
+				opts[i] = nil
+				continue
+			}
+
+			for eeIdx, eEnemy := range s.Board.Snakes {
+				if eEnemy.ID == enemy.ID {
+					continue
+				}
+
+				eeHeadProb := s.HeadGuesses[eeIdx].Prob(opt)
+				if eeHeadProb > 0.333 {
+					if eEnemy.Length >= enemy.Length {
+						opts[i] = nil
+						continue NextOpt
+					} else {
+						s.HeadGuesses[eeIdx].Clear(opt)
+					}
+				}
+
+				eeBodyProb := s.BodyGuesses[eeIdx].Prob(opt)
+				if eeBodyProb > 0.333 {
+					opts[i] = nil
+					continue NextOpt
+				}
 			}
 
 			legalMoves++
@@ -191,16 +237,6 @@ func (s *State) moveEnemy(idx int) {
 	}
 
 	s.Board.Snakes[idx].Health -= 1
-
-	// Clear guess for tail if snake didn't eat
-	ate := enemy.Health == 100
-	if !ate {
-		tail := enemy.Body[len(enemy.Body)-1]
-		s.BodyGuesses[idx].Clear(&tail)
-	}
-
-	// Move enemy snake probabilistically
-	s.moveSnakeBody(&s.Board.Snakes[idx], ate)
 
 	// We don't know where the head went
 	// Remove from deterministic structure
