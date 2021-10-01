@@ -31,7 +31,7 @@ func Move(w http.ResponseWriter, r *http.Request) {
 
 	direction, meta := tree.Search(ctx, &state, &state.You, &predict.State{})
 
-	log.Printf("MOVE: %s Search Depth %d Weight %.2f\n", direction, meta.Depth, meta.Weight)
+	log.Printf("MOVE[%d]: %s Search Depth %d Weight %.2f\n", state.Turn, direction, meta.Depth, meta.Weight)
 
 	response := BattlesnakeMoveResponse{
 		Move: direction.String(),
