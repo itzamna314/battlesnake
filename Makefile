@@ -6,3 +6,6 @@ build.docker: build.alpine
 
 run.docker: 
 	docker run -ti --rm -p 8080:8080 --name battlesnake itzamna/cobrakai:latest
+
+push.docker:
+	docker push itzamna/cobrakai:latest
