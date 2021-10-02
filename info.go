@@ -36,6 +36,6 @@ func info() BattlesnakeInfoResponse {
 		Author:     "Johnny Lawrence",
 		Color:      "#000000",
 		Head:       "evil",
-		Tail:       "small-rattle",
+		Tail:       "fat-rattle",
 	}
 }
