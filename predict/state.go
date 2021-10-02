@@ -33,15 +33,8 @@ func (s *State) Init(gs *game.GameState) {
 	s.BodyGuesses = make(SnakeVision, len(s.Board.Snakes))
 
 	for i, snake := range s.Board.Snakes {
-		for j, body := range snake.Body {
+		for _, body := range snake.Body {
 			// Only set tail to certain if this snake ate (full health)
-			if j == len(snake.Body)-1 {
-				if snake.Health == 100 {
-					s.BodyGuesses[i].Set(&body, guess.Certain)
-				}
-				continue
-			}
-
 			s.BodyGuesses[i].Set(&body, guess.Certain)
 		}
 	}
