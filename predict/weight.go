@@ -26,7 +26,7 @@ const (
 	EnemyKill = 0.3
 
 	// Value of hazard
-	Hazard = -0.3
+	Hazard = -0.2
 	// Required to live
 	Mandatory = 1.0
 )
