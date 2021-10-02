@@ -22,7 +22,7 @@ func TestFrames(t *testing.T) {
 		{"over_chase", 7, []game.Direction{game.Right}},
 		{"corner_crash", 7, []game.Direction{game.Left}},
 		{"pessimistic", 7, []game.Direction{game.Left, game.Up}},
-		{"hungry_hazard", 2, []game.Direction{game.Right}},
+		{"hungry_hazard", 8, []game.Direction{game.Right}},
 		{"wont_eat", 8, []game.Direction{game.Up}},
 		{"risky_food", 7, []game.Direction{game.Left, game.Down}},
 		{"juke_early", 7, []game.Direction{game.Down}},
