@@ -43,13 +43,15 @@ func (g *CoordSet) Mult(c *game.Coord, p float64) float64 {
 	return Impossible
 }
 
-func (g *CoordSet) Clear(c *game.Coord) {
-	for i, guess := range *g {
-		if guess.Hit(c) {
+func (g *CoordSet) Clear(c *game.Coord) float64 {
+	for i, gs := range *g {
+		if gs.Hit(c) {
 			*g = append((*g)[:i], (*g)[i+1:]...)
-			return
+			return gs.Probability
 		}
 	}
+
+	return Impossible
 }
 
 func (g CoordSet) Prob(c *game.Coord) float64 {
