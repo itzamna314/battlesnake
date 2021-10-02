@@ -29,6 +29,13 @@ func (s *State) weightFood(coord *game.Coord, me *game.Battlesnake) float64 {
 			continue
 		}
 
+		// If we don't want food, only avoid eating
+		// Don't penalize getting closer to food.
+		// Not eating isn't very important
+		if baseWeight < 0 && myDist > 0 {
+			continue
+		}
+
 		distDiffPct := float64(headDist-myDist) / float64(headDist)
 
 		finalWeight += baseWeight * distDiffPct * food.Probability
