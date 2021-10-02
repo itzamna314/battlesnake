@@ -1,7 +1,6 @@
 package predict_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/itzamna314/battlesnake/game"
@@ -176,8 +175,6 @@ func TestMoveEnemiesAroundYou(t *testing.T) {
 
 		enemyIdx = i
 	}
-
-	fmt.Printf("enemy idx: %v\n", enemyIdx)
 
 	// First move - we go right
 	ps.MoveEnemies(&ps.You)
