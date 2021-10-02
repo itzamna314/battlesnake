@@ -29,8 +29,14 @@ func (g *CoordSet) Add(c *game.Coord, p float64) {
 func (g *CoordSet) Mult(c *game.Coord, p float64) float64 {
 	for i, guess := range *g {
 		if guess.Hit(c) {
-			(*g)[i].Probability = clamp(guess.Probability * p)
-			return (*g)[i].Probability
+			newProb := clamp(guess.Probability * p)
+			if newProb == Impossible {
+				*g = append((*g)[:i], (*g)[i+1:]...)
+			} else {
+				(*g)[i].Probability = newProb
+			}
+
+			return newProb
 		}
 	}
 
