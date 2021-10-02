@@ -137,6 +137,7 @@ func (s *State) Move(snake *game.Battlesnake, dir game.Direction) {
 	snake.Head = step
 	snake.Body[0] = snake.Head
 
+	s.HeadGuesses[myIdx].Clear(&snake.Body[1])
 	s.HeadGuesses[myIdx].Set(&snake.Head, guess.Certain)
 
 	if snake.ID == s.You.ID {
@@ -171,8 +172,11 @@ func (s *State) moveEnemy(idx int) {
 	s.moveSnakeBody(&s.Board.Snakes[idx], ate)
 
 	// Move enemies probabilistically based on last certain segment
-	// If no certain segments remain, do not continue validation
+	// If no certain segments remain, do not continue projection
 	// Filter out certain death options
+	// For each guess, write the next level into nextGuesses, and replace
+	var nextGuesses guess.CoordSet
+
 	for _, headGuess := range s.HeadGuesses[idx] {
 		opts := game.Options(&headGuess.Coord)
 		var legalMoves int
@@ -222,7 +226,7 @@ func (s *State) moveEnemy(idx int) {
 				continue
 			}
 
-			s.HeadGuesses[idx].Add(opt, headProb)
+			nextGuesses.Add(opt, headProb)
 
 			eatProb := s.FoodGuesses.Mult(opt, headProb)
 			if eatProb > 0 {
@@ -238,9 +242,10 @@ func (s *State) moveEnemy(idx int) {
 			}
 		}
 
-		s.HeadGuesses[idx].Clear(&headGuess.Coord)
 		s.BodyGuesses[idx].Set(&headGuess.Coord, headGuess.Probability)
 	}
+
+	s.HeadGuesses[idx] = nextGuesses
 
 	s.Board.Snakes[idx].Health -= 1
 
