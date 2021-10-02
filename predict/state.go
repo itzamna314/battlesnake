@@ -32,11 +32,7 @@ func (s *State) Init(gs *game.GameState) {
 	// Initialize body guesses
 	s.BodyGuesses = make(SnakeVision, len(s.Board.Snakes))
 
-	for i, snake := range s.Board.Snakes {
-		if snake.ID == s.You.ID {
-			continue
-		}
-
+	for i := range s.Board.Snakes {
 		for _, body := range s.Board.Snakes[i].Body {
 			s.BodyGuesses[i].Set(&body, guess.Certain)
 		}
@@ -45,11 +41,7 @@ func (s *State) Init(gs *game.GameState) {
 	// Initialize head guesses
 	s.HeadGuesses = make(SnakeVision, len(s.Board.Snakes))
 
-	for i, snake := range s.Board.Snakes {
-		if snake.ID == s.You.ID {
-			continue
-		}
-
+	for i := range s.Board.Snakes {
 		s.HeadGuesses[i].Set(&s.Board.Snakes[i].Head, guess.Certain)
 	}
 
@@ -96,6 +88,15 @@ const (
 )
 
 func (s *State) Move(snake *game.Battlesnake, dir game.Direction) {
+	// Get my index
+	var myIdx int
+	for i, snk := range s.Board.Snakes {
+		if snk.ID == snake.ID {
+			myIdx = i
+			break
+		}
+	}
+
 	// Eat any food
 	var ate bool
 	step := snake.Head.Step(dir)
@@ -128,9 +129,15 @@ func (s *State) Move(snake *game.Battlesnake, dir game.Direction) {
 	// Move body
 	s.moveSnakeBody(snake, ate)
 
+	if !ate {
+		s.BodyGuesses[myIdx].Clear(&snake.Body[len(snake.Body)-1])
+	}
+
 	// Step the head in direction, and copy to body
 	snake.Head = step
 	snake.Body[0] = snake.Head
+
+	s.HeadGuesses[myIdx].Set(&snake.Head, guess.Certain)
 
 	if snake.ID == s.You.ID {
 		s.You = *snake
@@ -172,7 +179,6 @@ func (s *State) moveEnemy(idx int) {
 
 	NextOpt:
 		for i, opt := range opts {
-
 			if SnakeWillDie(s, opt, &enemy) {
 				opts[i] = nil
 				continue

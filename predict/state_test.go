@@ -156,3 +156,68 @@ func TestMoveEnemies(t *testing.T) {
 		t.Errorf("Expected head guess (3,5) with p %.2f, was at %s\n", hProb, &head[0])
 	}
 }
+
+func TestMoveEnemiesAroundYou(t *testing.T) {
+	// Pick a frame with some challenging enemy movement
+	initial, _ := testdata.Frame("tight_spot")
+
+	var ps predict.State
+	ps.Init(&initial)
+
+	var (
+		enemyIdx int
+		prob     float64
+	)
+	for i, snake := range ps.Board.Snakes {
+		if snake.ID == ps.You.ID {
+			continue
+		}
+
+		enemyIdx = i
+	}
+
+	// First move - we go right
+	ps.MoveEnemies(&ps.You)
+	ps.Move(&ps.You, game.Right)
+
+	prob = ps.HeadGuesses[enemyIdx].Prob(&game.Coord{6, 1})
+	if prob != 0 {
+		t.Errorf("Move 1 expected probability 0 at (6,1), got %v", prob)
+	}
+
+	// Second move - keep going right
+	ps.MoveEnemies(&ps.You)
+	ps.Move(&ps.You, game.Right)
+
+	prob = ps.HeadGuesses[enemyIdx].Prob(&game.Coord{7, 1})
+	if prob != 0 {
+		t.Errorf("Move 2 expected probability 0 at (7,1), got %v", prob)
+	}
+
+	// Third move - keep going right
+	ps.MoveEnemies(&ps.You)
+	ps.Move(&ps.You, game.Right)
+
+	prob = ps.HeadGuesses[enemyIdx].Prob(&game.Coord{8, 1})
+	if prob != 0 {
+		t.Errorf("Move 3 expected probability 0 at (8,1), got %v", prob)
+	}
+
+	// Fourth move - go down
+	ps.MoveEnemies(&ps.You)
+	ps.Move(&ps.You, game.Down)
+
+	prob = ps.HeadGuesses[enemyIdx].Prob(&game.Coord{9, 1})
+	if prob != 0 {
+		t.Errorf("Move 4 expected probability 0 at (9,1), got %v", prob)
+	}
+
+	// Fifth move - move enemies
+	// With this path, we blocked the enemy from possibly reaching (9,0)
+	ps.MoveEnemies(&ps.You)
+
+	prob = ps.HeadGuesses[enemyIdx].Prob(&game.Coord{9, 0})
+	if prob != 0 {
+		t.Errorf("Move 5 expected probability 0 at (9,0), got %v", prob)
+	}
+}
