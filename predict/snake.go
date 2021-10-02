@@ -18,7 +18,11 @@ func (p *State) moveSnakeBody(snake *game.Battlesnake, idx int) *game.Coord {
 	if ate {
 		snake.Body = append(snake.Body, tail)
 	} else {
-		p.BodyGuesses[idx].Clear(&tail)
+		tailProb := p.BodyGuesses[idx].Clear(&tail)
+		if len(snake.Body) > 1 {
+			newTail := snake.Body[len(snake.Body)-2]
+			p.BodyGuesses[idx].Set(&newTail, tailProb)
+		}
 	}
 
 	// Copy each body segment to next
@@ -39,14 +43,14 @@ func (p *State) eatSnakeFood(snake *game.Battlesnake, idx int, coord, tail *game
 		return guess.Impossible
 	}
 
+	eatProb := moveProb * foodProb
+
 	for i, food := range p.Board.Food {
 		if food.Hit(coord) {
 			p.Board.Food = append(p.Board.Food[:i], p.Board.Food[i+1:]...)
 			break
 		}
 	}
-
-	eatProb := moveProb * foodProb
 
 	// Remaining food probability is current food probability
 	// times probability we *didn't* move onto it
