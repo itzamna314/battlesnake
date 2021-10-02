@@ -61,19 +61,22 @@ func (s *State) MoveEnemies(me *game.Battlesnake) {
 }
 
 func (s *State) moveEnemy(idx int) {
-	enemy := s.Board.Snakes[idx]
-	if len(enemy.Body) == 0 {
+	enemy := &s.Board.Snakes[idx]
+	if len(s.Board.Snakes[idx].Body) == 0 {
 		return
 	}
 
 	// Move enemy snake
-	tail := s.moveSnakeBody(&s.Board.Snakes[idx], idx)
+	tail := s.moveSnakeBody(enemy, idx)
 
 	// Move enemies probabilistically based on last certain segment
 	// If no certain segments remain, do not continue projection
 	// Filter out certain death options
 	// For each guess, write the next level into nextGuesses, and replace
-	var nextGuesses guess.CoordSet
+	var (
+		nextGuesses guess.CoordSet
+		maybeAte    bool
+	)
 
 	for _, headGuess := range s.HeadGuesses[idx] {
 		opts := game.Options(&headGuess.Coord)
@@ -81,7 +84,7 @@ func (s *State) moveEnemy(idx int) {
 
 	NextOpt:
 		for i, opt := range opts {
-			if SnakeWillDie(s, opt, &enemy) {
+			if SnakeWillDie(s, opt, enemy) {
 				opts[i] = nil
 				continue
 			}
@@ -126,12 +129,15 @@ func (s *State) moveEnemy(idx int) {
 
 			nextGuesses.Add(opt, headProb)
 
-			eatProb := s.eatSnakeFood(&s.Board.Snakes[idx], idx, opt, tail, headProb)
+			eatProb := s.eatSnakeFood(enemy, idx, opt, tail, headProb)
+			if eatProb > guess.Impossible {
+				maybeAte = true
+			}
 
 			for _, hazard := range s.Board.Hazards {
 				if hazard.Hit(opt) {
 					pNotEat := 1 - eatProb
-					s.Board.Snakes[idx].Health -= int32(15 * headProb * pNotEat)
+					enemy.Health -= int32(15 * headProb * pNotEat)
 					break
 				}
 			}
@@ -141,9 +147,13 @@ func (s *State) moveEnemy(idx int) {
 	}
 
 	s.HeadGuesses[idx] = nextGuesses
-	s.Board.Snakes[idx].Health -= 1
+	enemy.Health -= 1
 
 	// We don't know where the head went
-	// Remove from deterministic structure
-	s.Board.Snakes[idx].Body = enemy.Body[1:]
+	enemy.Body = enemy.Body[1:]
+
+	// If we maybe ate, re-attach our tail so we can clean up guesses
+	if maybeAte {
+		enemy.Body = append(enemy.Body, *tail)
+	}
 }
