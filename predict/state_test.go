@@ -85,7 +85,7 @@ func TestMoveGameState(t *testing.T) {
 	}
 	tail := guesses.Prob(&game.Coord{9, 8})
 	if tail != guess.Certain {
-		t.Errorf("Expected tail probability to be Certain (1.0), was %v", neck)
+		t.Errorf("Expected tail probability to be Certain (1.0), was %v", tail)
 	}
 
 	oneThird := 1.0 / 3.0
@@ -222,5 +222,72 @@ func TestMoveEnemiesAroundYou(t *testing.T) {
 	prob = ps.HeadGuesses[enemyIdx].Prob(&game.Coord{9, 0})
 	if prob != 0 {
 		t.Errorf("Move 6 expected probability 0 at (9,0), got %v", prob)
+	}
+}
+
+func TestEnemyAte(t *testing.T) {
+	// Pick a frame where an enemy may eat in 2 turns
+	initial, _ := testdata.Frame("enemy_ate2")
+
+	var ps predict.State
+	ps.Init(&initial)
+
+	var rufio int
+	for i, s := range ps.Board.Snakes {
+		if s.Name == "Rufio the Tenacious" {
+			rufio = i
+			break
+		}
+	}
+
+	// First move - we go down
+	ps.MoveEnemies(&ps.You)
+
+	lProb := ps.HeadGuesses[rufio].Prob(&game.Coord{6, 8})
+	if lProb != float64(1)/float64(3) {
+		t.Errorf("Expected 1/3 prob at (6,8), got %v", lProb)
+	}
+
+	uProb := ps.HeadGuesses[rufio].Prob(&game.Coord{7, 9})
+	if uProb != float64(1)/float64(3) {
+		t.Errorf("Expected 1/3 prob at (7,9), got %v", uProb)
+	}
+
+	rProb := ps.HeadGuesses[rufio].Prob(&game.Coord{8, 8})
+	if rProb != float64(1)/float64(3) {
+		t.Errorf("Expected 1/3 prob at (8,8), got %v", rProb)
+	}
+
+	tailProb := ps.BodyGuesses[rufio].Prob(&game.Coord{3, 7})
+	if tailProb != guess.Impossible {
+		t.Errorf("Expected tail to move when no food available")
+	}
+
+	ps.Move(&ps.You, game.Down)
+
+	// Second move - we go left
+	ps.MoveEnemies(&ps.You)
+
+	ateTailProb := ps.BodyGuesses[rufio].Prob(&game.Coord{4, 7})
+	if ateTailProb == guess.Impossible {
+		t.Errorf("Expected non-zero tail when head maybe ate")
+	}
+
+	// TODO: head prob should go to 0 where we collided with head guess
+
+	ps.Move(&ps.You, game.Left)
+
+	// Third move - we are dead if rufio ate
+	// We should see the same tail at (5,7) that we saw at (4,7) last turn
+	ps.MoveEnemies(&ps.You)
+
+	tailProb = ps.BodyGuesses[rufio].Prob(&game.Coord{5, 7})
+	if tailProb != ateTailProb {
+		t.Errorf("Did not shift possible tail (4,7) to (5,7). Expected %.2f got %.2f", ateTailProb, tailProb)
+	}
+
+	tailProb = ps.BodyGuesses[rufio].Prob(&game.Coord{4, 7})
+	if tailProb != guess.Impossible {
+		t.Errorf("Expected possible tail at (4,7) to clear")
 	}
 }
