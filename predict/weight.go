@@ -21,7 +21,7 @@ const (
 	FoodAvoid = -0.1
 
 	// Value of enemies that we need to avoid
-	EnemyAvoid = -3.0
+	EnemyAvoid = -4.0
 	// Value of enemies that we can kill
 	EnemyKill = 0.3
 
