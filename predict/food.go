@@ -24,7 +24,7 @@ func (s *State) weightFood(coord *game.Coord, me *game.Battlesnake) float64 {
 			myDist   = coord.Dist(&food.Coord)
 		)
 
-		// We didn't get closer. Ignore
+		// We didn't get closer or farther. Ignore
 		if myDist == headDist {
 			continue
 		}
@@ -36,9 +36,14 @@ func (s *State) weightFood(coord *game.Coord, me *game.Battlesnake) float64 {
 			continue
 		}
 
+		contestFactor := s.foodContestFactor(&food.Coord, me)
+		if contestFactor == 0 {
+			continue
+		}
+
 		distDiffPct := float64(headDist-myDist) / float64(headDist)
 
-		finalWeight += baseWeight * distDiffPct * food.Probability
+		finalWeight += (baseWeight * distDiffPct * food.Probability * contestFactor)
 		numWeights++
 	}
 
@@ -71,4 +76,37 @@ func (s *State) wantFood(me *game.Battlesnake) bool {
 
 func (s *State) needFood(me *game.Battlesnake) bool {
 	return me.Health < 20
+}
+
+func (s *State) foodContestFactor(food *game.Coord, me *game.Battlesnake) float64 {
+	contestFactor := 1.0
+	for _, enemy := range s.Board.Snakes {
+		if enemy.ID == me.ID {
+			continue
+		}
+
+		eDist := enemy.Head.Dist(food)
+		myDist := me.Head.Dist(food)
+
+		// Treat enemy as 1 closer if they can bully us off
+		if enemy.Length > s.You.Length {
+			eDist--
+		}
+
+		distDiff := myDist - eDist
+
+		// If we are closer, no contest factor
+		if distDiff < 0 {
+			continue
+		}
+
+		// Subtract 0.25 for each dist diff
+		// If factor reaches 0, return 0
+		contestFactor += -0.25 * float64(distDiff)
+		if contestFactor <= 0 {
+			return 0
+		}
+	}
+
+	return contestFactor
 }
