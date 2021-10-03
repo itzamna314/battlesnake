@@ -9,10 +9,6 @@ func (s *State) weightFood(coord *game.Coord, me *game.Battlesnake) float64 {
 		baseWeight = Food
 	}
 
-	if s.needFood(me) {
-		baseWeight = Mandatory
-	}
-
 	// Prefer to move toward or away from foods
 	// Weight foods more strongly by the likelihood that they will remain
 	// Divide by number of foods where this move changes the distance
@@ -72,10 +68,6 @@ func (s *State) wantFood(me *game.Battlesnake) bool {
 	}
 
 	return false
-}
-
-func (s *State) needFood(me *game.Battlesnake) bool {
-	return me.Health < 20
 }
 
 func (s *State) foodContestFactor(food *game.Coord, me *game.Battlesnake) float64 {
