@@ -47,7 +47,6 @@ func (s *State) Init(gs *game.GameState) {
 	}
 
 	// Initialize food
-NextFood:
 	for i := 0; i < len(s.Board.Food); i++ {
 		food := s.Board.Food[i]
 
@@ -60,11 +59,11 @@ NextFood:
 			youDist := s.You.Head.Dist(&food)
 
 			if eDist < youDist {
-				continue NextFood
+				s.FoodGuesses.Set(&food, 0.75)
 			}
 
 			if eDist == youDist && snake.Length >= s.You.Length {
-				continue NextFood
+				s.FoodGuesses.Set(&food, 0.75)
 			}
 		}
 
