@@ -49,24 +49,6 @@ func (s *State) Init(gs *game.GameState) {
 	// Initialize food
 	for i := 0; i < len(s.Board.Food); i++ {
 		food := s.Board.Food[i]
-
-		for _, snake := range s.Board.Snakes {
-			if snake.ID == s.You.ID {
-				continue
-			}
-
-			eDist := snake.Head.Dist(&food)
-			youDist := s.You.Head.Dist(&food)
-
-			if eDist < youDist {
-				s.FoodGuesses.Set(&food, 0.75)
-			}
-
-			if eDist == youDist && snake.Length >= s.You.Length {
-				s.FoodGuesses.Set(&food, 0.75)
-			}
-		}
-
 		s.FoodGuesses.Set(&food, guess.Certain)
 	}
 }
