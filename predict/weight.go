@@ -51,13 +51,6 @@ func (s *State) Weight(coord *game.Coord, snake *game.Battlesnake) float64 {
 	}
 	weight += enemy
 
-	// Weight against hazards
-	hazard := s.weightHazard(coord, snake)
-	weight += hazard
-	if weight <= Death {
-		return Death
-	}
-
 	// Weight food
 	food := s.weightFood(coord, snake)
 	weight += food
