@@ -25,7 +25,7 @@ func (n *Node) String() string {
 
 	var s string
 	for cur := n; cur != nil; cur = cur.Parent {
-		s += fmt.Sprintf("%s[%v] ", cur.Coord, cur.Weight)
+		s += fmt.Sprintf("%s[%.2f] ", cur.Coord, cur.Weight)
 	}
 
 	return s
