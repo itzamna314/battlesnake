@@ -18,7 +18,7 @@ const (
 	// Base value of food
 	Food = 0.15
 	// Food value when we want to avoid eating
-	FoodAvoid = -0.0375
+	FoodAvoid = -0.1
 
 	// Value of enemies that we need to avoid
 	EnemyAvoid = -3.0
