@@ -265,6 +265,12 @@ func TestEnemyAte(t *testing.T) {
 
 	ps.Move(&ps.You, game.Down)
 
+	// Rufio's head prob where we would have killed it, if it went there
+	deadProb := ps.HeadGuesses[rufio].Prob(&game.Coord{6, 8})
+	if deadProb != guess.Impossible {
+		t.Errorf("Head cannot be here. If it were, we would have ate it")
+	}
+
 	// Second move - we go left
 	ps.MoveEnemies(&ps.You)
 
@@ -274,6 +280,10 @@ func TestEnemyAte(t *testing.T) {
 	}
 
 	// TODO: head prob should go to 0 where we collided with head guess
+	deadProb = ps.HeadGuesses[rufio].Prob(&game.Coord{5, 8})
+	if deadProb != guess.Impossible {
+		t.Errorf("Head cannot be here. We ate the possibility")
+	}
 
 	ps.Move(&ps.You, game.Left)
 
