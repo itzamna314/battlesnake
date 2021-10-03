@@ -45,6 +45,11 @@ func (s *State) Move(snake *game.Battlesnake, dir game.Direction) {
 	s.HeadGuesses[myIdx].Clear(&snake.Body[1])
 	s.HeadGuesses[myIdx].Set(&snake.Head, guess.Certain)
 
+	// If we may have eaten, re-append our tail
+	if ateProb > 0 {
+		snake.Body = append(snake.Body, *tail)
+	}
+
 	if snake.ID == s.You.ID {
 		s.You = *snake
 	}
