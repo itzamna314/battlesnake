@@ -17,7 +17,7 @@ func TestMoveGameState(t *testing.T) {
 		Body:   []game.Coord{{X: 2, Y: 0}, {X: 1, Y: 0}, {X: 0, Y: 0}},
 		Health: 80,
 	}
-	enemy := game.Battlesnake{
+	e := game.Battlesnake{
 		// Length 3, facing down
 		ID:     "enemy",
 		Head:   game.Coord{X: 8, Y: 8},
@@ -28,7 +28,7 @@ func TestMoveGameState(t *testing.T) {
 		Board: game.Board{
 			Height: 10,
 			Width:  10,
-			Snakes: []game.Battlesnake{me, enemy},
+			Snakes: []game.Battlesnake{me, e},
 			Food: []game.Coord{
 				{2, 1},
 			},
@@ -41,7 +41,7 @@ func TestMoveGameState(t *testing.T) {
 	state.Init(&input)
 
 	// Project me moving up
-	state.Move(&me, game.Up)
+	state.Move(me.ID, game.Up)
 
 	// Assert that I'm in the right place
 	assertHit(t, &game.Coord{2, 1}, &state.You.Head)
@@ -57,10 +57,10 @@ func TestMoveGameState(t *testing.T) {
 	}
 
 	// Move the enemies
-	state.MoveEnemies(&me)
+	state.MoveEnemies(me.ID)
 
 	// Certain remaining body segments
-	enemy = state.Board.Snakes[1]
+	enemy := state.Board.Snakes[1]
 	if len(enemy.Body) != 2 {
 		t.Fatalf("Expected enemy to be length 2 due to uncertainty, was %d", len(enemy.Body))
 	}
@@ -128,12 +128,12 @@ func TestMoveEnemies(t *testing.T) {
 	var ps predict.State
 	ps.Init(&initial)
 
-	ps.MoveEnemies(&initial.You)
+	ps.MoveEnemies(initial.You.ID)
 
 	// Assert moves on 'Untimely Neglected Wearable'
 	var (
 		unwIdx   int
-		unwSnake *game.Battlesnake
+		unwSnake *predict.Snake
 	)
 	for i, snake := range ps.Board.Snakes {
 		if snake.Name == "Untimely Neglected Wearable" {
@@ -177,12 +177,12 @@ func TestMoveEnemiesAroundYou(t *testing.T) {
 	}
 
 	// First move - we go right
-	ps.MoveEnemies(&ps.You)
-	ps.Move(&ps.You, game.Right)
+	ps.MoveEnemies(ps.You.ID)
+	ps.Move(ps.You.ID, game.Right)
 
 	// Second move - keep going right
-	ps.MoveEnemies(&ps.You)
-	ps.Move(&ps.You, game.Right)
+	ps.MoveEnemies(ps.You.ID)
+	ps.Move(ps.You.ID, game.Right)
 
 	prob = ps.HeadGuesses[enemyIdx].Prob(&game.Coord{6, 1})
 	if prob != 0 {
@@ -190,8 +190,8 @@ func TestMoveEnemiesAroundYou(t *testing.T) {
 	}
 
 	// Third move - keep going right
-	ps.MoveEnemies(&ps.You)
-	ps.Move(&ps.You, game.Right)
+	ps.MoveEnemies(ps.You.ID)
+	ps.Move(ps.You.ID, game.Right)
 
 	prob = ps.HeadGuesses[enemyIdx].Prob(&game.Coord{7, 1})
 	if prob != 0 {
@@ -199,8 +199,8 @@ func TestMoveEnemiesAroundYou(t *testing.T) {
 	}
 
 	// Fourth move - go down
-	ps.MoveEnemies(&ps.You)
-	ps.Move(&ps.You, game.Down)
+	ps.MoveEnemies(ps.You.ID)
+	ps.Move(ps.You.ID, game.Down)
 
 	prob = ps.HeadGuesses[enemyIdx].Prob(&game.Coord{8, 1})
 	if prob != 0 {
@@ -209,15 +209,15 @@ func TestMoveEnemiesAroundYou(t *testing.T) {
 
 	// Fifth move - move enemies
 	// With this path, we blocked the enemy from possibly reaching (9,0)
-	ps.MoveEnemies(&ps.You)
-	ps.Move(&ps.You, game.Left)
+	ps.MoveEnemies(ps.You.ID)
+	ps.Move(ps.You.ID, game.Left)
 
 	prob = ps.HeadGuesses[enemyIdx].Prob(&game.Coord{9, 1})
 	if prob != 0 {
 		t.Errorf("Move 5 expected probability 0 at (9,1), got %v", prob)
 	}
 
-	ps.MoveEnemies(&ps.You)
+	ps.MoveEnemies(ps.You.ID)
 
 	prob = ps.HeadGuesses[enemyIdx].Prob(&game.Coord{9, 0})
 	if prob != 0 {
@@ -241,7 +241,7 @@ func TestEnemyAte(t *testing.T) {
 	}
 
 	// First move - we go down
-	ps.MoveEnemies(&ps.You)
+	ps.MoveEnemies(ps.You.ID)
 
 	lProb := ps.HeadGuesses[rufio].Prob(&game.Coord{6, 8})
 	if lProb != float64(1)/float64(3) {
@@ -263,7 +263,7 @@ func TestEnemyAte(t *testing.T) {
 		t.Errorf("Expected tail to move when no food available")
 	}
 
-	ps.Move(&ps.You, game.Down)
+	ps.Move(ps.You.ID, game.Down)
 
 	// Rufio's head prob where we would have killed it, if it went there
 	deadProb := ps.HeadGuesses[rufio].Prob(&game.Coord{6, 8})
@@ -272,24 +272,23 @@ func TestEnemyAte(t *testing.T) {
 	}
 
 	// Second move - we go left
-	ps.MoveEnemies(&ps.You)
+	ps.MoveEnemies(ps.You.ID)
 
 	ateTailProb := ps.BodyGuesses[rufio].Prob(&game.Coord{4, 7})
 	if ateTailProb == guess.Impossible {
 		t.Errorf("Expected non-zero tail when head maybe ate")
 	}
 
-	// TODO: head prob should go to 0 where we collided with head guess
 	deadProb = ps.HeadGuesses[rufio].Prob(&game.Coord{5, 8})
 	if deadProb != guess.Impossible {
 		t.Errorf("Head cannot be here. We ate the possibility")
 	}
 
-	ps.Move(&ps.You, game.Left)
+	ps.Move(ps.You.ID, game.Left)
 
 	// Third move - we are dead if rufio ate
 	// We should see the same tail at (5,7) that we saw at (4,7) last turn
-	ps.MoveEnemies(&ps.You)
+	ps.MoveEnemies(ps.You.ID)
 
 	tailProb = ps.BodyGuesses[rufio].Prob(&game.Coord{5, 7})
 	if tailProb != ateTailProb {

@@ -57,10 +57,9 @@ func (t *Tree) expandWorker(ctx context.Context) {
 
 func (t *Tree) expandNode(ctx context.Context, node *Node) {
 	for dir, opt := range game.Options(node.Coord) {
-		snakeClone := node.Snake.Clone()
 		child := Node{
 			Direction: game.Direction(dir),
-			Snake:     &snakeClone,
+			SnakeID:   node.SnakeID,
 			Coord:     opt,
 			Brain:     node.Brain.Clone(),
 			Parent:    node,

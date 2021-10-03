@@ -53,11 +53,10 @@ func Search(ctx context.Context,
 
 	brain.Init(state)
 
-	snakeClone := snake.Clone()
 	root := Node{
-		Snake: &snakeClone,
-		Coord: &snakeClone.Head,
-		Brain: brain,
+		SnakeID: snake.ID,
+		Coord:   &snake.Head,
+		Brain:   brain,
 	}
 
 	// Send the root node for expansion

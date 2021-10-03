@@ -46,7 +46,7 @@ func TestSingleFood(t *testing.T) {
 			var state predict.State
 			state.Init(&input)
 
-			w := state.Weight(&game.Coord{2, 1}, &me)
+			w := state.Weight(&game.Coord{2, 1}, me.ID)
 			if w < tt.minWeight {
 				t.Errorf("Expected weight above %v, got %v", tt.minWeight, w)
 			}

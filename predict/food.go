@@ -2,7 +2,7 @@ package predict
 
 import "github.com/itzamna314/battlesnake/game"
 
-func (s *State) weightFood(coord *game.Coord, me *game.Battlesnake) float64 {
+func (s *State) weightFood(coord *game.Coord, me *Snake) float64 {
 	baseWeight := FoodAvoid
 
 	if s.wantFood(me) {
@@ -50,7 +50,7 @@ func (s *State) weightFood(coord *game.Coord, me *game.Battlesnake) float64 {
 	return finalWeight / numWeights
 }
 
-func (s *State) wantFood(me *game.Battlesnake) bool {
+func (s *State) wantFood(me *Snake) bool {
 	if me.Health < 50 {
 		return true
 	}
@@ -70,7 +70,7 @@ func (s *State) wantFood(me *game.Battlesnake) bool {
 	return false
 }
 
-func (s *State) foodContestFactor(food *game.Coord, me *game.Battlesnake) float64 {
+func (s *State) foodContestFactor(food *game.Coord, me *Snake) float64 {
 	contestFactor := 1.0
 	for _, enemy := range s.Board.Snakes {
 		if enemy.ID == me.ID {
@@ -81,7 +81,7 @@ func (s *State) foodContestFactor(food *game.Coord, me *game.Battlesnake) float6
 		myDist := me.Head.Dist(food)
 
 		// Treat enemy as 1 closer if they can bully us off
-		if enemy.Length > s.You.Length {
+		if enemy.Length > me.Length {
 			eDist--
 		}
 
