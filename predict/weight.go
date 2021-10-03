@@ -41,24 +41,28 @@ func (s *State) Weight(coord *game.Coord, snake *game.Battlesnake) float64 {
 		return Death
 	}
 
-	// Compute food weight
-	weight := Base
+	// Start with our remaining health
+	weight := s.weightHealth(snake)
 
+	// Weight for enemy encounters
 	enemy := s.weightEnemies(coord, snake)
 	if enemy <= Death {
 		return Death
 	}
 	weight += enemy
 
+	// Weight against hazards
 	hazard := s.weightHazard(coord, snake)
 	weight += hazard
 	if weight <= Death {
 		return Death
 	}
 
+	// Weight food
 	food := s.weightFood(coord, snake)
 	weight += food
 
+	// Clip to a maximum to prevent runaway scores due to bugs
 	if weight > Mandatory {
 		return Mandatory
 	}
