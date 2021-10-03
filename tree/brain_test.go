@@ -6,7 +6,7 @@ import (
 )
 
 type testBrain struct {
-	weightFunc func(*game.Coord, *game.Battlesnake) float64
+	weightFunc func(*game.Coord, string) float64
 	abortFunc  func(float64) bool
 }
 
@@ -16,12 +16,12 @@ func (b *testBrain) Clone() tree.SnakeBrain {
 }
 
 // testBrain moves to the right
-func (b *testBrain) Weight(coord *game.Coord, snake *game.Battlesnake) float64 {
+func (b *testBrain) Weight(coord *game.Coord, snakeID string) float64 {
 	if b.weightFunc == nil {
 		return 0
 	}
 
-	return b.weightFunc(coord, snake)
+	return b.weightFunc(coord, snakeID)
 }
 
 // testBrain never aborts
@@ -33,5 +33,5 @@ func (b *testBrain) Abort(weight float64) bool {
 	return b.abortFunc(weight)
 }
 
-func (b *testBrain) Move(*game.Battlesnake, game.Direction) {}
-func (b *testBrain) MoveEnemies(*game.Battlesnake)          {}
+func (b *testBrain) Move(string, game.Direction) {}
+func (b *testBrain) MoveEnemies(string)          {}

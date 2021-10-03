@@ -31,7 +31,7 @@ func TestRightSearch(t *testing.T) {
 
 	// This brain always pulls to the right
 	rightBrain := &testBrain{
-		weightFunc: func(coord *game.Coord, snake *game.Battlesnake) float64 {
+		weightFunc: func(coord *game.Coord, snakeID string) float64 {
 			return float64(coord.X)
 		},
 	}
@@ -71,7 +71,7 @@ func TestSeekSearch(t *testing.T) {
 	origDist := me.Head.Dist(target)
 
 	upBrain := &testBrain{
-		weightFunc: func(coord *game.Coord, snake *game.Battlesnake) float64 {
+		weightFunc: func(coord *game.Coord, snakeID string) float64 {
 			newDist := coord.Dist(target)
 
 			return float64(origDist - newDist)
@@ -110,7 +110,7 @@ func TestDeterioratingPath(t *testing.T) {
 
 	// This brain follows the weights we describe in hardcoded world coordinates
 	worldBrain := &testBrain{
-		weightFunc: func(coord *game.Coord, snake *game.Battlesnake) float64 {
+		weightFunc: func(coord *game.Coord, snakeID string) float64 {
 			w, ok := world[*coord]
 			if !ok {
 				return -100
