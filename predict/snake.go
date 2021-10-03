@@ -7,10 +7,49 @@ import (
 	"github.com/itzamna314/battlesnake/guess"
 )
 
+type Snake struct {
+	ID     string       `json:"id"`
+	Name   string       `json:"name"`
+	Health float64      `json:"health"`
+	Body   []game.Coord `json:"body"`
+	Head   game.Coord   `json:"head"`
+	Length float64      `json:"length"`
+}
+
+func (s *Snake) Clone() Snake {
+	clone := Snake{
+		ID:     s.ID,
+		Name:   s.Name,
+		Health: s.Health,
+		Head:   s.Head,
+		Length: s.Length,
+		Body:   make([]game.Coord, len(s.Body)),
+	}
+
+	for i, bd := range s.Body {
+		clone.Body[i] = bd
+	}
+
+	return clone
+}
+
+func (s *Snake) Init(gs *game.Battlesnake) {
+	s.ID = gs.ID
+	s.Name = gs.Name
+	s.Health = float64(gs.Health)
+	s.Head = gs.Head
+	s.Length = float64(gs.Length)
+
+	s.Body = make([]game.Coord, len(gs.Body))
+	for i := range gs.Body {
+		s.Body[i] = gs.Body[i]
+	}
+}
+
 // moveSnakeBody shifts the snake's body one move forward
 // if the snake ate last turn (health restored to full), grow it
 // from the tail. Return tail coordinate for projecting next turn
-func (p *State) moveSnakeBody(snake *game.Battlesnake, idx int) *game.Coord {
+func (p *State) moveSnakeBody(snake *Snake, idx int) *game.Coord {
 	// If ate, grow tail
 	// Else, remove tail guess
 	ate := snake.Health == 100
@@ -37,7 +76,7 @@ func (p *State) moveSnakeBody(snake *game.Battlesnake, idx int) *game.Coord {
 
 // eatSnakeFood simulates the snake eating food at coord, with probability moveProb
 // returns the probability that the snake ate
-func (p *State) eatSnakeFood(snake *game.Battlesnake, idx int, coord, tail *game.Coord, moveProb float64) float64 {
+func (p *State) eatSnakeFood(snake *Snake, idx int, coord, tail *game.Coord, moveProb float64) float64 {
 	foodProb := p.FoodGuesses.Prob(coord)
 	if foodProb == guess.Impossible {
 		return guess.Impossible
@@ -58,11 +97,12 @@ func (p *State) eatSnakeFood(snake *game.Battlesnake, idx int, coord, tail *game
 
 	// Restore health
 	healthMissing := 100 - snake.Health
-	healthRestored := float64(healthMissing) * eatProb
-	snake.Health += int32(math.Round(healthRestored))
+	healthRestored := healthMissing * eatProb
+	snake.Health += math.Round(healthRestored)
 
 	// Grow tail
 	p.BodyGuesses[idx].Add(tail, eatProb)
+	snake.Length += eatProb
 
 	return eatProb
 }

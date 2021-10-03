@@ -7,9 +7,9 @@ import (
 )
 
 type Node struct {
-	Snake  *game.Battlesnake
-	Parent *Node
-	Coord  *game.Coord
+	SnakeID string
+	Parent  *Node
+	Coord   *game.Coord
 
 	Direction game.Direction
 	Brain     SnakeBrain

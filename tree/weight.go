@@ -12,15 +12,15 @@ func weightWorker(ctx context.Context, weight <-chan *Node, expand chan<- *Node)
 				return
 			}
 
-			nd.Brain.MoveEnemies(nd.Snake)
+			nd.Brain.MoveEnemies(nd.SnakeID)
 
-			nd.Weight = nd.Brain.Weight(nd.Coord, nd.Snake)
+			nd.Weight = nd.Brain.Weight(nd.Coord, nd.SnakeID)
 
 			if nd.Parent != nil {
 				nd.Weight += nd.Parent.Weight
 			}
 
-			nd.Brain.Move(nd.Snake, nd.Direction)
+			nd.Brain.Move(nd.SnakeID, nd.Direction)
 
 			select {
 			case <-ctx.Done():

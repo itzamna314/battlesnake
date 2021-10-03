@@ -1,18 +1,21 @@
 package predict
 
 import (
-	"math"
-
 	"github.com/itzamna314/battlesnake/game"
 	"github.com/itzamna314/battlesnake/guess"
 )
 
-func (s *State) Move(snake *game.Battlesnake, dir game.Direction) {
+func (s *State) Move(snakeID string, dir game.Direction) {
 	// Get my index
-	var myIdx int
+	var (
+		myIdx int
+		snake *Snake
+	)
+
 	for i, snk := range s.Board.Snakes {
-		if snk.ID == snake.ID {
+		if snk.ID == snakeID {
 			myIdx = i
+			snake = &s.Board.Snakes[i]
 			break
 		}
 	}
@@ -32,7 +35,7 @@ func (s *State) Move(snake *game.Battlesnake, dir game.Direction) {
 	for _, hazard := range s.Board.Hazards {
 		if hazard.Hit(&step) {
 			hazardDmg := float64(15) * (1 - ateProb)
-			snake.Health -= int32(math.Round(hazardDmg))
+			snake.Health -= hazardDmg
 			break
 		}
 	}
@@ -68,9 +71,9 @@ func (s *State) Move(snake *game.Battlesnake, dir game.Direction) {
 	}
 }
 
-func (s *State) MoveEnemies(me *game.Battlesnake) {
+func (s *State) MoveEnemies(snakeID string) {
 	for i, snake := range s.Board.Snakes {
-		if snake.ID == me.ID {
+		if snake.ID == snakeID {
 			continue
 		}
 
@@ -171,7 +174,7 @@ func (s *State) moveEnemy(idx int) {
 			for _, hazard := range s.Board.Hazards {
 				if hazard.Hit(opt) {
 					pNotEat := 1 - eatProb
-					enemy.Health -= int32(15 * headProb * pNotEat)
+					enemy.Health -= 15 * headProb * pNotEat
 					break
 				}
 			}

@@ -6,7 +6,7 @@ import (
 )
 
 // Calculate weight for moving You to coord in state
-func (s *State) weightEnemies(coord *game.Coord, snake *game.Battlesnake) float64 {
+func (s *State) weightEnemies(coord *game.Coord, snake *Snake) float64 {
 	// No enemies
 	if len(s.Board.Snakes) <= 1 {
 		return Nothing
@@ -29,7 +29,9 @@ func (s *State) weightEnemies(coord *game.Coord, snake *game.Battlesnake) float6
 		// STRIKE FIRST STRIKE HARD NO MERCY
 		// But also don't chase a short snake into a long snake
 		prob = s.HeadGuesses[i].Prob(coord)
-		if enemy.Length >= snake.Length {
+		if enemy.Length == snake.Length {
+			weight += (prob * EnemyTie)
+		} else if enemy.Length > snake.Length {
 			weight += (prob * EnemyAvoid)
 		} else {
 			weight += (prob * EnemyKill)

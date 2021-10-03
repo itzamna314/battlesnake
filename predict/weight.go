@@ -20,8 +20,10 @@ const (
 	// Food value when we want to avoid eating
 	FoodAvoid = -0.1
 
-	// Value of enemies that we need to avoid
+	// Value of enemies that can kill us
 	EnemyAvoid = -4.0
+	// Value of enemies we tie (both die) with
+	EnemyTie = -1.0
 	// Value of enemies that we can kill
 	EnemyKill = 0.3
 
@@ -36,13 +38,17 @@ var (
 	Death = math.Inf(-1)
 )
 
-func (s *State) Weight(coord *game.Coord, snake *game.Battlesnake) float64 {
+func (s *State) Weight(coord *game.Coord, snakeID string) float64 {
+	snake := s.Snake(snakeID)
+
 	if SnakeWillDie(s, coord, snake) {
 		return Death
 	}
 
+	var weight float64
 	// Start with our remaining health
-	weight := s.weightHealth(snake)
+	health := s.weightHealth(snake)
+	weight += health
 
 	// Weight for enemy encounters
 	enemy := s.weightEnemies(coord, snake)
