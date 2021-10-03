@@ -114,8 +114,24 @@ func (s *State) moveEnemy(idx int) {
 					}
 				}
 
+				if len(eEnemy.Body) <= 1 {
+					continue
+				}
+
 				eeBodyProb := s.BodyGuesses[eeIdx].Prob(opt)
 				if eeBodyProb > 0.333 {
+					tail := eEnemy.Body[len(eEnemy.Body)-1]
+
+					// If this is the tail skip it...
+					if tail.Hit(opt) {
+						tNeck := eEnemy.Body[len(eEnemy.Body)-2]
+
+						// ... unless they just ate
+						if !tail.Hit(&tNeck) {
+							continue
+						}
+					}
+
 					opts[i] = nil
 					continue NextOpt
 				}
