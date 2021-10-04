@@ -1,4 +1,4 @@
-package predict
+package multiverse
 
 import (
 	"github.com/itzamna314/battlesnake/game"

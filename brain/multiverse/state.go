@@ -1,4 +1,4 @@
-package predict
+package multiverse
 
 import (
 	"sort"
@@ -17,7 +17,7 @@ type State struct {
 	FoodGuesses guess.CoordSet
 }
 
-// Init sets up our predict State for tree traversal
+// Init sets up our multiverse State for tree traversal
 // This assumes we are predicting on behalf of You
 func (s *State) Init(gs *game.GameState) {
 	s.Board.Init(&gs.Board)

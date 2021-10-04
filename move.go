@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/itzamna314/battlesnake/brain/multiverse"
 	"github.com/itzamna314/battlesnake/game"
-	"github.com/itzamna314/battlesnake/predict"
 	"github.com/itzamna314/battlesnake/tree"
 )
 
@@ -29,7 +29,7 @@ func Move(w http.ResponseWriter, r *http.Request) {
 	to := time.Duration(*timeout)
 	ctx, _ := context.WithTimeout(r.Context(), to*time.Millisecond)
 
-	direction, meta := tree.Search(ctx, &state, &state.You, &predict.State{})
+	direction, meta := tree.Search(ctx, &state, &state.You, &multiverse.State{})
 
 	log.Printf("MOVE[%d]: %s Search Depth %d Weight %.2f\n", state.Turn, direction, meta.Depth, meta.Weight)
 

@@ -1,10 +1,10 @@
-package predict_test
+package multiverse_test
 
 import (
 	"testing"
 
+	"github.com/itzamna314/battlesnake/brain/multiverse"
 	"github.com/itzamna314/battlesnake/game"
-	"github.com/itzamna314/battlesnake/predict"
 )
 
 func TestSingleFood(t *testing.T) {
@@ -33,8 +33,8 @@ func TestSingleFood(t *testing.T) {
 		minWeight float64
 		maxWeight float64
 	}{
-		{"low_health", 15, predict.Avoid, predict.Mandatory},
-		{"high_health", 99, predict.Death, predict.Base},
+		{"low_health", 15, multiverse.Avoid, multiverse.Mandatory},
+		{"high_health", 99, multiverse.Death, multiverse.Base},
 	}
 
 	for _, tt := range testCases {
@@ -43,7 +43,7 @@ func TestSingleFood(t *testing.T) {
 			input.You = me
 			input.Board.Snakes = []game.Battlesnake{me}
 
-			var state predict.State
+			var state multiverse.State
 			state.Init(&input)
 
 			w := state.Weight(&game.Coord{2, 1}, me.ID)

@@ -1,11 +1,11 @@
-package predict_test
+package multiverse_test
 
 import (
 	"testing"
 
+	"github.com/itzamna314/battlesnake/brain/multiverse"
 	"github.com/itzamna314/battlesnake/game"
 	"github.com/itzamna314/battlesnake/guess"
-	"github.com/itzamna314/battlesnake/predict"
 	"github.com/itzamna314/battlesnake/testdata"
 )
 
@@ -37,7 +37,7 @@ func TestMoveGameState(t *testing.T) {
 	}
 
 	// Clone input to initialize data structures
-	var state predict.State
+	var state multiverse.State
 	state.Init(&input)
 
 	// Project me moving up
@@ -125,7 +125,7 @@ func TestMoveEnemies(t *testing.T) {
 	// Pick a frame with some challenging enemy movement
 	initial, _ := testdata.Frame("juke_early")
 
-	var ps predict.State
+	var ps multiverse.State
 	ps.Init(&initial)
 
 	ps.MoveEnemies(initial.You.ID)
@@ -133,7 +133,7 @@ func TestMoveEnemies(t *testing.T) {
 	// Assert moves on 'Untimely Neglected Wearable'
 	var (
 		unwIdx   int
-		unwSnake *predict.Snake
+		unwSnake *multiverse.Snake
 	)
 	for i, snake := range ps.Board.Snakes {
 		if snake.Name == "Untimely Neglected Wearable" {
@@ -161,7 +161,7 @@ func TestMoveEnemiesAroundYou(t *testing.T) {
 	// Pick a frame with some challenging enemy movement
 	initial, _ := testdata.Frame("tight_spot")
 
-	var ps predict.State
+	var ps multiverse.State
 	ps.Init(&initial)
 
 	var (
@@ -229,7 +229,7 @@ func TestEnemyAte(t *testing.T) {
 	// Pick a frame where an enemy may eat in 2 turns
 	initial, _ := testdata.Frame("enemy_ate2")
 
-	var ps predict.State
+	var ps multiverse.State
 	ps.Init(&initial)
 
 	var rufio int

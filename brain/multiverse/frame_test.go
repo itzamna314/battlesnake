@@ -1,10 +1,10 @@
-package predict_test
+package multiverse_test
 
 import (
 	"testing"
 
+	"github.com/itzamna314/battlesnake/brain/multiverse"
 	"github.com/itzamna314/battlesnake/game"
-	"github.com/itzamna314/battlesnake/predict"
 	"github.com/itzamna314/battlesnake/testdata"
 	"github.com/itzamna314/battlesnake/tree"
 )
@@ -49,7 +49,7 @@ func TestFrames(t *testing.T) {
 			mv, meta := tree.Search(testTimeout(),
 				&input,
 				&input.You,
-				&predict.State{},
+				&multiverse.State{},
 				tree.ConfigMaxDepth(tt.depth),
 			)
 

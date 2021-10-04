@@ -1,12 +1,12 @@
-package predict_test
+package multiverse_test
 
 import (
 	"context"
 	"testing"
 	"time"
 
+	"github.com/itzamna314/battlesnake/brain/multiverse"
 	"github.com/itzamna314/battlesnake/game"
-	"github.com/itzamna314/battlesnake/predict"
 	"github.com/itzamna314/battlesnake/tree"
 )
 
@@ -35,7 +35,7 @@ func TestEatOne(t *testing.T) {
 		You: me,
 	}
 
-	mv, meta := tree.Search(testTimeout(), &state, &me, &predict.State{})
+	mv, meta := tree.Search(testTimeout(), &state, &me, &multiverse.State{})
 	t.Logf("Search meta %+v\n", meta)
 	if mv != game.Up {
 		t.Errorf("snake did not eat food at (2,1), went %s", mv)
@@ -65,7 +65,7 @@ func TestEatFuture(t *testing.T) {
 		You: me,
 	}
 
-	mv, meta := tree.Search(testTimeout(), &state, &me, &predict.State{})
+	mv, meta := tree.Search(testTimeout(), &state, &me, &multiverse.State{})
 	t.Logf("Search meta %+v\n", meta)
 	if mv != game.Right {
 		t.Errorf("snake did not eat 2 food, went %s", mv)
@@ -99,7 +99,7 @@ func TestWithEnemies(t *testing.T) {
 		You: me,
 	}
 
-	mv, meta := tree.Search(testTimeout(), &state, &me, &predict.State{})
+	mv, meta := tree.Search(testTimeout(), &state, &me, &multiverse.State{})
 	t.Logf("Search meta %+v\n", meta)
 	if mv != game.Up {
 		t.Errorf("snake did not eat food at (2,1), went %s", mv)
@@ -137,7 +137,7 @@ func TestFoodOrDeath(t *testing.T) {
 		You: me,
 	}
 
-	mv, meta := tree.Search(testTimeout(), &state, &me, &predict.State{})
+	mv, meta := tree.Search(testTimeout(), &state, &me, &multiverse.State{})
 	t.Logf("Search meta %+v\n", meta)
 	if mv == game.Down {
 		t.Errorf("snake went down into death")
@@ -173,7 +173,7 @@ func TestAvoidDeath(t *testing.T) {
 		You: me,
 	}
 
-	mv, meta := tree.Search(testTimeout(), &state, &state.You, &predict.State{}, tree.ConfigMaxDepth(4))
+	mv, meta := tree.Search(testTimeout(), &state, &state.You, &multiverse.State{}, tree.ConfigMaxDepth(4))
 	t.Logf("Search meta %+v\n", meta)
 	if mv == game.Down {
 		t.Errorf("snake went down into possible head collision")
