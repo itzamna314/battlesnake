@@ -21,6 +21,7 @@ func (s *State) weightFood(coord *game.Coord, me *Snake) float64 {
 		)
 
 		// We didn't get closer or farther. Ignore
+		// TODO: Remove
 		if myDist == headDist {
 			continue
 		}
@@ -28,6 +29,7 @@ func (s *State) weightFood(coord *game.Coord, me *Snake) float64 {
 		// If we don't want food, only avoid eating
 		// Don't penalize getting closer to food.
 		// Not eating isn't very important
+		// TODO: Use head dist instead of my dist
 		if baseWeight < 0 && myDist > 0 {
 			continue
 		}
@@ -37,6 +39,7 @@ func (s *State) weightFood(coord *game.Coord, me *Snake) float64 {
 			continue
 		}
 
+		// TODO: 1 - (headDist / headDist + 1)
 		distDiffPct := float64(headDist-myDist) / float64(headDist)
 
 		finalWeight += (baseWeight * distDiffPct * food.Probability * contestFactor)

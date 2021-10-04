@@ -12,13 +12,19 @@ func weightWorker(ctx context.Context, weight <-chan *Node, expand chan<- *Node)
 				return
 			}
 
+			// TODO: Combine move enemies and move snake
 			nd.Brain.MoveEnemies(nd.SnakeID)
 
-			nd.Weight = nd.Brain.Weight(nd.Coord, nd.SnakeID)
+			// Remove coord from weight
+			// Allow Move to step toward coord
+			nd.Weight = nd.Brain.Weight(nd)
 
-			if nd.Parent != nil {
-				nd.Weight += nd.Parent.Weight
-			}
+			// TODO: Move to multiverse brain
+			/*
+				if nd.Parent != nil {
+					nd.Weight += nd.Parent.Weight
+				}
+			*/
 
 			nd.Brain.Move(nd.SnakeID, nd.Direction)
 

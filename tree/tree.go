@@ -16,7 +16,7 @@ type Tree struct {
 
 	// cur fields tracks the level we're currently expanding
 	curBest       []*Node
-	curBestWeight float64
+	curBestWeight Weight
 	curDepth      int
 	curLeft       int
 
@@ -32,7 +32,7 @@ type Tree struct {
 
 type SearchMetadata struct {
 	Depth  int
-	Weight float64
+	Weight Weight
 }
 
 func Search(ctx context.Context,
