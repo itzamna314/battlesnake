@@ -25,20 +25,19 @@ func (s *State) Move(snakeID string, dir game.Direction) {
 	// Move body
 	tail := s.moveSnakeBody(snake, myIdx)
 
-	// Consume food
-	ateProb := s.eatSnakeFood(snake, myIdx, &step, tail, guess.Certain)
-
 	// Take standard damage
 	snake.Health -= 1
 
 	// Take hazard damage
 	for _, hazard := range s.Board.Hazards {
 		if hazard.Hit(&step) {
-			hazardDmg := float64(15) * (1 - ateProb)
-			snake.Health -= hazardDmg
+			snake.Health -= 15
 			break
 		}
 	}
+
+	// Consume food
+	ateProb := s.eatSnakeFood(snake, myIdx, &step, tail, guess.Certain)
 
 	// Step the head in direction, and copy to body
 	snake.Head = step

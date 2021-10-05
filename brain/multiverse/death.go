@@ -2,8 +2,8 @@ package multiverse
 
 import "github.com/itzamna314/battlesnake/game"
 
-func YouWillDie(state *State, coord *game.Coord) bool {
-	return SnakeWillDie(state, coord, &state.You)
+func YouWillDie(state *State) bool {
+	return SnakeWillDie(state, &state.You.Head, &state.You)
 }
 
 func SnakeWillDie(state *State, coord *game.Coord, snake *Snake) bool {
@@ -20,13 +20,8 @@ func SnakeWillDie(state *State, coord *game.Coord, snake *Snake) bool {
 	}
 
 	// Don't hit self
-	for i, body := range snake.Body {
-		// Tail - it will move as long as we didn't eat last turn
-		if i == len(snake.Body)-1 && snake.Health < 100 {
-			break
-		}
-
-		if coord.Hit(&body) {
+	for i := 1; i < len(snake.Body); i++ {
+		if coord.Hit(&snake.Body[i]) {
 			return true
 		}
 	}

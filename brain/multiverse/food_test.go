@@ -5,6 +5,7 @@ import (
 
 	"github.com/itzamna314/battlesnake/brain/multiverse"
 	"github.com/itzamna314/battlesnake/game"
+	"github.com/itzamna314/battlesnake/tree"
 )
 
 func TestSingleFood(t *testing.T) {
@@ -30,10 +31,10 @@ func TestSingleFood(t *testing.T) {
 	testCases := []struct {
 		testName  string
 		health    int32
-		minWeight float64
-		maxWeight float64
+		minWeight multiverse.FloatWeight
+		maxWeight multiverse.FloatWeight
 	}{
-		{"low_health", 15, multiverse.Avoid, multiverse.Mandatory},
+		{"low_health", 15, multiverse.Avoid, multiverse.FloatWeight(1.0)},
 		{"high_health", 99, multiverse.Death, multiverse.Base},
 	}
 
@@ -46,12 +47,20 @@ func TestSingleFood(t *testing.T) {
 			var state multiverse.State
 			state.Init(&input)
 
-			w := state.Weight(&game.Coord{2, 1}, me.ID)
-			if w < tt.minWeight {
+			state.Move(me.ID, game.Up)
+
+			w := state.Weight(&tree.Node{
+				SnakeID:   me.ID,
+				Coord:     &me.Head,
+				Direction: game.Up,
+				Brain:     &state,
+				Depth:     1,
+			})
+			if w.Compare(tt.minWeight) < 0 {
 				t.Errorf("Expected weight above %v, got %v", tt.minWeight, w)
 			}
 
-			if w > tt.maxWeight {
+			if w.Compare(tt.maxWeight) > 0 {
 				t.Errorf("Expected weight below %v, got %v", tt.maxWeight, w)
 			}
 		})

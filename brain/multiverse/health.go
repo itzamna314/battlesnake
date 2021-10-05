@@ -1,5 +1,5 @@
 package multiverse
 
-func (s *State) weightHealth(snake *Snake) float64 {
-	return Base * snake.Health / 100
+func (s *State) weightHealth(snake *Snake) FloatWeight {
+	return Base * FloatWeight(snake.Health) / 100
 }

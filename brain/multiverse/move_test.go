@@ -35,7 +35,11 @@ func TestEatOne(t *testing.T) {
 		You: me,
 	}
 
-	mv, meta := tree.Search(testTimeout(), &state, &me, &multiverse.State{})
+	mv, meta := tree.Search(testTimeout(),
+		&state,
+		&me,
+		&multiverse.State{},
+	)
 	t.Logf("Search meta %+v\n", meta)
 	if mv != game.Up {
 		t.Errorf("snake did not eat food at (2,1), went %s", mv)

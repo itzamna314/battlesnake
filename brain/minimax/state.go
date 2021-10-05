@@ -1,5 +1,9 @@
 package minimax
 
+import (
+	"github.com/itzamna314/battlesnake/game"
+)
+
 type State struct {
 	MaxScore *int32
 	MinScore *int32

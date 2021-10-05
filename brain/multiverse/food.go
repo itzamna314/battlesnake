@@ -2,55 +2,42 @@ package multiverse
 
 import "github.com/itzamna314/battlesnake/game"
 
-func (s *State) weightFood(coord *game.Coord, me *Snake) float64 {
+func (s *State) weightFood(snake *Snake) FloatWeight {
 	baseWeight := FoodAvoid
 
-	if s.wantFood(me) {
+	if s.wantFood(snake) {
 		baseWeight = Food
 	}
 
 	// Prefer to move toward or away from foods
 	// Weight foods more strongly by the likelihood that they will remain
 	// Divide by number of foods where this move changes the distance
-	var finalWeight, numWeights float64
+	var finalWeight FloatWeight
 
+	// If we just ate, apply the full weight
+	if snake.Health == 100 {
+		finalWeight += baseWeight
+	}
+
+	// Add a small weight adjustment based on the distance squared to food
+	// The closer we are to food, the higher the adjustment
+	// This must be insignificant compared to the value of just eating
+	// Otherwise the snake will circle around food without eating it
 	for _, food := range s.FoodGuesses {
-		var (
-			headDist = me.Head.Dist(&food.Coord)
-			myDist   = coord.Dist(&food.Coord)
-		)
+		var headDist = snake.Head.Dist(&food.Coord)
+		headDist *= headDist
 
-		// We didn't get closer or farther. Ignore
-		// TODO: Remove
-		if myDist == headDist {
-			continue
-		}
-
-		// If we don't want food, only avoid eating
-		// Don't penalize getting closer to food.
-		// Not eating isn't very important
-		// TODO: Use head dist instead of my dist
-		if baseWeight < 0 && myDist > 0 {
-			continue
-		}
-
-		contestFactor := s.foodContestFactor(&food.Coord, me)
+		contestFactor := s.foodContestFactor(&snake.Head, snake)
 		if contestFactor == 0 {
 			continue
 		}
 
-		// TODO: 1 - (headDist / headDist + 1)
-		distDiffPct := float64(headDist-myDist) / float64(headDist)
+		distWeight := 0.0001 * (100 - FloatWeight(headDist))
 
-		finalWeight += (baseWeight * distDiffPct * food.Probability * contestFactor)
-		numWeights++
+		finalWeight += (baseWeight * distWeight * FloatWeight(food.Probability) * contestFactor)
 	}
 
-	if numWeights == 0 {
-		return 0
-	}
-
-	return finalWeight / numWeights
+	return finalWeight
 }
 
 func (s *State) wantFood(me *Snake) bool {
@@ -73,8 +60,8 @@ func (s *State) wantFood(me *Snake) bool {
 	return false
 }
 
-func (s *State) foodContestFactor(food *game.Coord, me *Snake) float64 {
-	contestFactor := 1.0
+func (s *State) foodContestFactor(food *game.Coord, me *Snake) FloatWeight {
+	contestFactor := FloatWeight(1.0)
 	for _, enemy := range s.Board.Snakes {
 		if enemy.ID == me.ID {
 			continue
@@ -97,7 +84,7 @@ func (s *State) foodContestFactor(food *game.Coord, me *Snake) float64 {
 
 		// Subtract 0.25 for each dist diff
 		// If factor reaches 0, return 0
-		contestFactor += -0.25 * float64(distDiff)
+		contestFactor += -0.25 * FloatWeight(distDiff)
 		if contestFactor <= 0 {
 			return 0
 		}

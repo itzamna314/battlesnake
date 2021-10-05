@@ -2,7 +2,6 @@ package tree
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/itzamna314/battlesnake/game"
 )
@@ -23,15 +22,11 @@ func (t *Tree) expandWorker(ctx context.Context) {
 			if t.curBest == nil {
 				t.curBest = []*Node{exp}
 				t.curBestWeight = exp.Weight
-				fmt.Printf("best[%d] %s\n", exp.Depth, exp)
 			} else if diff := exp.Weight.Compare(t.curBestWeight); diff > 0 {
 				t.curBest = []*Node{exp}
 				t.curBestWeight = exp.Weight
-				fmt.Printf("exp: %v best: %v\n", exp.Weight, t.curBestWeight)
-				fmt.Printf("best[%d] %s, diff %v\n", exp.Depth, exp, diff)
 			} else if diff == 0 {
 				t.curBest = append(t.curBest, exp)
-				fmt.Printf("best[%d] %s, diff %v\n", exp.Depth, exp, diff)
 			}
 
 			// Expand this node if:
